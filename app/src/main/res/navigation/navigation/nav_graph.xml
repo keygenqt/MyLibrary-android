@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/FragmentSplash">
+
+  <fragment
+      android:id="@+id/FragmentSplash"
+      android:name="com.keygenqt.mylibrary.ui.other.FragmentSplash"
+      tools:layout="@layout/fragment_splash">
+    <action
+        android:id="@+id/action_FragmentSplash_to_FragmentLocal"
+        app:destination="@id/FragmentLocal" />
+    <action
+        android:id="@+id/action_FragmentSplash_to_FragmentOnline"
+        app:destination="@id/FragmentOnline" />
+    <action
+        android:id="@+id/action_FragmentSplash_to_FragmentChat"
+        app:destination="@id/FragmentChat" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentLocal"
+      android:name="com.keygenqt.mylibrary.ui.local.FragmentLocal"
+      tools:layout="@layout/common_fragment_list">
+    <action
+        android:id="@+id/action_FragmentLocal_to_FragmentSettings"
+        app:destination="@id/FragmentSettings" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentOnline"
+      android:name="com.keygenqt.mylibrary.ui.online.FragmentOnline"
+      tools:layout="@layout/common_fragment_list">
+
+    <action
+        android:id="@+id/action_FragmentOnline_to_FragmentChat"
+        app:destination="@id/FragmentChat" />
+    <action
+        android:id="@+id/action_FragmentOnline_to_FragmentSettings"
+        app:destination="@id/FragmentSettings" />
+
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentChat"
+      android:name="com.keygenqt.mylibrary.ui.chat.FragmentChat"
+      tools:layout="@layout/common_fragment_list">
+    <action
+        android:id="@+id/action_FragmentChat_to_FragmentSettings"
+        app:destination="@id/FragmentSettings" />
+  </fragment>
+
+
+  <fragment
+      android:id="@+id/FragmentSettings"
+      android:name="com.keygenqt.mylibrary.ui.other.FragmentSettings"
+      tools:layout="@layout/fragment_settings" />
+</navigation>

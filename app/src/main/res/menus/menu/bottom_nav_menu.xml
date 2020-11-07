@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/FragmentLocal"
+        android:icon="@drawable/main_local_library"
+        android:title="@string/page_main_bottom_menu_item_my_library" />
+
+    <item
+        android:id="@+id/FragmentOnline"
+        android:icon="@drawable/main_users_library"
+        android:title="@string/page_main_bottom_menu_item_users_library" />
+
+    <item
+        android:visible="false"
+        android:id="@+id/FragmentChat"
+        android:icon="@drawable/main_chat_bubble"
+        android:title="@string/page_main_bottom_menu_item_chat" />
+
+</menu>
