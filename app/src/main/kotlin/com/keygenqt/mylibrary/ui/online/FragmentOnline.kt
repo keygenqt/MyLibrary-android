@@ -22,53 +22,51 @@ import androidx.fragment.app.*
 import androidx.recyclerview.widget.*
 import com.keygenqt.mylibrary.*
 import com.keygenqt.mylibrary.R.*
+import com.keygenqt.mylibrary.annotations.*
 import com.keygenqt.mylibrary.base.*
+import com.keygenqt.mylibrary.base.BaseListData.*
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
 import com.keygenqt.mylibrary.data.*
+import kotlinx.android.synthetic.main.common_fragment_list.*
 import kotlinx.android.synthetic.main.common_fragment_list.view.*
 
+@ActionBarEnable
+@BottomNavigationEnable
 @FragmentTitle("Users Libs")
 class FragmentOnline : BaseFragment(R.layout.common_fragment_list) {
 
-    private val viewOnline: ViewOnline by viewModels()
-
-    override fun isBottomNavigation(): Boolean {
-        return true
-    }
+    private val viewModels: ViewOnline by viewModels()
 
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterOnline(layout.item_book_list, viewOnline)
+            recyclerView.adapter = AdapterOnline(layout.item_book_list, viewModels)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            refresh.setOnRefreshListener { viewOnline.updateList() }
-
-            setItems(ModelBook.findAll())
-
-            viewOnline.items.observe(viewLifecycleOwner, { (items, type) ->
-                if (type == LIST_DATA_TYPE_SET) {
-                    setItems(items)
-                } else {
-                    addAdapterItems(items)
-                }
-            })
-            viewOnline.loading.observe(viewLifecycleOwner, { status ->
-                refresh.isRefreshing = status
-            })
+            refresh.setOnRefreshListener { viewModels.updateList() }
         }
     }
 
-    private fun setItems(items: List<Any>) {
-        initView {
-            notFound.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-            (recyclerView.adapter as BaseAdapter).setItems(items)
-            recyclerView.smoothScrollToPosition(0)
-        }
+    @ObserveInit private fun statusRefresh() {
+        viewModels.loading.observe(viewLifecycleOwner, { status ->
+            refresh.isRefreshing = status
+        })
     }
 
-    private fun addAdapterItems(items: List<Any>) {
-        initView {
-            (recyclerView.adapter as BaseAdapter).addItems(items)
-        }
+    @ObserveInit private fun setItems() {
+        viewModels.items.observe(viewLifecycleOwner, { (items, type) ->
+            if (type == LIST_DATA_TYPE_SET) {
+                notFound.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+                (recyclerView.adapter as BaseAdapter).setItems(items)
+                recyclerView.smoothScrollToPosition(0)
+            }
+        })
+    }
+
+    @ObserveInit private fun addAdapterItems() {
+        viewModels.items.observe(viewLifecycleOwner, { (items, type) ->
+            if (type == Companion.LIST_DATA_TYPE_ADD) {
+                (recyclerView.adapter as BaseAdapter).addItems(items)
+            }
+        })
     }
 }

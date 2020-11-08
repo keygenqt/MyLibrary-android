@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.other
+package com.keygenqt.mylibrary.annotations
 
-import android.os.*
-import androidx.navigation.fragment.*
-import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.base.*
-
-class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
-    override fun onCreateView() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
-        }, 1000)
-    }
-}
+/**
+ * Annotation FragmentTitle for set title before change fragment
+ * It fix delay twitches
+ *
+ * @author      Vitaliy Zarubin
+ * @version     %I%, %G%
+ * @since       1.0
+ */
+@Target(AnnotationTarget.CLASS)
+annotation class FragmentTitle(val title: String)

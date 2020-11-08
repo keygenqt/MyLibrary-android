@@ -59,9 +59,13 @@ android {
 }
 
 dependencies {
+    implementation("com.squareup.retrofit2:converter-gson:2.7.2")
+    implementation("com.squareup.retrofit2:retrofit:2.7.2")
+}
+dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }
 
@@ -73,10 +77,10 @@ dependencies {
 }
 
 dependencies {
-    implementation("androidx.navigation:navigation-fragment:2.3.0")
-    implementation("androidx.navigation:navigation-ui:2.3.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.0")
+    implementation("androidx.navigation:navigation-fragment:2.3.1")
+    implementation("androidx.navigation:navigation-ui:2.3.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.1")
 }
 
 dependencies {

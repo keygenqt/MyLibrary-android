@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.base
+package com.keygenqt.mylibrary.annotations
 
 /**
  * Annotation FragmentTitle for set title before change fragment
@@ -25,4 +25,4 @@ package com.keygenqt.mylibrary.base
  * @since       1.0
  */
 @Target(AnnotationTarget.CLASS)
-annotation class FragmentTitle(val title: String)
+annotation class BottomNavigationEnable

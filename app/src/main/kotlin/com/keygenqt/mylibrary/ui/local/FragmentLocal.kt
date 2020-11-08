@@ -22,59 +22,51 @@ import androidx.fragment.app.*
 import androidx.navigation.fragment.*
 import androidx.recyclerview.widget.*
 import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.*
 import com.keygenqt.mylibrary.base.*
+import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_ADD
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
-import com.keygenqt.mylibrary.data.*
+import kotlinx.android.synthetic.main.common_fragment_list.*
 import kotlinx.android.synthetic.main.common_fragment_list.view.*
 
+@ActionBarEnable
+@BottomNavigationEnable
 @FragmentTitle("My Library")
 class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
 
-    private val viewLocal: ViewLocal by viewModels()
-
-    override fun isBottomNavigation(): Boolean {
-        return true
-    }
+    private val viewModels: ViewLocal by viewModels()
 
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterLocal(R.layout.item_book_list, viewLocal)
-            refresh.setColorSchemeColors(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorAccent
-                )
-            )
-            refresh.setOnRefreshListener { viewLocal.updateList() }
-
-            setItems(ModelBook.findAll())
-
-            viewLocal.items.observe(viewLifecycleOwner, { (items, type) ->
-                if (type == LIST_DATA_TYPE_SET) {
-                    setItems(items)
-                } else {
-                    addAdapterItems(items)
-                }
-            })
-            viewLocal.loading.observe(viewLifecycleOwner, { status ->
-                refresh.isRefreshing = status
-            })
+            recyclerView.adapter = AdapterLocal(R.layout.item_book_list, viewModels)
+            refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            refresh.setOnRefreshListener { viewModels.updateList() }
         }
     }
 
-    private fun setItems(items: List<Any>) {
-        initView {
-            notFound.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-            (recyclerView.adapter as BaseAdapter).setItems(items)
-            recyclerView.smoothScrollToPosition(0)
-        }
+    @ObserveInit private fun statusRefresh() {
+        viewModels.loading.observe(viewLifecycleOwner, { status ->
+            refresh.isRefreshing = status
+        })
     }
 
-    private fun addAdapterItems(items: List<Any>) {
-        initView {
-            (recyclerView.adapter as BaseAdapter).addItems(items)
-        }
+    @ObserveInit private fun setItems() {
+        viewModels.items.observe(viewLifecycleOwner, { (items, type) ->
+            if (type == LIST_DATA_TYPE_SET) {
+                notFound.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+                (recyclerView.adapter as BaseAdapter).setItems(items)
+                recyclerView.smoothScrollToPosition(0)
+            }
+        })
+    }
+
+    @ObserveInit private fun addAdapterItems() {
+        viewModels.items.observe(viewLifecycleOwner, { (items, type) ->
+            if (type == LIST_DATA_TYPE_ADD) {
+                (recyclerView.adapter as BaseAdapter).addItems(items)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

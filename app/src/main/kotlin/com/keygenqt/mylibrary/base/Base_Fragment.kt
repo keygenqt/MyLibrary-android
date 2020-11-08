@@ -23,9 +23,10 @@ import androidx.appcompat.app.*
 import androidx.appcompat.widget.*
 import androidx.fragment.app.*
 import androidx.lifecycle.*
-import com.keygenqt.mylibrary.*
 import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.*
 import kotlinx.coroutines.*
+import kotlin.reflect.full.*
 
 /**
  * BaseFragment is a class that makes it easier to work with
@@ -39,6 +40,8 @@ import kotlinx.coroutines.*
 abstract class BaseFragment(
     @LayoutRes private val layoutId: Int
 ) : Fragment() {
+
+    annotation class ObserveInit
 
     /**
      * Hidden field for can using initView in onCreateView
@@ -70,26 +73,6 @@ abstract class BaseFragment(
     abstract fun onCreateView()
 
     /**
-     * Method for show/hide ActionBar. If you need hide ActionBar
-     * override this method and return false
-     *
-     * @return <code>true</code>
-     */
-    open fun isActionBar(): Boolean {
-        return true
-    }
-
-    /**
-     * Method for show/hide BottomNavigation. If you need show BottomNavigation
-     * override this method and return true
-     *
-     * @return <code>false</code>
-     */
-    open fun isBottomNavigation(): Boolean {
-        return false
-    }
-
-    /**
      * Base inner method for generate view in initialization view
      *
      * @return View?
@@ -98,19 +81,28 @@ abstract class BaseFragment(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (isActionBar()) {
+        this::class.java.kotlin.findAnnotation<ActionBarEnable>()?.let {
             (requireActivity() as AppCompatActivity).supportActionBar?.show()
-        } else {
+        } ?: run {
             (requireActivity() as AppCompatActivity).supportActionBar?.hide()
         }
-        if (isBottomNavigation()) {
+        this::class.java.kotlin.findAnnotation<BottomNavigationEnable>()?.let {
             (requireActivity() as AppCompatActivity).findViewById<View>(R.id.nav_view).visibility = View.VISIBLE
-        } else {
+        } ?: run {
             (requireActivity() as AppCompatActivity).findViewById<View>(R.id.nav_view).visibility = View.GONE
         }
         _view = inflater.inflate(layoutId, container, false)
         setHasOptionsMenu(true)
         onCreateView()
+        observeInit()
         return _view
+    }
+
+    private fun observeInit() {
+        this::class.java.declaredMethods.forEach { method ->
+            method.getAnnotation(ObserveInit::class.java) ?: return@forEach
+            method.isAccessible = true
+            method.invoke(this)
+        }
     }
 }
