@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.*

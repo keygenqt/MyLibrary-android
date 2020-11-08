@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.chat
 
+import androidx.lifecycle.ViewModel
 import com.keygenqt.mylibrary.*
 import com.keygenqt.mylibrary.annotations.*
 import com.keygenqt.mylibrary.base.*

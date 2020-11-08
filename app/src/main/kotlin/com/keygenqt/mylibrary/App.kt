@@ -17,6 +17,10 @@
 package com.keygenqt.mylibrary
 
 import android.app.*
+import com.keygenqt.mylibrary.base.*
+import org.koin.android.ext.koin.*
+import org.koin.core.context.*
+import org.koin.dsl.*
 
 /**
  * App class android application
@@ -28,5 +32,13 @@ class App : Application() {
      */
     override fun onCreate() {
         super.onCreate()
+
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(module {
+                single { BaseSharedPreferences(androidContext().getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE)) }
+            })
+        }
     }
 }

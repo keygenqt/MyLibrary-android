@@ -16,17 +16,21 @@
 
 package com.keygenqt.mylibrary.base
 
-import android.os.*
-import android.view.*
-import androidx.annotation.*
-import androidx.appcompat.app.*
-import androidx.appcompat.widget.*
-import androidx.fragment.app.*
-import androidx.lifecycle.*
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.annotations.*
-import kotlinx.coroutines.*
-import kotlin.reflect.full.*
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import kotlinx.coroutines.launch
+import kotlin.reflect.full.findAnnotation
 
 /**
  * BaseFragment is a class that makes it easier to work with

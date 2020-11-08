@@ -21,26 +21,28 @@ import androidx.core.content.*
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.*
 import com.keygenqt.mylibrary.*
-import com.keygenqt.mylibrary.R.*
 import com.keygenqt.mylibrary.annotations.*
 import com.keygenqt.mylibrary.base.*
 import com.keygenqt.mylibrary.base.BaseListData.*
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
-import com.keygenqt.mylibrary.data.*
+import com.keygenqt.mylibrary.ui.local.*
 import kotlinx.android.synthetic.main.common_fragment_list.*
 import kotlinx.android.synthetic.main.common_fragment_list.view.*
+import org.koin.android.ext.android.*
 
 @ActionBarEnable
 @BottomNavigationEnable
 @FragmentTitle("Users Libs")
 class FragmentOnline : BaseFragment(R.layout.common_fragment_list) {
 
-    private val viewModels: ViewOnline by viewModels()
+    val sharedPreferences: BaseSharedPreferences by inject()
+
+    private val viewModels: ViewLocal by viewModels()
 
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterOnline(layout.item_book_list, viewModels)
+            recyclerView.adapter = AdapterOnline(R.layout.item_book_list, viewModels)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener { viewModels.updateList() }
         }
