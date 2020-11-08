@@ -27,7 +27,7 @@ class AdapterOnline(@LayoutRes layout: Int, viewModel: ViewModelPage) : BaseAdap
     override fun onBindViewHolder(holder: View, model: Any) {
         if (model is ModelBook) {
             holder.apply {
-                title.text = model.name
+                title.text = model.title
                 subtitle.text = model.user.email
             }
         }

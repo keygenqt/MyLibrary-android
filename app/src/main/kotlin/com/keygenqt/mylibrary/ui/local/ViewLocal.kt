@@ -16,19 +16,29 @@
 
 package com.keygenqt.mylibrary.ui.local
 
+import android.util.*
 import androidx.lifecycle.*
-import com.keygenqt.mylibrary.interfaces.*
+import com.keygenqt.mylibrary.App.*
 import com.keygenqt.mylibrary.base.*
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_ADD
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
 import com.keygenqt.mylibrary.data.*
+import com.keygenqt.mylibrary.interfaces.*
 import com.keygenqt.mylibrary.utils.*
+import kotlinx.coroutines.*
+import retrofit2.HttpException
 import java.util.*
 import kotlin.concurrent.*
 
-class ViewLocal : ViewModel(), ViewModelPage {
+class ViewLocal(
+    private val sharedPreferences: BaseSharedPreferences,
+    private val service: BookService,
+) : ViewModel(), ViewModelPage {
 
     val items = MutableLiveData<BaseListData>().apply {
+        service.getView { model ->
+            Log.e("!!!!!!!!!!!", model.title)
+        }
         value = BaseListData(ModelBook.findAll(PAGE_SIZE), LIST_DATA_TYPE_SET)
     }
 

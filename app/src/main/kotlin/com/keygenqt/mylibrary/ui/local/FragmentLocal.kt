@@ -28,13 +28,14 @@ import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_ADD
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
 import kotlinx.android.synthetic.main.common_fragment_list.*
 import kotlinx.android.synthetic.main.common_fragment_list.view.*
+import org.koin.android.ext.android.*
 
 @ActionBarEnable
 @BottomNavigationEnable
 @FragmentTitle("My Library")
 class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
 
-    private val viewModels: ViewLocal by viewModels()
+    private val viewModels: ViewLocal by inject()
 
     override fun onCreateView() {
         initView {

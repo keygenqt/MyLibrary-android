@@ -86,8 +86,6 @@ class MainActivity : AppCompatActivity() {
         controller = findNavController(R.id.nav_host_fragment)
 
         db = BaseOrmLite(this, "my_library.db", 1)
-        ModelBook.clearTable()
-        addData()
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
@@ -139,18 +137,5 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         db.close()
-    }
-
-    /**
-     * Add test data (temporary)
-     */
-    private fun addData() {
-        (1..33).forEach { index ->
-            ModelBook(
-                "image",
-                "Name $index",
-                ModelUser("email@gmail.${listOf("com", "ru", "ua").random()}")
-            ).createOrUpdate()
-        }
     }
 }

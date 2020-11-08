@@ -16,18 +16,38 @@
 
 package com.keygenqt.mylibrary.data
 
-import com.j256.ormlite.field.*
-import com.j256.ormlite.table.*
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
 import com.keygenqt.db.dao
-import com.keygenqt.mylibrary.utils.*
+import com.keygenqt.mylibrary.utils.PAGE_SIZE
 import java.util.*
 
 @DatabaseTable(tableName = "ModelBook")
 class ModelBook(
     @DatabaseField
-    var image: String = "",
+    var title: String = "",
+
     @DatabaseField
-    var name: String = "",
+    var author: String = "",
+
+    @DatabaseField
+    var description: String = "",
+
+    @DatabaseField
+    var publisher: String = "",
+
+    @DatabaseField
+    var year: String = "",
+
+    @DatabaseField
+    var numberOfPages: String = "",
+
+    @DatabaseField
+    var coverType: String = "",
+
+    @DatabaseField
+    var image: String = "",
+
     @DatabaseField(foreign = true)
     var user: ModelUser = ModelUser(),
 ) {

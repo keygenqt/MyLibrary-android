@@ -28,7 +28,7 @@ import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
 import com.keygenqt.mylibrary.ui.local.*
 import kotlinx.android.synthetic.main.common_fragment_list.*
 import kotlinx.android.synthetic.main.common_fragment_list.view.*
-import org.koin.android.ext.android.*
+import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @BottomNavigationEnable
@@ -37,7 +37,7 @@ class FragmentOnline : BaseFragment(R.layout.common_fragment_list) {
 
     val sharedPreferences: BaseSharedPreferences by inject()
 
-    private val viewModels: ViewLocal by viewModels()
+    private val viewModels: ViewLocal by inject()
 
     override fun onCreateView() {
         initView {
