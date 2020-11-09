@@ -62,7 +62,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.7.2")
     implementation("com.squareup.retrofit2:retrofit:2.7.2")
     implementation("com.squareup.okhttp3:logging-interceptor:4.4.1")
-    implementation("com.squareup.retrofit2:converter-moshi:2.6.0")
 }
 dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
@@ -96,7 +95,7 @@ dependencies {
 }
 
 dependencies {
-    implementation("com.j256.ormlite:ormlite-android:5.1")
-    kapt("com.keygenqt.artifactory:gen-ormlite-android:1.0.1")
+//    implementation("com.j256.ormlite:ormlite-android:5.1")
+//    kapt("com.keygenqt.artifactory:gen-ormlite-android:1.0.1")
 }
 

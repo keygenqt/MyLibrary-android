@@ -20,7 +20,7 @@ import android.view.*
 import androidx.annotation.*
 import com.keygenqt.mylibrary.interfaces.*
 import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.data.*
+import com.keygenqt.mylibrary.data.models.ModelBook
 import kotlinx.android.synthetic.main.item_book_list.view.*
 
 class AdapterLocal(@LayoutRes layout: Int, viewModel: ViewModelPage) : BaseAdapter(layout, viewModel) {
@@ -28,7 +28,7 @@ class AdapterLocal(@LayoutRes layout: Int, viewModel: ViewModelPage) : BaseAdapt
         if (model is ModelBook) {
             holder.apply {
                 title.text = model.title
-                subtitle.text = model.user.email
+                subtitle.text = model.description
             }
         }
     }

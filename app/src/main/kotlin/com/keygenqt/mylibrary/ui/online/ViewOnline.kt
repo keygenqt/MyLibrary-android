@@ -17,19 +17,16 @@
 package com.keygenqt.mylibrary.ui.online
 
 import androidx.lifecycle.*
-import com.keygenqt.mylibrary.interfaces.*
 import com.keygenqt.mylibrary.base.*
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_ADD
 import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
-import com.keygenqt.mylibrary.data.*
-import com.keygenqt.mylibrary.utils.*
-import java.util.*
-import kotlin.concurrent.*
+import com.keygenqt.mylibrary.data.services.*
+import com.keygenqt.mylibrary.interfaces.*
 
-class ViewOnline : ViewModel(), ViewModelPage {
+class ViewOnline(private val service: BookService) : ViewModel(), ViewModelPage {
 
     val items = MutableLiveData<BaseListData>().apply {
-        value = BaseListData(ModelBook.findAll(PAGE_SIZE), LIST_DATA_TYPE_SET)
+        //        value = BaseListData(ModelBook.findAll(PAGE_SIZE), LIST_DATA_TYPE_SET)
     }
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
@@ -39,10 +36,9 @@ class ViewOnline : ViewModel(), ViewModelPage {
     }
 
     override fun updateList(page: Int) {
-        Timer().schedule(1000) {
+        service.getList { models ->
             loading.postValue(false)
-            items.postValue(BaseListData(ModelBook.getPage(page),
-                if (page == 1) LIST_DATA_TYPE_SET else LIST_DATA_TYPE_ADD))
+            items.postValue(BaseListData(models, if (page == 1) LIST_DATA_TYPE_SET else LIST_DATA_TYPE_ADD))
         }
     }
 }

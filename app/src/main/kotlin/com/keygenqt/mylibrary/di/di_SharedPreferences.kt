@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.online
+package com.keygenqt.mylibrary.di
 
-import android.view.*
-import androidx.annotation.*
+import android.app.*
+import com.keygenqt.mylibrary.*
 import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.data.models.*
-import com.keygenqt.mylibrary.interfaces.*
-import kotlinx.android.synthetic.main.item_book_list.view.*
+import org.koin.android.ext.koin.*
+import org.koin.dsl.*
 
-class AdapterOnline(@LayoutRes layout: Int, viewModel: ViewModelPage) : BaseAdapter(layout, viewModel) {
-    override fun onBindViewHolder(holder: View, model: Any) {
-        if (model is ModelBook) {
-            holder.apply {
-                title.text = model.title
-                subtitle.text = model.description
-            }
-        }
-    }
+val moduleSharedPreferences = module {
+    single { BaseSharedPreferences(androidContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Application.MODE_PRIVATE)) }
 }

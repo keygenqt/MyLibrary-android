@@ -24,10 +24,7 @@ import androidx.navigation.fragment.*
 import androidx.navigation.ui.*
 import com.google.android.material.bottomnavigation.*
 import com.google.android.material.snackbar.*
-import com.keygenqt.db.*
 import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.data.*
 import com.keygenqt.mylibrary.ui.chat.*
 import com.keygenqt.mylibrary.ui.local.*
 import com.keygenqt.mylibrary.ui.online.*
@@ -46,11 +43,6 @@ class MainActivity : AppCompatActivity() {
      * Navigation fragments
      */
     private lateinit var controller: NavController
-
-    /**
-     * OrmLite db
-     */
-    private lateinit var db: BaseOrmLite
 
     /**
      * Notification show for double click exit
@@ -84,8 +76,6 @@ class MainActivity : AppCompatActivity() {
             resources.getString(R.string.exit_info), Snackbar.LENGTH_SHORT)
 
         controller = findNavController(R.id.nav_host_fragment)
-
-        db = BaseOrmLite(this, "my_library.db", 1)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
@@ -129,13 +119,5 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         controller.removeOnDestinationChangedListener(listener)
         super.onPause()
-    }
-
-    /**
-     * For db close
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-        db.close()
     }
 }

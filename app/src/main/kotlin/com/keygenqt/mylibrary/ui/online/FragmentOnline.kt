@@ -35,8 +35,6 @@ import org.koin.android.ext.android.inject
 @FragmentTitle("Users Libs")
 class FragmentOnline : BaseFragment(R.layout.common_fragment_list) {
 
-    val sharedPreferences: BaseSharedPreferences by inject()
-
     private val viewModels: ViewLocal by inject()
 
     override fun onCreateView() {
@@ -44,7 +42,12 @@ class FragmentOnline : BaseFragment(R.layout.common_fragment_list) {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterOnline(R.layout.item_book_list, viewModels)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            refresh.setOnRefreshListener { viewModels.updateList() }
+            val refreshF = {
+                refresh.isRefreshing = true
+                viewModels.updateList()
+            }
+            refresh.setOnRefreshListener(refreshF)
+            refreshF()
         }
     }
 

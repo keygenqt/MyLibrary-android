@@ -14,32 +14,13 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary
+package com.keygenqt.mylibrary.di
 
-import android.app.*
-import com.keygenqt.mylibrary.di.*
-import org.koin.android.ext.koin.*
-import org.koin.core.context.*
+import com.keygenqt.mylibrary.ui.local.*
+import com.keygenqt.mylibrary.ui.online.*
+import org.koin.dsl.*
 
-/**
- * App class android application
- */
-class App : Application() {
-
-    /**
-     * For initialization dependencies
-     */
-    override fun onCreate() {
-        super.onCreate()
-
-        startKoin {
-            androidLogger()
-            androidContext(this@App)
-            modules(
-                moduleSharedPreferences,
-                moduleRetrofit,
-                moduleViewModel
-            )
-        }
-    }
+val moduleViewModel = module {
+    factory { ViewLocal(get()) }
+    factory { ViewOnline(get()) }
 }

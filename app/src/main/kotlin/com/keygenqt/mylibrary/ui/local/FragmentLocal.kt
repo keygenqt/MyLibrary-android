@@ -42,7 +42,12 @@ class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterLocal(R.layout.item_book_list, viewModels)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            refresh.setOnRefreshListener { viewModels.updateList() }
+            val refreshF = {
+                refresh.isRefreshing = true
+                viewModels.updateList()
+            }
+            refresh.setOnRefreshListener(refreshF)
+            refreshF()
         }
     }
 

@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data
+package com.keygenqt.mylibrary.data.models
 
-import com.j256.ormlite.field.DatabaseField
-import com.j256.ormlite.table.DatabaseTable
+class ModelBook(
+    var id: String = "",
 
-@DatabaseTable(tableName = "ModelUser")
-class ModelUser(
-    @DatabaseField
-    var email: String = "",
+    var title: String = "",
+
+    var author: String = "",
+
+    var description: String = "",
+
+    var publisher: String = "",
+
+    var year: String = "",
+
+    var numberOfPages: String = "",
+
+    var coverType: String = "",
+
+    var image: String = ""
 ) {
-    @DatabaseField(allowGeneratedIdInsert = true, generatedId = true)
-    var uid: Int = 0
-
     companion object
 }
