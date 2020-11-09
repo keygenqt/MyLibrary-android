@@ -13,8 +13,7 @@ class RetrofitHALConverter(private val gson: Gson) : Converter.Factory() {
         annotations: Array<Annotation>,
         retrofit: Retrofit
     ): Converter<ResponseBody, *> {
-        val adapter = gson.getAdapter(TypeToken.get(type))
-        return RetrofitHALResponse(gson, adapter)
+        return RetrofitHALResponse(gson, gson.getAdapter(TypeToken.get(type)), type.toString())
     }
 
     override fun requestBodyConverter(
@@ -23,8 +22,7 @@ class RetrofitHALConverter(private val gson: Gson) : Converter.Factory() {
         methodAnnotations: Array<Annotation>,
         retrofit: Retrofit
     ): Converter<*, RequestBody> {
-        val adapter = gson.getAdapter(TypeToken.get(type))
-        return RetrofitHALRequest(gson, adapter)
+        return RetrofitHALRequest(gson, gson.getAdapter(TypeToken.get(type)))
     }
 
     companion object {

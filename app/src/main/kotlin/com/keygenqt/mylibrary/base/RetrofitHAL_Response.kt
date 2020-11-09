@@ -12,31 +12,17 @@ import java.nio.charset.*
 
 internal class RetrofitHALResponse<T>(
     private val gson: Gson,
-    private val adapter: TypeAdapter<T>
+    private val adapter: TypeAdapter<T>,
+    private val typeName: String,
 ) : Converter<ResponseBody, T> {
 
     companion object {
         const val API_KEY_LIST = "_embedded"
-        const val API_KEY_LINKS = "_links"
-        const val API_KEY_page = "page"
+        const val API_KEY_PAGE = "page"
     }
 
     override fun convert(value: ResponseBody): T {
-        val response = Buffer().write(value.string().let {
-            return@let try {
-                val json = JSONObject(it)
-                if (json.has(API_KEY_LIST)) {
-                    val models = json.getJSONObject(API_KEY_LIST)
-                    models.keys().forEach { key ->
-                        return@let models.getJSONArray(key).toString()
-                    }
-                    it
-                } else it
-            } catch (ex: Exception) {
-                it
-            }
-        }.toByteArray(StandardCharsets.UTF_8)).asResponseBody("application/json; charset=UTF-8".toMediaType())
-        val jsonReader = gson.newJsonReader(response.charStream())
+        val jsonReader = gson.newJsonReader(checkResponse(value).charStream())
         return value.use {
             val result = adapter.read(jsonReader)
             if (jsonReader.peek() != JsonToken.END_DOCUMENT) {
@@ -44,6 +30,25 @@ internal class RetrofitHALResponse<T>(
             }
             result
         }
+    }
 
+    private fun checkResponse(value: ResponseBody): ResponseBody {
+        return if (typeName.contains("java.util.List")) {
+            Buffer().write(value.string().let write@{
+                return@write try {
+                    val json = JSONObject(it)
+                    if (json.has(API_KEY_LIST)) {
+                        json.getJSONObject(API_KEY_LIST).keys().forEach { key ->
+                            return@write json.getJSONObject(API_KEY_LIST).getJSONArray(key).toString()
+                        }
+                    }
+                    it
+                } catch (ex: Exception) {
+                    it
+                }
+            }.toByteArray(StandardCharsets.UTF_8)).asResponseBody("application/json; charset=UTF-8".toMediaType())
+        } else {
+            value
+        }
     }
 }

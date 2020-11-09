@@ -16,24 +16,40 @@
 
 package com.keygenqt.mylibrary.data.models
 
+import com.google.gson.annotations.*
+import com.keygenqt.mylibrary.base.*
+
 class ModelBook(
+
+    @SerializedName("id")
     var id: String = "",
 
+    @SerializedName("title")
     var title: String = "",
 
+    @SerializedName("author")
     var author: String = "",
 
+    @SerializedName("description")
     var description: String = "",
 
+    @SerializedName("publisher")
     var publisher: String = "",
 
+    @SerializedName("year")
     var year: String = "",
 
+    @SerializedName("numberOfPages")
     var numberOfPages: String = "",
 
+    @SerializedName("coverType")
     var coverType: String = "",
 
-    var image: String = ""
+    @SerializedName("image")
+    var image: String = "",
+
+    @SerializedName("_links")
+    var links: HashMap<String, BaseLink> = hashMapOf()
 ) {
     companion object
 }

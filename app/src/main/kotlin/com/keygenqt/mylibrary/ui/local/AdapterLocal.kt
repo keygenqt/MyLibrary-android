@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.local
 
+import android.util.*
 import android.view.*
 import androidx.annotation.*
 import com.keygenqt.mylibrary.interfaces.*
@@ -29,6 +30,10 @@ class AdapterLocal(@LayoutRes layout: Int, viewModel: ViewModelPage) : BaseAdapt
             holder.apply {
                 title.text = model.title
                 subtitle.text = model.description
+
+                model.links.forEach {
+                    Log.e(it.key, it.value.href)
+                }
             }
         }
     }
