@@ -24,6 +24,5 @@ package com.keygenqt.mylibrary.interfaces
  * @since       1.0
  */
 interface ViewModelPage {
-    fun updateList()
-    fun updateList(page: Int)
+    fun updateList(linkNext: String? = null)
 }

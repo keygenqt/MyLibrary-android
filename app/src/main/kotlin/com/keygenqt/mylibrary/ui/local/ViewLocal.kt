@@ -24,18 +24,16 @@ import com.keygenqt.mylibrary.interfaces.*
 
 class ViewLocal(private val service: BookService) : ViewModel(), ViewModelPage {
 
+    private val linkFirst = "http://192.168.1.68:8080/books"
+
     val items = MutableLiveData<ListData<ModelBook>>().apply {
         // value = BaseListData(ModelBook.findAll(PAGE_SIZE), LIST_DATA_TYPE_SET)
     }
 
     val loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    override fun updateList() {
-        updateList(1)
-    }
-
-    override fun updateList(page: Int) {
-        service.getList(page) { listData ->
+    override fun updateList(linkNext: String?) {
+        service.getList(linkNext ?: linkFirst) { listData ->
             loading.postValue(false)
             items.postValue(listData)
         }

@@ -16,25 +16,18 @@
 
 package com.keygenqt.mylibrary.ui.local
 
-import android.util.*
 import android.view.*
 import androidx.annotation.*
+import com.keygenqt.mylibrary.data.models.*
+import com.keygenqt.mylibrary.hal.*
 import com.keygenqt.mylibrary.interfaces.*
-import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.data.models.ModelBook
 import kotlinx.android.synthetic.main.item_book_list.view.*
 
-class AdapterLocal(@LayoutRes layout: Int, viewModel: ViewModelPage) : BaseAdapter(layout, viewModel) {
-    override fun onBindViewHolder(holder: View, model: Any) {
-        if (model is ModelBook) {
-            holder.apply {
-                title.text = model.title
-                subtitle.text = model.description
-
-                model.links.forEach {
-                    Log.e(it.key, it.value.href)
-                }
-            }
+class AdapterLocal(@LayoutRes layout: Int, viewModel: ViewModelPage) : Adapter<ModelBook>(layout, viewModel) {
+    override fun onBindViewHolder(holder: View, model: ModelBook) {
+        holder.apply {
+            title.text = model.title
+            subtitle.text = model.description
         }
     }
 }

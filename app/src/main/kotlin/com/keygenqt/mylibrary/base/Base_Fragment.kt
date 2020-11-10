@@ -29,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import com.keygenqt.mylibrary.hal.*
 import kotlinx.coroutines.launch
 import kotlin.reflect.full.findAnnotation
 

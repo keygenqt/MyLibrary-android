@@ -17,10 +17,8 @@
 package com.keygenqt.mylibrary.di
 
 import com.keygenqt.mylibrary.ui.local.*
-import com.keygenqt.mylibrary.ui.online.*
 import org.koin.dsl.*
 
 val moduleViewModel = module {
     factory { ViewLocal(get()) }
-    factory { ViewOnline(get()) }
 }
