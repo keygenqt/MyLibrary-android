@@ -36,7 +36,7 @@ val moduleRetrofit = module {
 fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
     return Retrofit.Builder()
         .baseUrl("http://192.168.1.68:8080/")
-        .addConverterFactory(RetrofitHALConverter.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .client(OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

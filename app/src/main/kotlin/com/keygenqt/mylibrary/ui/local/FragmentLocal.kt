@@ -18,14 +18,13 @@ package com.keygenqt.mylibrary.ui.local
 
 import android.view.*
 import androidx.core.content.*
-import androidx.fragment.app.*
 import androidx.navigation.fragment.*
 import androidx.recyclerview.widget.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.*
 import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_ADD
-import com.keygenqt.mylibrary.base.BaseListData.Companion.LIST_DATA_TYPE_SET
+import com.keygenqt.mylibrary.hal.ListData.Companion.LIST_DATA_TYPE_ADD
+import com.keygenqt.mylibrary.hal.ListData.Companion.LIST_DATA_TYPE_SET
 import kotlinx.android.synthetic.main.common_fragment_list.*
 import kotlinx.android.synthetic.main.common_fragment_list.view.*
 import org.koin.android.ext.android.*
@@ -58,19 +57,19 @@ class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
     }
 
     @ObserveInit private fun setItems() {
-        viewModels.items.observe(viewLifecycleOwner, { (items, type) ->
-            if (type == LIST_DATA_TYPE_SET) {
-                notFound.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
-                (recyclerView.adapter as BaseAdapter).setItems(items)
+        viewModels.items.observe(viewLifecycleOwner, {
+            if (it.type == LIST_DATA_TYPE_SET) {
+                notFound.visibility = if (it.items.isEmpty()) View.VISIBLE else View.GONE
+                (recyclerView.adapter as BaseAdapter).setItems(it.items)
                 recyclerView.smoothScrollToPosition(0)
             }
         })
     }
 
     @ObserveInit private fun addAdapterItems() {
-        viewModels.items.observe(viewLifecycleOwner, { (items, type) ->
-            if (type == LIST_DATA_TYPE_ADD) {
-                (recyclerView.adapter as BaseAdapter).addItems(items)
+        viewModels.items.observe(viewLifecycleOwner, {
+            if (it.type == LIST_DATA_TYPE_ADD) {
+                (recyclerView.adapter as BaseAdapter).addItems(it.items)
             }
         })
     }

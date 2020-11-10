@@ -17,7 +17,7 @@
 package com.keygenqt.mylibrary.data.models
 
 import com.google.gson.annotations.*
-import com.keygenqt.mylibrary.base.*
+import com.keygenqt.mylibrary.hal.*
 
 class ModelBook(
 
@@ -49,7 +49,7 @@ class ModelBook(
     var image: String = "",
 
     @SerializedName("_links")
-    var links: HashMap<String, BaseLink> = hashMapOf()
+    var links: HashMap<String, Link> = hashMapOf()
 ) {
     companion object
 }
