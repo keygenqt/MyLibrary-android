@@ -18,7 +18,15 @@
     <action
         android:id="@+id/action_FragmentSplash_to_FragmentChat"
         app:destination="@id/FragmentChat" />
+    <action
+        android:id="@+id/action_FragmentSplash_to_FragmentLogin"
+        app:destination="@id/FragmentLogin" />
   </fragment>
+
+  <fragment
+      android:id="@+id/FragmentLogin"
+      android:name="com.keygenqt.mylibrary.ui.other.FragmentLogin"
+      tools:layout="@layout/fragment_login" />
 
   <fragment
       android:id="@+id/FragmentLocal"
@@ -32,26 +40,12 @@
   <fragment
       android:id="@+id/FragmentOnline"
       android:name="com.keygenqt.mylibrary.ui.online.FragmentOnline"
-      tools:layout="@layout/common_fragment_list">
-
-    <action
-        android:id="@+id/action_FragmentOnline_to_FragmentChat"
-        app:destination="@id/FragmentChat" />
-    <action
-        android:id="@+id/action_FragmentOnline_to_FragmentSettings"
-        app:destination="@id/FragmentSettings" />
-
-  </fragment>
+      tools:layout="@layout/common_fragment_list" />
 
   <fragment
       android:id="@+id/FragmentChat"
       android:name="com.keygenqt.mylibrary.ui.chat.FragmentChat"
-      tools:layout="@layout/common_fragment_list">
-    <action
-        android:id="@+id/action_FragmentChat_to_FragmentSettings"
-        app:destination="@id/FragmentSettings" />
-  </fragment>
-
+      tools:layout="@layout/common_fragment_list" />
 
   <fragment
       android:id="@+id/FragmentSettings"

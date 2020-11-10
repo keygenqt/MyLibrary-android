@@ -16,21 +16,20 @@
 
 package com.keygenqt.mylibrary.di
 
-import android.util.Log
-import com.google.gson.*
+import android.util.*
 import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.data.services.BookApi
-import com.keygenqt.mylibrary.data.services.BookService
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import com.keygenqt.mylibrary.data.services.*
+import okhttp3.*
+import okhttp3.logging.*
+import org.koin.dsl.*
+import retrofit2.*
+import retrofit2.converter.gson.*
+import java.util.concurrent.*
 
 val moduleRetrofit = module {
     factory { provideRetrofit(get()) }
     single { provideBookService(provideBookApi(get())) }
+    single { provideOtherService(provideOtherApi(get())) }
 }
 
 fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
@@ -52,7 +51,8 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
             .addInterceptor {
                 val original = it.request()
                 val request = original.newBuilder()
-                    .header("Authorization", sharedPreferences.token ?: "")
+                    .header("authorization", sharedPreferences.token ?: "")
+                    .header("uid", sharedPreferences.uid)
                     .method(original.method, original.body)
                     .build()
                 it.proceed(request)
@@ -65,3 +65,7 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
 fun provideBookApi(retrofit: Retrofit): BookApi = retrofit.create(BookApi::class.java)
 
 fun provideBookService(api: BookApi): BookService = BookService(api)
+
+fun provideOtherApi(retrofit: Retrofit): OtherApi = retrofit.create(OtherApi::class.java)
+
+fun provideOtherService(api: OtherApi): OtherService = OtherService(api)

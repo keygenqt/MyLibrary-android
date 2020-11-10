@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.interfaces
 
+import androidx.lifecycle.*
+
 /**
  * Interface for ViewModel with pagination
  *
@@ -24,5 +26,7 @@ package com.keygenqt.mylibrary.interfaces
  * @since       1.0
  */
 interface ViewModelPage {
-    fun updateList(linkNext: String? = null)
+    //    fun updateList(linkNext: String? = null): LiveData<*>
+    val link: MutableLiveData<String?>
+    val loading: MutableLiveData<Boolean>
 }

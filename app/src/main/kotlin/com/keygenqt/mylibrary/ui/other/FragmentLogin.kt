@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.ui.other
 
-import com.keygenqt.mylibrary.base.getResponse
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.hal.ListData
+import com.keygenqt.mylibrary.*
+import com.keygenqt.mylibrary.annotations.*
+import com.keygenqt.mylibrary.base.*
+import org.koin.android.ext.android.*
 
-class BookService(private val api: BookApi) {
-    suspend fun getList(link: String, delegate: suspend (ListData<ModelBook>) -> Unit) {
-        api.getList(link).getResponse { response ->
-            response?.let {
-                delegate.invoke(response)
-            }
-        }
+@ActionBarEnable
+@FragmentTitle("Login")
+class FragmentLogin : BaseFragment(R.layout.fragment_login) {
+
+    private val viewModel: ViewLogin by inject()
+
+    override fun onCreateView() {
+
     }
 }

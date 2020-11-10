@@ -17,25 +17,27 @@
 package com.keygenqt.mylibrary.ui.local
 
 import androidx.lifecycle.*
-import com.keygenqt.mylibrary.data.models.*
 import com.keygenqt.mylibrary.data.services.*
-import com.keygenqt.mylibrary.hal.*
 import com.keygenqt.mylibrary.interfaces.*
 
 class ViewLocal(private val service: BookService) : ViewModel(), ViewModelPage {
 
-    private val linkFirst = "http://192.168.1.68:8080/books"
+    private val linkFirstDefault = "http://192.168.1.68:8080/books"
 
-    val items = MutableLiveData<ListData<ModelBook>>().apply {
-        // value = BaseListData(ModelBook.findAll(PAGE_SIZE), LIST_DATA_TYPE_SET)
+    override val link: MutableLiveData<String?> = MutableLiveData()
+    override val loading: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        link.postValue(null)
     }
 
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
-
-    override fun updateList(linkNext: String?) {
-        service.getList(linkNext ?: linkFirst) { listData ->
-            loading.postValue(false)
-            items.postValue(listData)
+    val listData = link.switchMap {
+        liveData {
+            loading.postValue(true)
+            service.getList(link.value ?: linkFirstDefault) { listData ->
+                loading.postValue(false)
+                emit(listData)
+            }
         }
     }
 }

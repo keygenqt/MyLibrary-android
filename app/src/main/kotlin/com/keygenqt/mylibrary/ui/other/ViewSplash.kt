@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.ui.other
 
-import com.keygenqt.mylibrary.base.getResponse
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.hal.ListData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.keygenqt.mylibrary.data.models.ModelRoot
+import com.keygenqt.mylibrary.data.services.OtherService
 
-class BookService(private val api: BookApi) {
-    suspend fun getList(link: String, delegate: suspend (ListData<ModelBook>) -> Unit) {
-        api.getList(link).getResponse { response ->
-            response?.let {
-                delegate.invoke(response)
-            }
+class ViewSplash(private val service: OtherService) : ViewModel() {
+    val links: LiveData<ModelRoot?> = liveData {
+        service.getRootLinks { links ->
+            emit(links)
         }
     }
 }

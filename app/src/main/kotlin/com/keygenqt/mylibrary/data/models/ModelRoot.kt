@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.data.models
 
-import com.keygenqt.mylibrary.base.getResponse
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.hal.ListData
+import com.google.gson.annotations.*
+import com.keygenqt.mylibrary.hal.*
 
-class BookService(private val api: BookApi) {
-    suspend fun getList(link: String, delegate: suspend (ListData<ModelBook>) -> Unit) {
-        api.getList(link).getResponse { response ->
-            response?.let {
-                delegate.invoke(response)
-            }
-        }
-    }
+class ModelRoot(
+
+    @SerializedName("version")
+    var version: String = "",
+
+    @SerializedName("description")
+    var description: String = "",
+
+    @SerializedName("_links")
+    var links: HashMap<String, Link> = hashMapOf()
+) {
+    companion object
 }

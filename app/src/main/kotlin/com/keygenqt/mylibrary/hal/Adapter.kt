@@ -76,7 +76,7 @@ abstract class Adapter<T>(
             timer = Timer()
             timer.schedule(800) {
                 linkNext?.let {
-                    viewModel?.updateList(it)
+                    viewModel?.link?.postValue(it)
                 }
                 timer.cancel()
             }

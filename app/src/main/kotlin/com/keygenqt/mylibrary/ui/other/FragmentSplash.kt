@@ -16,16 +16,22 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import android.os.*
-import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.*
+import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.base.*
+import com.keygenqt.mylibrary.base.BaseFragment
+import org.koin.android.ext.android.inject
 
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
+
+    private val viewModel: ViewSplash by inject()
+
     override fun onCreateView() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
-        }, 1000)
+        viewModel.links.observe(viewLifecycleOwner, { links ->
+            links?.let {
+                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
+            } ?: run {
+                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLogin())
+            }
+        })
     }
 }
