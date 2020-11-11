@@ -17,6 +17,8 @@
 package com.keygenqt.mylibrary
 
 import android.app.*
+import android.content.Context
+import android.widget.Toast
 import com.keygenqt.mylibrary.di.*
 import org.koin.android.ext.koin.*
 import org.koin.core.context.*
@@ -26,11 +28,17 @@ import org.koin.core.context.*
  */
 class App : Application() {
 
+    companion object {
+        lateinit var APP_CONTEXT: Context
+    }
+
     /**
      * For initialization dependencies
      */
     override fun onCreate() {
         super.onCreate()
+
+        APP_CONTEXT = this.applicationContext
 
         startKoin {
             androidLogger()

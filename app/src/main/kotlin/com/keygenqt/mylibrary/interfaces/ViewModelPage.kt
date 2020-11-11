@@ -26,7 +26,6 @@ import androidx.lifecycle.*
  * @since       1.0
  */
 interface ViewModelPage {
-    //    fun updateList(linkNext: String? = null): LiveData<*>
     val link: MutableLiveData<String?>
     val loading: MutableLiveData<Boolean>
 }

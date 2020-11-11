@@ -16,14 +16,11 @@
 
 package com.keygenqt.mylibrary.data.services
 
-import com.keygenqt.mylibrary.base.getResponse
+import com.keygenqt.mylibrary.base.checkResponse
 import com.keygenqt.mylibrary.data.models.ModelRoot
 
 class OtherService(private val api: OtherApi) {
-    suspend fun getRootLinks(delegate: suspend (ModelRoot?) -> Unit) {
-        api.getRootLinks().getResponse {
-            // @todo save db
-            delegate.invoke(it)
-        }
+    suspend fun getRootLinks(response: suspend (ModelRoot) -> Unit) {
+        api.getRootLinks().checkResponse(response)
     }
 }

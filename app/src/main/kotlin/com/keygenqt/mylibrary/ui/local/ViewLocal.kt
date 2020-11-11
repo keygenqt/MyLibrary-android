@@ -16,9 +16,13 @@
 
 package com.keygenqt.mylibrary.ui.local
 
-import androidx.lifecycle.*
-import com.keygenqt.mylibrary.data.services.*
-import com.keygenqt.mylibrary.interfaces.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
+import com.keygenqt.mylibrary.base.getExceptionHandler
+import com.keygenqt.mylibrary.data.services.BookService
+import com.keygenqt.mylibrary.interfaces.ViewModelPage
 
 class ViewLocal(private val service: BookService) : ViewModel(), ViewModelPage {
 
@@ -32,7 +36,7 @@ class ViewLocal(private val service: BookService) : ViewModel(), ViewModelPage {
     }
 
     val listData = link.switchMap {
-        liveData {
+        liveData(getExceptionHandler()) {
             loading.postValue(true)
             service.getList(link.value ?: linkFirstDefault) { listData ->
                 loading.postValue(false)

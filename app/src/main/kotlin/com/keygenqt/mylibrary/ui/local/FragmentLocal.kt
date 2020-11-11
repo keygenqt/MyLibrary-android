@@ -16,16 +16,23 @@
 
 package com.keygenqt.mylibrary.ui.local
 
-import android.view.*
-import androidx.core.content.*
-import androidx.navigation.fragment.*
-import androidx.recyclerview.widget.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.hal.*
-import kotlinx.android.synthetic.main.common_fragment_list.view.*
-import org.koin.android.ext.android.*
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.hal.Adapter
+import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
+import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
+import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
+import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @BottomNavigationEnable
@@ -47,15 +54,14 @@ class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
             viewModel.loading.observe(viewLifecycleOwner, { status ->
                 refresh.isRefreshing = status
             })
-
-            viewModel.listData.observe(viewLifecycleOwner, { listData ->
+            viewModel.listData.observe(viewLifecycleOwner) { listData ->
                 (recyclerView.adapter as Adapter<*>).setListData(listData) { type ->
                     if (type == Adapter.LIST_DATA_TYPE_SET) {
                         notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
                         recyclerView.smoothScrollToPosition(0)
                     }
                 }
-            })
+            }
         }
     }
 

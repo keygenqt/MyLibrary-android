@@ -24,6 +24,7 @@ import okhttp3.logging.*
 import org.koin.dsl.*
 import retrofit2.*
 import retrofit2.converter.gson.*
+import java.net.ConnectException
 import java.util.concurrent.*
 
 val moduleRetrofit = module {

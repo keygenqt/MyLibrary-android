@@ -16,16 +16,12 @@
 
 package com.keygenqt.mylibrary.data.services
 
-import com.keygenqt.mylibrary.base.getResponse
+import com.keygenqt.mylibrary.base.checkResponse
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.ListData
 
 class BookService(private val api: BookApi) {
-    suspend fun getList(link: String, delegate: suspend (ListData<ModelBook>) -> Unit) {
-        api.getList(link).getResponse { response ->
-            response?.let {
-                delegate.invoke(response)
-            }
-        }
+    suspend fun getList(link: String, response: suspend (ListData<ModelBook>) -> Unit) {
+        api.getList(link).checkResponse(response)
     }
 }

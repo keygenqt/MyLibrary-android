@@ -16,21 +16,63 @@
 
 package com.keygenqt.mylibrary.base
 
-import android.util.Log
-import retrofit2.HttpException
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import com.keygenqt.mylibrary.App
+import kotlinx.coroutines.CoroutineExceptionHandler
+import org.json.JSONObject
 import retrofit2.Response
+import java.net.ConnectException
 
-suspend fun <T> Response<T>.getResponse(delegate: suspend (T?) -> Unit) {
-    try {
-        if (this@getResponse.isSuccessful) {
-            delegate.invoke(this@getResponse.body())
-        } else {
-            delegate.invoke(null)
-            Log.e("Application", "Error: ${this@getResponse.code()}")
+class HttpException(
+    val code: Int,
+    override val message: String,
+    val error: String,
+    val path: String,
+    val date: String,
+) : RuntimeException()
+
+fun getExceptionHandler(delegate: (Throwable) -> Unit): CoroutineExceptionHandler {
+    return CoroutineExceptionHandler { _, throwable ->
+        when (throwable) {
+            is ConnectException -> {
+                Toast.makeText(App.APP_CONTEXT, "Failed to connect", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                delegate.invoke(throwable)
+            }
         }
-    } catch (e: HttpException) {
-        Log.e("Application", "Exception ${e.message}")
-    } catch (e: Throwable) {
-        Log.e("Application", "Ooops: Something else went wrong")
+    }
+}
+
+fun getExceptionHandler(error: MutableLiveData<Throwable>): CoroutineExceptionHandler {
+    return getExceptionHandler {
+        error.postValue(it)
+    }
+}
+
+fun getExceptionHandler(): CoroutineExceptionHandler {
+    return getExceptionHandler {
+
+    }
+}
+
+suspend fun <T> Response<T>.checkResponse(delegate: suspend (T) -> Unit) {
+    if (this@checkResponse.isSuccessful) {
+        delegate.invoke(this@checkResponse.body()!!)
+    } else {
+        this@checkResponse.errorBody()?.let {
+            val jsonObject = JSONObject(it.string())
+            if (jsonObject.has("status")) {
+                throw HttpException(
+                    code = jsonObject.getInt("status"),
+                    message = jsonObject.getString("message"),
+                    error = jsonObject.getString("error"),
+                    path = jsonObject.getString("path"),
+                    date = jsonObject.getString("timestamp"),
+                )
+            }
+        }
+        throw RuntimeException("Response api has error")
     }
 }
