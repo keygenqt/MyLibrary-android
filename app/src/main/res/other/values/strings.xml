@@ -8,6 +8,18 @@
   <string name="page_main_bottom_menu_item_my_library">My Library</string>
   <string name="page_main_bottom_menu_item_users_library">Users Libs</string>
   <string name="page_main_bottom_menu_item_chat">Chat</string>
+  <string name="button_submit">Submit</string>
+
+  // login
+  <string name="login_email">Email</string>
+  <string name="login_passw">Password</string>
+  <string name="login_reg_info">If you are not join yet, you can do this</string>
+  <string name="login_reg">Join us</string>
+
+  // join
+  <string name="join_login">Login</string>
+  <string name="join_email">Email</string>
+  <string name="join_passw">Password</string>
 
   // other
   <string name="page_settings_title">Settings</string>

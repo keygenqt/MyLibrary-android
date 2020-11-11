@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.di
+package com.keygenqt.mylibrary.ui.other
 
-import com.keygenqt.mylibrary.ui.local.*
-import com.keygenqt.mylibrary.ui.other.*
-import org.koin.dsl.*
+import androidx.lifecycle.*
+import com.keygenqt.mylibrary.data.services.*
 
-val moduleViewModel = module {
-    factory { ViewLocal(get()) }
-    factory { ViewSettings(get()) }
-    factory { ViewSplash(get()) }
-    factory { ViewLogin(get()) }
-    factory { ViewJoin(get()) }
-}
+class ViewJoin(private val service: OtherService) : ViewModel()

@@ -28,6 +28,7 @@ import com.keygenqt.mylibrary.annotations.*
 import com.keygenqt.mylibrary.ui.chat.*
 import com.keygenqt.mylibrary.ui.local.*
 import com.keygenqt.mylibrary.ui.online.*
+import com.keygenqt.mylibrary.ui.other.*
 import kotlin.reflect.full.*
 
 /**
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
      * @see FragmentTitle
      */
     private val listener = NavController.OnDestinationChangedListener { controller, _, _ ->
+        // set title fragment without delay
         findViewById<Toolbar>(R.id.toolbar)?.let { toolbar ->
             val destinationClassName = (controller.currentDestination as FragmentNavigator.Destination).className
             Class.forName(destinationClassName).kotlin.findAnnotation<FragmentTitle>()?.let { annotation ->
@@ -100,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                 is FragmentLocal -> if (info.isShown) finishAffinity() else info.show()
                 is FragmentOnline -> if (info.isShown) finishAffinity() else info.show()
                 is FragmentChat -> if (info.isShown) finishAffinity() else info.show()
+                is FragmentLogin -> if (info.isShown) finishAffinity() else info.show()
                 else -> super.onBackPressed()
             }
         }

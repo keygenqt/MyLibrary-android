@@ -16,10 +16,15 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import com.keygenqt.mylibrary.*
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
-import org.koin.android.ext.android.*
+import android.util.Log
+import androidx.navigation.fragment.findNavController
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_login.view.buttonJoin
+import kotlinx.android.synthetic.main.fragment_login.view.buttonSubmit
+import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @FragmentTitle("Login")
@@ -28,6 +33,16 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     private val viewModel: ViewLogin by inject()
 
     override fun onCreateView() {
-
+        initToolbar {
+            setNavigationOnClickListener { activity?.onBackPressed() }
+        }
+        initView {
+            buttonSubmit.setOnClickListener {
+                Log.e("TAG", "Submit")
+            }
+            buttonJoin.setOnClickListener {
+                findNavController().navigate(FragmentLoginDirections.actionFragmentSplashToFragmentJoin())
+            }
+        }
     }
 }

@@ -26,7 +26,16 @@
   <fragment
       android:id="@+id/FragmentLogin"
       android:name="com.keygenqt.mylibrary.ui.other.FragmentLogin"
-      tools:layout="@layout/fragment_login" />
+      tools:layout="@layout/fragment_login" >
+    <action
+        android:id="@+id/action_FragmentSplash_to_FragmentJoin"
+        app:destination="@id/FragmentJoin" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentJoin"
+      android:name="com.keygenqt.mylibrary.ui.other.FragmentJoin"
+      tools:layout="@layout/fragment_join" />
 
   <fragment
       android:id="@+id/FragmentLocal"

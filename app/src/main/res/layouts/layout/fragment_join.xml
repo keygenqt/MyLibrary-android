@@ -25,10 +25,27 @@
         >
 
       <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/textInputLayoutLogin"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/join_login"
+          >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/textInputLayoutEmail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/login_email"
+          android:layout_marginTop="@dimen/padding"
+          android:hint="@string/join_email"
           >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -45,7 +62,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/padding"
-          android:hint="@string/login_passw"
+          android:hint="@string/join_passw"
           app:passwordToggleEnabled="true"
           >
 
@@ -64,23 +81,6 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/padding"
           android:text="@string/button_submit"
-          />
-
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_marginTop="@dimen/padding"
-          android:text="@string/login_reg_info"
-          />
-
-      <Button
-          android:id="@+id/buttonJoin"
-          style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
-          android:text="@string/login_reg"
-          app:strokeColor="@color/colorPrimary"
           />
 
     </LinearLayout>

@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.di
+package com.keygenqt.mylibrary.ui.other
 
-import com.keygenqt.mylibrary.ui.local.*
-import com.keygenqt.mylibrary.ui.other.*
-import org.koin.dsl.*
+import androidx.navigation.fragment.*
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.*
+import com.keygenqt.mylibrary.base.*
+import org.koin.android.ext.android.*
 
-val moduleViewModel = module {
-    factory { ViewLocal(get()) }
-    factory { ViewSettings(get()) }
-    factory { ViewSplash(get()) }
-    factory { ViewLogin(get()) }
-    factory { ViewJoin(get()) }
+@ActionBarEnable
+@FragmentTitle("Join")
+class FragmentJoin : BaseFragment(R.layout.fragment_join) {
+
+    private val viewModel: ViewJoin by inject()
+
+    override fun onCreateView() {
+        initToolbar {
+            setNavigationOnClickListener { findNavController().navigateUp() }
+        }
+    }
 }
