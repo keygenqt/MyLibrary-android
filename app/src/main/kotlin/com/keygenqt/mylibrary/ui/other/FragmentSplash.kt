@@ -18,34 +18,27 @@ package com.keygenqt.mylibrary.ui.other
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.HttpException
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import org.koin.android.ext.android.inject
-import java.net.ConnectException
 
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
 
     private val viewModel: ViewSplash by inject()
 
+    private val sharedPreferences: BaseSharedPreferences by inject()
+
     override fun onCreateView() {
         Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.links.observe(viewLifecycleOwner, {
-                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
-            })
-            viewModel.error.observe(viewLifecycleOwner, { throwable ->
-                when (throwable) {
-                    is HttpException -> {
-                        if (throwable.code == 403) {
-                            findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLogin())
-                        }
-                    }
-                }
-                Log.e("TAG", throwable.message ?: "")
-            })
+            if (sharedPreferences.token.isNullOrEmpty()) {
+                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLogin())
+            } else {
+                viewModel.links.observe(viewLifecycleOwner, {
+                    findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
+                })
+            }
         }, 700)
     }
 }

@@ -17,10 +17,23 @@
 package com.keygenqt.mylibrary.data.services
 
 import com.keygenqt.mylibrary.data.models.ModelRoot
+import com.keygenqt.mylibrary.data.models.ModelUser
 import retrofit2.Response
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface OtherApi {
+
+    @POST("/login")
+    @FormUrlEncoded
+    suspend fun login(
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("uid") uid: String,
+    ): Response<ModelUser>
+
     @GET("/")
     suspend fun getRootLinks(): Response<ModelRoot>
 }

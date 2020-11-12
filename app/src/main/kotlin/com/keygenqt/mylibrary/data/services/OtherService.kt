@@ -16,10 +16,21 @@
 
 package com.keygenqt.mylibrary.data.services
 
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.checkResponse
 import com.keygenqt.mylibrary.data.models.ModelRoot
+import com.keygenqt.mylibrary.data.models.ModelUser
 
-class OtherService(private val api: OtherApi) {
+class OtherService(private val api: OtherApi, private val preferences: BaseSharedPreferences) {
+
+    suspend fun login(
+        email: String,
+        passw: String,
+        response: suspend (ModelUser) -> Unit
+    ) {
+        api.login(email, passw, preferences.uid).checkResponse(response)
+    }
+
     suspend fun getRootLinks(response: suspend (ModelRoot) -> Unit) {
         api.getRootLinks().checkResponse(response)
     }

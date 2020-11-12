@@ -16,14 +16,14 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_login.view.buttonJoin
-import kotlinx.android.synthetic.main.fragment_login.view.buttonSubmit
+import com.keygenqt.mylibrary.base.ValidateException
+import com.keygenqt.mylibrary.extensions.hideKeyboard
+import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -37,11 +37,34 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
             setNavigationOnClickListener { activity?.onBackPressed() }
         }
         initView {
+            viewModel.login.observe(viewLifecycleOwner) {
+                this.hideKeyboard()
+                findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToFragmentLocal())
+            }
+            viewModel.error.observe(viewLifecycleOwner, { throwable ->
+                if (throwable is ValidateException) {
+                    textInputLayoutEmail.error = null
+                    textInputLayoutPassw.error = null
+                    throwable.errors.forEach {
+                        when (it.field) {
+                            "email" -> if (textInputLayoutEmail.error.isNullOrEmpty()) {
+                                textInputLayoutEmail.error = it.defaultMessage
+                            }
+                            "password" -> if (textInputLayoutPassw.error.isNullOrEmpty()) {
+                                textInputLayoutPassw.error = it.defaultMessage
+                            }
+                        }
+                    }
+                }
+            })
             buttonSubmit.setOnClickListener {
-                Log.e("TAG", "Submit")
+                viewModel.params.postValue(hashMapOf(
+                    "email" to textInputEditTextEmail.text.toString(),
+                    "passw" to textInputEditTextPassw.text.toString()
+                ))
             }
             buttonJoin.setOnClickListener {
-                findNavController().navigate(FragmentLoginDirections.actionFragmentSplashToFragmentJoin())
+                findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToFragmentJoin())
             }
         }
     }

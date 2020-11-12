@@ -16,20 +16,23 @@
 
 package com.keygenqt.mylibrary
 
-import android.os.*
-import androidx.appcompat.app.*
-import androidx.appcompat.widget.*
-import androidx.navigation.*
-import androidx.navigation.fragment.*
-import androidx.navigation.ui.*
-import com.google.android.material.bottomnavigation.*
-import com.google.android.material.snackbar.*
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.ui.chat.*
-import com.keygenqt.mylibrary.ui.local.*
-import com.keygenqt.mylibrary.ui.online.*
-import com.keygenqt.mylibrary.ui.other.*
-import kotlin.reflect.full.*
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.ui.chat.FragmentChat
+import com.keygenqt.mylibrary.ui.local.FragmentLocal
+import com.keygenqt.mylibrary.ui.online.FragmentOnline
+import com.keygenqt.mylibrary.ui.other.FragmentLogin
+import kotlin.reflect.full.findAnnotation
 
 /**
  * MainActivity - base activity for navigation fragments
@@ -57,10 +60,12 @@ class MainActivity : AppCompatActivity() {
     private val listener = NavController.OnDestinationChangedListener { controller, _, _ ->
         // set title fragment without delay
         findViewById<Toolbar>(R.id.toolbar)?.let { toolbar ->
-            val destinationClassName = (controller.currentDestination as FragmentNavigator.Destination).className
-            Class.forName(destinationClassName).kotlin.findAnnotation<FragmentTitle>()?.let { annotation ->
-                toolbar.title = annotation.title
-            } ?: run {
+            val destinationClassName =
+                (controller.currentDestination as FragmentNavigator.Destination).className
+            Class.forName(destinationClassName).kotlin.findAnnotation<FragmentTitle>()
+                ?.let { annotation ->
+                    toolbar.title = annotation.title
+                } ?: run {
                 toolbar.title = ""
             }
         }
@@ -74,8 +79,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        info = Snackbar.make(findViewById(R.id.contentMain),
-            resources.getString(R.string.exit_info), Snackbar.LENGTH_SHORT)
+        info = Snackbar.make(
+            findViewById(R.id.contentMain),
+            resources.getString(R.string.exit_info), Snackbar.LENGTH_SHORT
+        )
 
         controller = findNavController(R.id.nav_host_fragment)
 
@@ -90,7 +97,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(controller, appBarConfiguration)
         navView.setupWithNavController(controller)
-
     }
 
     /**

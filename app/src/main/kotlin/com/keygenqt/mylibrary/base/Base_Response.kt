@@ -18,44 +18,72 @@ package com.keygenqt.mylibrary.base
 
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
+import com.google.gson.Gson
 import com.keygenqt.mylibrary.App
+import com.keygenqt.mylibrary.MainActivity
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import kotlinx.coroutines.CoroutineExceptionHandler
 import org.json.JSONObject
 import retrofit2.Response
 import java.net.ConnectException
 
+class ValidateException(
+    val status: Int,
+    override val message: String,
+    val error: String,
+    val errors: List<ValidateExceptionError>,
+    val path: String,
+    val timestamp: String,
+) : RuntimeException()
+
+class ValidateExceptionError(
+    val codes: List<String>,
+    val defaultMessage: String,
+    val objectName: String,
+    val field: String,
+    val rejectedValue: String,
+    val bindingFailure: String,
+    val code: String,
+)
+
 class HttpException(
-    val code: Int,
+    val status: Int,
     override val message: String,
     val error: String,
     val path: String,
-    val date: String,
+    val timestamp: String,
 ) : RuntimeException()
 
-fun getExceptionHandler(delegate: (Throwable) -> Unit): CoroutineExceptionHandler {
-    return CoroutineExceptionHandler { _, throwable ->
-        when (throwable) {
-            is ConnectException -> {
-                Toast.makeText(App.APP_CONTEXT, "Failed to connect", Toast.LENGTH_SHORT).show()
-            }
-            else -> {
-                delegate.invoke(throwable)
-            }
-        }
-    }
-}
-
-fun getExceptionHandler(error: MutableLiveData<Throwable>): CoroutineExceptionHandler {
-    return getExceptionHandler {
-        error.postValue(it)
-    }
-}
-
-fun getExceptionHandler(): CoroutineExceptionHandler {
-    return getExceptionHandler {
-
-    }
-}
+//fun getExceptionHandler(delegate: (Throwable) -> Unit): CoroutineExceptionHandler {
+//    return CoroutineExceptionHandler { c, throwable ->
+//        when (throwable) {
+//            is HttpException -> {
+//                if (throwable.status == 403) {
+//                    findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLogin())
+//                }
+//            }
+//            is ConnectException -> {
+//                Toast.makeText(App.APP_CONTEXT, "Failed to connect", Toast.LENGTH_SHORT).show()
+//            }
+//            else -> {
+//                delegate.invoke(throwable)
+//            }
+//        }
+//    }
+//}
+//
+//fun getExceptionHandler(error: MutableLiveData<Throwable>): CoroutineExceptionHandler {
+//    return getExceptionHandler {
+//        error.postValue(it)
+//    }
+//}
+//
+//fun getExceptionHandler(): CoroutineExceptionHandler {
+//    return getExceptionHandler {}
+//}
 
 suspend fun <T> Response<T>.checkResponse(delegate: suspend (T) -> Unit) {
     if (this@checkResponse.isSuccessful) {
@@ -64,13 +92,11 @@ suspend fun <T> Response<T>.checkResponse(delegate: suspend (T) -> Unit) {
         this@checkResponse.errorBody()?.let {
             val jsonObject = JSONObject(it.string())
             if (jsonObject.has("status")) {
-                throw HttpException(
-                    code = jsonObject.getInt("status"),
-                    message = jsonObject.getString("message"),
-                    error = jsonObject.getString("error"),
-                    path = jsonObject.getString("path"),
-                    date = jsonObject.getString("timestamp"),
-                )
+                if (jsonObject.getInt("status") == 422) {
+                    throw Gson().fromJson(jsonObject.toString(), ValidateException::class.java)
+                } else {
+                    throw Gson().fromJson(jsonObject.toString(), HttpException::class.java)
+                }
             }
         }
         throw RuntimeException("Response api has error")

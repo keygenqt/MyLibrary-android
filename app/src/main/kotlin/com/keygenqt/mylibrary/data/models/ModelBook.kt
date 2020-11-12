@@ -19,7 +19,7 @@ package com.keygenqt.mylibrary.data.models
 import com.google.gson.annotations.*
 import com.keygenqt.mylibrary.hal.*
 
-class ModelBook(
+data class ModelBook(
 
     @SerializedName("id")
     var id: String = "",

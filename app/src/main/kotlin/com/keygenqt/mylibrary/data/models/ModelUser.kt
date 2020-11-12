@@ -16,8 +16,28 @@
 
 package com.keygenqt.mylibrary.data.models
 
-class ModelUser(
+import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.hal.Link
+
+data class ModelUser(
+
+    @SerializedName("id")
+    var id: String = "",
+
+    @SerializedName("email")
     var email: String = "",
+
+    @SerializedName("login")
+    var login: String = "",
+
+    @SerializedName("image")
+    var image: String = "",
+
+    @SerializedName("token")
+    var token: String = "",
+
+    @SerializedName("_links")
+    var links: HashMap<String, Link> = hashMapOf()
 ) {
     companion object
 }

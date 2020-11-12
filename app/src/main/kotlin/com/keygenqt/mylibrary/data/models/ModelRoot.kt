@@ -19,7 +19,7 @@ package com.keygenqt.mylibrary.data.models
 import com.google.gson.annotations.*
 import com.keygenqt.mylibrary.hal.*
 
-class ModelRoot(
+data class ModelRoot(
 
     @SerializedName("version")
     var version: String = "",

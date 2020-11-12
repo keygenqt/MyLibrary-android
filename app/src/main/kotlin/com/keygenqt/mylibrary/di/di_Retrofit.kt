@@ -16,21 +16,23 @@
 
 package com.keygenqt.mylibrary.di
 
-import android.util.*
-import com.keygenqt.mylibrary.base.*
-import com.keygenqt.mylibrary.data.services.*
-import okhttp3.*
-import okhttp3.logging.*
-import org.koin.dsl.*
-import retrofit2.*
-import retrofit2.converter.gson.*
-import java.net.ConnectException
-import java.util.concurrent.*
+import android.util.Log
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.data.services.BookApi
+import com.keygenqt.mylibrary.data.services.BookService
+import com.keygenqt.mylibrary.data.services.OtherApi
+import com.keygenqt.mylibrary.data.services.OtherService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 val moduleRetrofit = module {
     factory { provideRetrofit(get()) }
     single { provideBookService(provideBookApi(get())) }
-    single { provideOtherService(provideOtherApi(get())) }
+    single { provideOtherService(provideOtherApi(get()), get()) }
 }
 
 fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
@@ -69,4 +71,4 @@ fun provideBookService(api: BookApi): BookService = BookService(api)
 
 fun provideOtherApi(retrofit: Retrofit): OtherApi = retrofit.create(OtherApi::class.java)
 
-fun provideOtherService(api: OtherApi): OtherService = OtherService(api)
+fun provideOtherService(api: OtherApi, preferences: BaseSharedPreferences): OtherService = OtherService(api, preferences)

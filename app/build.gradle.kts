@@ -63,11 +63,13 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.7.2")
     implementation("com.squareup.okhttp3:logging-interceptor:4.4.1")
 }
+
 dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.jakewharton:process-phoenix:2.0.0")
 }
 
 dependencies {
