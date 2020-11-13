@@ -2,6 +2,10 @@
 <resources>
   <string name="app_name">MyLibrary</string>
 
+  // test credentials
+  <string name="user_email">user@gmail.com</string>
+  <string name="user_passw">12345</string>
+
   // common
   <string name="list_not_found">Not found</string>
   <string name="exit_info">Please click back again to exit</string>

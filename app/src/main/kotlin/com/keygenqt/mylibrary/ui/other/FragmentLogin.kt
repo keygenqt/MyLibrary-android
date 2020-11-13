@@ -18,6 +18,7 @@ package com.keygenqt.mylibrary.ui.other
 
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
+import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
@@ -36,6 +37,10 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
 
     override fun onCreateView() {
         initView {
+            if (BuildConfig.DEBUG) {
+                textInputEditTextEmail.setText(R.string.user_email)
+                textInputEditTextPassw.setText(R.string.user_passw)
+            }
             viewModel.login.observe(viewLifecycleOwner) {
                 this.hideKeyboard()
                 val intent = Intent(context, MainActivity::class.java)
