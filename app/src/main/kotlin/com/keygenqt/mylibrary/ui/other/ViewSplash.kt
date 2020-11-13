@@ -19,7 +19,7 @@ package com.keygenqt.mylibrary.ui.other
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.keygenqt.mylibrary.base.BaseResponseError.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.services.OtherService
 

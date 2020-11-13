@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="MainActivity"
+            android:name="com.keygenqt.mylibrary.ui.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,6 +26,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.keygenqt.mylibrary.ui.activities.GuestActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

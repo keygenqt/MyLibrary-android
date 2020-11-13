@@ -16,11 +16,17 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import androidx.navigation.fragment.*
+import android.content.Intent
+import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
-import org.koin.android.ext.android.*
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.response.ValidateException
+import com.keygenqt.mylibrary.extensions.hideKeyboard
+import com.keygenqt.mylibrary.ui.activities.MainActivity
+import kotlinx.android.synthetic.main.fragment_join.view.*
+import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @FragmentTitle("Join")
@@ -31,6 +37,41 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     override fun onCreateView() {
         initToolbar {
             setNavigationOnClickListener { findNavController().navigateUp() }
+        }
+        initView {
+            viewModel.join.observe(viewLifecycleOwner) {
+                this.hideKeyboard()
+                val intent = Intent(context, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                context.startActivity(intent)
+            }
+            viewModel.error.observe(viewLifecycleOwner, { throwable ->
+                if (throwable is ValidateException) {
+                    textInputLayoutLogin.error = null
+                    textInputLayoutEmail.error = null
+                    textInputLayoutPassw.error = null
+                    throwable.errors.forEach {
+                        when (it.field) {
+                            "login" -> if (textInputLayoutLogin.error.isNullOrEmpty()) {
+                                textInputLayoutLogin.error = it.defaultMessage
+                            }
+                            "email" -> if (textInputLayoutEmail.error.isNullOrEmpty()) {
+                                textInputLayoutEmail.error = it.defaultMessage
+                            }
+                            "password" -> if (textInputLayoutPassw.error.isNullOrEmpty()) {
+                                textInputLayoutPassw.error = it.defaultMessage
+                            }
+                        }
+                    }
+                }
+            })
+            buttonSubmit.setOnClickListener {
+                viewModel.params.postValue(hashMapOf(
+                    "login" to textInputEditTextLogin.text.toString(),
+                    "email" to textInputEditTextEmail.text.toString(),
+                    "passw" to textInputEditTextPassw.text.toString()
+                ))
+            }
         }
     }
 }

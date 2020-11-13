@@ -26,6 +26,15 @@ import retrofit2.http.POST
 
 interface OtherApi {
 
+    @POST("/join")
+    @FormUrlEncoded
+    suspend fun join(
+        @Field("login") login: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("uid") uid: String,
+    ): Response<ModelUser>
+
     @POST("/login")
     @FormUrlEncoded
     suspend fun login(

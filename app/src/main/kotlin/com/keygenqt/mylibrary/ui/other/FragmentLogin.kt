@@ -16,13 +16,15 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.ValidateException
+import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
+import com.keygenqt.mylibrary.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.koin.android.ext.android.inject
 
@@ -33,13 +35,12 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     private val viewModel: ViewLogin by inject()
 
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { activity?.onBackPressed() }
-        }
         initView {
             viewModel.login.observe(viewLifecycleOwner) {
                 this.hideKeyboard()
-                findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToFragmentLocal())
+                val intent = Intent(context, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                context.startActivity(intent)
             }
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
                 if (throwable is ValidateException) {

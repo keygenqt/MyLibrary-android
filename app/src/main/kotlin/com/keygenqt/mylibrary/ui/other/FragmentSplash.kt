@@ -21,24 +21,17 @@ import android.os.Looper
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import org.koin.android.ext.android.inject
 
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
 
     private val viewModel: ViewSplash by inject()
 
-    private val sharedPreferences: BaseSharedPreferences by inject()
-
     override fun onCreateView() {
         Handler(Looper.getMainLooper()).postDelayed({
-            if (sharedPreferences.token.isNullOrEmpty()) {
-                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLogin())
-            } else {
-                viewModel.links.observe(viewLifecycleOwner, {
-                    findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
-                })
-            }
-        }, 700)
+            viewModel.links.observe(viewLifecycleOwner, {
+                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
+            })
+        }, 500)
     }
 }

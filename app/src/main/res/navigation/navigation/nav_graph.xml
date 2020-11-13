@@ -18,27 +18,7 @@
     <action
         android:id="@+id/action_FragmentSplash_to_FragmentChat"
         app:destination="@id/FragmentChat" />
-    <action
-        android:id="@+id/action_FragmentSplash_to_FragmentLogin"
-        app:destination="@id/FragmentLogin" />
   </fragment>
-
-  <fragment
-      android:id="@+id/FragmentLogin"
-      android:name="com.keygenqt.mylibrary.ui.other.FragmentLogin"
-      tools:layout="@layout/fragment_login" >
-    <action
-        android:id="@+id/action_FragmentLogin_to_FragmentJoin"
-        app:destination="@id/FragmentJoin" />
-    <action
-        android:id="@+id/action_FragmentLogin_to_FragmentLocal"
-        app:destination="@id/FragmentLocal" />
-  </fragment>
-
-  <fragment
-      android:id="@+id/FragmentJoin"
-      android:name="com.keygenqt.mylibrary.ui.other.FragmentJoin"
-      tools:layout="@layout/fragment_join" />
 
   <fragment
       android:id="@+id/FragmentLocal"

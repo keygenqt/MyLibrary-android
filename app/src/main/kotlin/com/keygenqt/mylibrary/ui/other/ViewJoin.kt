@@ -16,7 +16,25 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import androidx.lifecycle.*
-import com.keygenqt.mylibrary.data.services.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.base.response.BaseResponseError
+import com.keygenqt.mylibrary.data.services.OtherService
 
-class ViewJoin(private val service: OtherService) : ViewModel()
+class ViewJoin(private val service: OtherService, private val preferences: BaseSharedPreferences) : ViewModel() {
+
+    val params: MutableLiveData<HashMap<String, String>> = MutableLiveData()
+    val error: MutableLiveData<Throwable> = MutableLiveData()
+
+    val join = params.switchMap {
+        liveData(BaseResponseError.getExceptionHandler(error)) {
+            service.join(it["login"]!!, it["email"]!!, it["passw"]!!) { model ->
+                preferences.token = model.token
+                emit(model)
+            }
+        }
+    }
+}

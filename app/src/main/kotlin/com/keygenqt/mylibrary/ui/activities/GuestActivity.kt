@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.di
+package com.keygenqt.mylibrary.ui.activities
 
-import android.app.Application
-import com.keygenqt.mylibrary.BuildConfig
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.base.BaseActivity
 
-val moduleSharedPreferences = module {
-    single { BaseSharedPreferences(androidContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Application.MODE_PRIVATE)) }
+class GuestActivity : BaseActivity(R.layout.activity_main, R.navigation.nav_graph_guest) {
+    override fun onCreate() {}
 }

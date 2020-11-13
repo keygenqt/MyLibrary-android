@@ -25,5 +25,5 @@ val moduleViewModel = module {
     factory { ViewSettings(get()) }
     factory { ViewSplash(get()) }
     factory { ViewLogin(get(), get()) }
-    factory { ViewJoin(get()) }
+    factory { ViewJoin(get(), get()) }
 }
