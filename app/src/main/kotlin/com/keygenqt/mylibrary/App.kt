@@ -28,7 +28,7 @@ import org.koin.core.context.*
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this)
         startKoin {
             androidLogger()
             androidContext(this@App)
