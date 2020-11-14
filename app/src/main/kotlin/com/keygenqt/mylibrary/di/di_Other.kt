@@ -19,9 +19,11 @@ package com.keygenqt.mylibrary.di
 import android.app.Application
 import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.data.RoomDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val moduleSharedPreferences = module {
     single { BaseSharedPreferences(androidContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Application.MODE_PRIVATE)) }
+    single { RoomDatabase(androidContext()) }
 }

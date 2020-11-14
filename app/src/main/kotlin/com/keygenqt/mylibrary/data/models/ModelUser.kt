@@ -17,7 +17,7 @@
 package com.keygenqt.mylibrary.data.models
 
 import com.google.gson.annotations.SerializedName
-import com.keygenqt.mylibrary.hal.Link
+import com.keygenqt.mylibrary.base.BaseModel
 
 data class ModelUser(
 
@@ -34,10 +34,10 @@ data class ModelUser(
     var image: String = "",
 
     @SerializedName("token")
-    var token: String = "",
+    var token: String = ""
 
-    @SerializedName("_links")
-    var links: HashMap<String, Link> = hashMapOf()
-) {
-    companion object
+) : BaseModel() {
+    companion object {
+        const val API_KEY = "users"
+    }
 }

@@ -38,7 +38,7 @@ data class ListData<T>(
     val linkFirst: String?
         get() {
             if (links.containsKey("first")) {
-                return links["first"]!!.href
+                return links["first"]!!.link
             }
             return null
         }
@@ -46,7 +46,7 @@ data class ListData<T>(
     val linkSelf: String?
         get() {
             if (links.containsKey("self")) {
-                return links["self"]!!.href
+                return links["self"]!!.link
             }
             return null
         }
@@ -54,7 +54,7 @@ data class ListData<T>(
     val linkNext: String?
         get() {
             if (links.containsKey("next")) {
-                return links["next"]!!.href
+                return links["next"]!!.link
             }
             return null
         }
@@ -62,7 +62,7 @@ data class ListData<T>(
     val linkLast: String?
         get() {
             if (links.containsKey("last")) {
-                return links["last"]!!.href
+                return links["last"]!!.link
             }
             return null
         }
@@ -70,7 +70,7 @@ data class ListData<T>(
     val linkProfile: String?
         get() {
             if (links.containsKey("profile")) {
-                return links["profile"]!!.href
+                return links["profile"]!!.link
             }
             return null
         }

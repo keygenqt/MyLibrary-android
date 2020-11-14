@@ -16,8 +16,8 @@
 
 package com.keygenqt.mylibrary.data.models
 
-import com.google.gson.annotations.*
-import com.keygenqt.mylibrary.hal.*
+import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.base.BaseModel
 
 data class ModelBook(
 
@@ -46,10 +46,10 @@ data class ModelBook(
     var coverType: String = "",
 
     @SerializedName("image")
-    var image: String = "",
+    var image: String = ""
 
-    @SerializedName("_links")
-    var links: HashMap<String, Link> = hashMapOf()
-) {
-    companion object
+) : BaseModel() {
+    companion object {
+        const val API_KEY = "books"
+    }
 }

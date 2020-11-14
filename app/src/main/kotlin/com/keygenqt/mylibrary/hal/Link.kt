@@ -16,9 +16,19 @@
 
 package com.keygenqt.mylibrary.hal
 
-import com.google.gson.annotations.*
+import com.google.gson.annotations.SerializedName
 
 data class Link(
     @SerializedName("href")
-    var href: String = ""
-)
+    private var href: String = ""
+) {
+    val link: String
+        get() {
+            return href.substringBefore("{")
+        }
+
+    val params: List<String>
+        get() {
+            return href.substringAfter("{").replace("}", "").replace("?", "").split(",")
+        }
+}

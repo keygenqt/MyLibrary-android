@@ -20,12 +20,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.services.OtherService
 
-class ViewSplash(private val service: OtherService) : ViewModel() {
+class ViewSplash(private val service: OtherService, private val db: RoomDatabase) : ViewModel() {
     val links: LiveData<ModelRoot> = liveData(getExceptionHandler()) {
         service.getRootLinks { links ->
+            db.getDao<ModelRootDao>().insert(links)
             emit(links)
         }
     }

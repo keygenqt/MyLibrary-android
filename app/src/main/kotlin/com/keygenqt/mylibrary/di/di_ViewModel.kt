@@ -21,9 +21,9 @@ import com.keygenqt.mylibrary.ui.other.*
 import org.koin.dsl.*
 
 val moduleViewModel = module {
-    factory { ViewLocal(get()) }
+    factory { ViewLocal(get(), get()) }
     factory { ViewSettings(get()) }
-    factory { ViewSplash(get()) }
+    factory { ViewSplash(get(), get()) }
     factory { ViewLogin(get(), get()) }
     factory { ViewJoin(get(), get()) }
 }

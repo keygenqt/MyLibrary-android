@@ -46,7 +46,7 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
             .addInterceptor(HttpLoggingInterceptor(
                 object : HttpLoggingInterceptor.Logger {
                     override fun log(message: String) {
-                        Log.i("HttpLoggingInterceptor", message)
+//                        Log.i("HttpLoggingInterceptor", message)
                     }
                 }).apply {
                 level = HttpLoggingInterceptor.Level.BODY

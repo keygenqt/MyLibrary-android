@@ -58,6 +58,13 @@ android {
     }
 }
 
+// room
+dependencies {
+    implementation("androidx.room:room-runtime:${findProperty("room_version")}")
+    kapt("androidx.room:room-compiler:${findProperty("room_version")}")
+    implementation("androidx.room:room-ktx:${findProperty("room_version")}")
+}
+
 dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.7.2")
     implementation("com.squareup.retrofit2:retrofit:2.7.2")

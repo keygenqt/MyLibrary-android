@@ -16,19 +16,17 @@
 
 package com.keygenqt.mylibrary.data.models
 
-import com.google.gson.annotations.*
-import com.keygenqt.mylibrary.hal.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.base.BaseModel
 
+@Entity(tableName = "ModelRoot")
 data class ModelRoot(
-
+    @PrimaryKey
     @SerializedName("version")
     var version: String = "",
 
     @SerializedName("description")
-    var description: String = "",
-
-    @SerializedName("_links")
-    var links: HashMap<String, Link> = hashMapOf()
-) {
-    companion object
-}
+    var description: String = ""
+) : BaseModel()

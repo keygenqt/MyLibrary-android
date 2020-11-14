@@ -21,12 +21,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelRootDao
+import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.BookService
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
+import com.keygenqt.mylibrary.utils.API_VERSION
 
-class ViewLocal(private val service: BookService) : ViewModel(), ViewModelPage {
+class ViewLocal(private val service: BookService, db: RoomDatabase) : ViewModel(), ViewModelPage {
 
-    private val linkFirstDefault = "http://192.168.1.68:8080/books"
+    private val linkModel = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
 
     override val link: MutableLiveData<String?> = MutableLiveData()
     override val loading: MutableLiveData<Boolean> = MutableLiveData()
@@ -38,7 +42,7 @@ class ViewLocal(private val service: BookService) : ViewModel(), ViewModelPage {
     val listData = link.switchMap {
         liveData(getExceptionHandler()) {
             loading.postValue(true)
-            service.getList(link.value ?: linkFirstDefault) { listData ->
+            service.getList(link.value ?: linkModel.link) { listData ->
                 loading.postValue(false)
                 emit(listData)
             }
