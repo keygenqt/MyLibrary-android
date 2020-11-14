@@ -25,14 +25,14 @@
         >
 
       <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/textInputLayoutLogin"
+          android:id="@+id/textInputLayoutNickname"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/join_login"
+          android:hint="@string/join_nickname"
           >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextLogin"
+            android:id="@+id/textInputEditTextNickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"

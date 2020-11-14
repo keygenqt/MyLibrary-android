@@ -21,7 +21,7 @@
   <string name="login_reg">Join us</string>
 
   // join
-  <string name="join_login">Login</string>
+  <string name="join_nickname">Nickname</string>
   <string name="join_email">Email</string>
   <string name="join_passw">Password</string>
 

@@ -31,7 +31,7 @@ class ViewJoin(private val service: OtherService, private val preferences: BaseS
 
     val join = params.switchMap {
         liveData(BaseResponseError.getExceptionHandler(error)) {
-            service.join(it["login"]!!, it["email"]!!, it["passw"]!!) { model ->
+            service.join(it["nickname"]!!, it["email"]!!, it["passw"]!!) { model ->
                 preferences.token = model.token
                 emit(model)
             }

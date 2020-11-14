@@ -27,8 +27,8 @@ data class ModelUser(
     @SerializedName("email")
     var email: String = "",
 
-    @SerializedName("login")
-    var login: String = "",
+    @SerializedName("nickname")
+    var nickname: String = "",
 
     @SerializedName("image")
     var image: String = "",

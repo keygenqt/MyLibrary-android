@@ -47,13 +47,13 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
             }
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
                 if (throwable is ValidateException) {
-                    textInputLayoutLogin.error = null
+                    textInputLayoutNickname.error = null
                     textInputLayoutEmail.error = null
                     textInputLayoutPassw.error = null
                     throwable.errors.forEach {
                         when (it.field) {
-                            "login" -> if (textInputLayoutLogin.error.isNullOrEmpty()) {
-                                textInputLayoutLogin.error = it.defaultMessage
+                            "nickname" -> if (textInputLayoutNickname.error.isNullOrEmpty()) {
+                                textInputLayoutNickname.error = it.defaultMessage
                             }
                             "email" -> if (textInputLayoutEmail.error.isNullOrEmpty()) {
                                 textInputLayoutEmail.error = it.defaultMessage
@@ -67,7 +67,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
             })
             buttonSubmit.setOnClickListener {
                 viewModel.params.postValue(hashMapOf(
-                    "login" to textInputEditTextLogin.text.toString(),
+                    "nickname" to textInputEditTextNickname.text.toString(),
                     "email" to textInputEditTextEmail.text.toString(),
                     "passw" to textInputEditTextPassw.text.toString()
                 ))
