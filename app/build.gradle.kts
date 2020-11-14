@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId = "com.keygenqt.mylibrary"
-        minSdkVersion(21)
+        minSdkVersion(24)
         targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
@@ -61,14 +61,21 @@ android {
 // room
 dependencies {
     implementation("androidx.room:room-runtime:${findProperty("room_version")}")
-    kapt("androidx.room:room-compiler:${findProperty("room_version")}")
     implementation("androidx.room:room-ktx:${findProperty("room_version")}")
+    kapt("androidx.room:room-compiler:${findProperty("room_version")}")
+}
+
+// security
+dependencies {
+    implementation("com.facebook.stetho:stetho:1.5.1")
+    implementation("androidx.security:security-crypto:1.1.0-alpha02")
+    implementation("androidx.security:security-identity-credential:1.0.0-alpha01")
 }
 
 dependencies {
-    implementation("com.squareup.retrofit2:converter-gson:2.7.2")
-    implementation("com.squareup.retrofit2:retrofit:2.7.2")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.4.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 }
 
 dependencies {
@@ -80,7 +87,7 @@ dependencies {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${findProperty("kotlin_version")}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.10")
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
@@ -94,7 +101,7 @@ dependencies {
 }
 
 dependencies {
-    testImplementation("junit:junit:4.13")
+    testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }

@@ -16,14 +16,24 @@
 
 package com.keygenqt.mylibrary.di
 
-import android.app.Application
-import com.keygenqt.mylibrary.BuildConfig
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val moduleSharedPreferences = module {
-    single { BaseSharedPreferences(androidContext().getSharedPreferences(BuildConfig.APPLICATION_ID, Application.MODE_PRIVATE)) }
+    single {
+        BaseSharedPreferences(
+            EncryptedSharedPreferences.create(
+                androidContext(),
+                "sharedPrefsFile",
+                MasterKey.Builder(androidContext()).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        )
+    }
     single { RoomDatabase(androidContext()) }
 }

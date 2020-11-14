@@ -20,6 +20,7 @@ import android.app.*
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.facebook.stetho.Stetho
 import com.keygenqt.mylibrary.di.*
 import org.koin.android.ext.koin.*
 import org.koin.core.context.*
@@ -27,6 +28,7 @@ import org.koin.core.context.*
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        Stetho.initializeWithDefaults(this);
         startKoin {
             androidLogger()
             androidContext(this@App)
