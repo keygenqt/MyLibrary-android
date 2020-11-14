@@ -18,7 +18,6 @@ package com.keygenqt.mylibrary.base
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +44,7 @@ abstract class BaseFragment(
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 
-    annotation class ObserveInit
+    annotation class CallOnCreate
 
     private var _view: View? = null
 
@@ -85,14 +84,14 @@ abstract class BaseFragment(
         _view = inflater.inflate(layoutId, container, false)
         setHasOptionsMenu(true)
         onCreateView()
-        observeInit()
+        callOnCreate()
         listenErrorResponse()
         return _view
     }
 
-    private fun observeInit() {
+    private fun callOnCreate() {
         this::class.java.declaredMethods.forEach { method ->
-            method.getAnnotation(ObserveInit::class.java) ?: return@forEach
+            method.getAnnotation(CallOnCreate::class.java) ?: return@forEach
             method.isAccessible = true
             method.invoke(this)
         }

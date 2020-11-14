@@ -20,18 +20,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
-import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.ui.other.FragmentLogin.*
 
 class ViewLogin(private val service: OtherService, private val preferences: BaseSharedPreferences) : ViewModel() {
 
-    val params: MutableLiveData<HashMap<String, String>> = MutableLiveData()
+    val params: MutableLiveData<HashMap<PARAMS, String>> = MutableLiveData()
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
     val login = params.switchMap {
         liveData(getExceptionHandler(error)) {
-            service.login(it["email"]!!, it["passw"]!!) { model ->
+            service.login(it[PARAMS.EMAIL]!!, it[PARAMS.PASSWORD]!!) { model ->
                 preferences.token = model.token
                 emit(model)
             }

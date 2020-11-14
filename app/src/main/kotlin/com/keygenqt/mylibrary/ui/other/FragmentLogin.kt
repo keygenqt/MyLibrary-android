@@ -26,8 +26,10 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.ui.activities.MainActivity
+import com.keygenqt.mylibrary.ui.other.FragmentLogin.PARAMS.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.koin.android.ext.android.inject
+import java.util.Locale
 
 @ActionBarEnable
 @FragmentTitle("Login")
@@ -35,43 +37,60 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
 
     private val viewModel: ViewLogin by inject()
 
+    enum class PARAMS {
+        EMAIL,
+        PASSWORD,
+    }
+
     override fun onCreateView() {
         initView {
             if (BuildConfig.DEBUG) {
                 textInputEditTextEmail.setText(R.string.user_email)
                 textInputEditTextPassw.setText(R.string.user_passw)
             }
+            buttonSubmit.setOnClickListener {
+                viewModel.params.postValue(hashMapOf(
+                    EMAIL to textInputEditTextEmail.text.toString(),
+                    PASSWORD to textInputEditTextPassw.text.toString()
+                ))
+            }
+            buttonJoin.setOnClickListener {
+                findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToFragmentJoin())
+            }
+        }
+    }
+
+    @CallOnCreate fun observeLoading() {
+        initView {
             viewModel.login.observe(viewLifecycleOwner) {
                 this.hideKeyboard()
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
                 context.startActivity(intent)
             }
+        }
+    }
+
+    @CallOnCreate fun observeError() {
+        initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
                 if (throwable is ValidateException) {
                     textInputLayoutEmail.error = null
                     textInputLayoutPassw.error = null
                     throwable.errors.forEach {
                         when (it.field) {
-                            "email" -> if (textInputLayoutEmail.error.isNullOrEmpty()) {
-                                textInputLayoutEmail.error = it.defaultMessage
-                            }
-                            "password" -> if (textInputLayoutPassw.error.isNullOrEmpty()) {
-                                textInputLayoutPassw.error = it.defaultMessage
-                            }
+                            EMAIL.name.toLowerCase(Locale.ROOT) ->
+                                if (textInputLayoutEmail.error.isNullOrEmpty()) {
+                                    textInputLayoutEmail.error = it.defaultMessage
+                                }
+                            PASSWORD.name.toLowerCase(Locale.ROOT) ->
+                                if (textInputLayoutPassw.error.isNullOrEmpty()) {
+                                    textInputLayoutPassw.error = it.defaultMessage
+                                }
                         }
                     }
                 }
             })
-            buttonSubmit.setOnClickListener {
-                viewModel.params.postValue(hashMapOf(
-                    "email" to textInputEditTextEmail.text.toString(),
-                    "passw" to textInputEditTextPassw.text.toString()
-                ))
-            }
-            buttonJoin.setOnClickListener {
-                findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToFragmentJoin())
-            }
         }
     }
 }

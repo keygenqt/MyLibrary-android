@@ -50,14 +50,22 @@ class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterLocal(R.layout.item_book_list, viewModel)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-
             refresh.setOnRefreshListener {
                 viewModel.link.postValue(null)
             }
+        }
+    }
 
+    @CallOnCreate fun observeLoading() {
+        initView {
             viewModel.loading.observe(viewLifecycleOwner, { status ->
                 refresh.isRefreshing = status
             })
+        }
+    }
+
+    @CallOnCreate fun observeListData() {
+        initView {
             viewModel.listData.observe(viewLifecycleOwner) { listData ->
                 (recyclerView.adapter as Adapter<*>).setListData(listData) { type ->
                     if (type == Adapter.LIST_DATA_TYPE_SET) {

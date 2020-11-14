@@ -25,8 +25,12 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.ui.activities.MainActivity
+import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 import kotlinx.android.synthetic.main.fragment_join.view.*
+import kotlinx.android.synthetic.main.fragment_login.view.textInputLayoutEmail
+import kotlinx.android.synthetic.main.fragment_login.view.textInputLayoutPassw
 import org.koin.android.ext.android.inject
+import java.util.Locale
 
 @ActionBarEnable
 @FragmentTitle("Join")
@@ -34,10 +38,28 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
 
     private val viewModel: ViewJoin by inject()
 
+    enum class PARAMS {
+        NICKNAME,
+        EMAIL,
+        PASSWORD,
+    }
+
     override fun onCreateView() {
         initToolbar {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
+        initView {
+            buttonSubmit.setOnClickListener {
+                viewModel.params.postValue(hashMapOf(
+                    NICKNAME to textInputEditTextNickname.text.toString(),
+                    EMAIL to textInputEditTextEmail.text.toString(),
+                    PASSWORD to textInputEditTextPassw.text.toString()
+                ))
+            }
+        }
+    }
+
+    @CallOnCreate fun observeLoading() {
         initView {
             viewModel.join.observe(viewLifecycleOwner) {
                 this.hideKeyboard()
@@ -45,6 +67,11 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
                 context.startActivity(intent)
             }
+        }
+    }
+
+    @CallOnCreate fun observeError() {
+        initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
                 if (throwable is ValidateException) {
                     textInputLayoutNickname.error = null
@@ -52,26 +79,22 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
                     textInputLayoutPassw.error = null
                     throwable.errors.forEach {
                         when (it.field) {
-                            "nickname" -> if (textInputLayoutNickname.error.isNullOrEmpty()) {
-                                textInputLayoutNickname.error = it.defaultMessage
-                            }
-                            "email" -> if (textInputLayoutEmail.error.isNullOrEmpty()) {
-                                textInputLayoutEmail.error = it.defaultMessage
-                            }
-                            "password" -> if (textInputLayoutPassw.error.isNullOrEmpty()) {
-                                textInputLayoutPassw.error = it.defaultMessage
-                            }
+                            NICKNAME.name.toLowerCase(Locale.ROOT) ->
+                                if (textInputLayoutNickname.error.isNullOrEmpty()) {
+                                    textInputLayoutNickname.error = it.defaultMessage
+                                }
+                            EMAIL.name.toLowerCase(Locale.ROOT) ->
+                                if (textInputLayoutEmail.error.isNullOrEmpty()) {
+                                    textInputLayoutEmail.error = it.defaultMessage
+                                }
+                            PASSWORD.name.toLowerCase(Locale.ROOT) ->
+                                if (textInputLayoutPassw.error.isNullOrEmpty()) {
+                                    textInputLayoutPassw.error = it.defaultMessage
+                                }
                         }
                     }
                 }
             })
-            buttonSubmit.setOnClickListener {
-                viewModel.params.postValue(hashMapOf(
-                    "nickname" to textInputEditTextNickname.text.toString(),
-                    "email" to textInputEditTextEmail.text.toString(),
-                    "passw" to textInputEditTextPassw.text.toString()
-                ))
-            }
         }
     }
 }
