@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.local
+package com.keygenqt.mylibrary.ui.books
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
@@ -28,7 +25,7 @@ import com.keygenqt.mylibrary.data.services.BookService
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import com.keygenqt.mylibrary.utils.API_VERSION
 
-class ViewLocal(private val service: BookService, db: RoomDatabase) : ViewModel(), ViewModelPage {
+class ViewBooks(private val service: BookService, db: RoomDatabase) : ViewModel(), ViewModelPage {
 
     private val linkModel = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
 
@@ -46,6 +43,12 @@ class ViewLocal(private val service: BookService, db: RoomDatabase) : ViewModel(
                 loading.postValue(false)
                 emit(listData)
             }
+        }
+    }
+
+    val search: LiveData<SearchModelBooks> = liveData(getExceptionHandler()) {
+        service.getSearch { links ->
+            emit(links)
         }
     }
 }

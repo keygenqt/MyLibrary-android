@@ -16,12 +16,18 @@
 
 package com.keygenqt.mylibrary.data.services
 
-import com.keygenqt.mylibrary.data.models.*
-import com.keygenqt.mylibrary.hal.*
-import retrofit2.*
-import retrofit2.http.*
+import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.hal.ListData
+import com.keygenqt.mylibrary.ui.books.SearchModelBooks
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface BookApi {
     @GET
     suspend fun getList(@Url link: String): Response<ListData<ModelBook>>
+
+    @GET("/{path}/search")
+    suspend fun getSearch(@Path("path") path: String): Response<SearchModelBooks>
 }

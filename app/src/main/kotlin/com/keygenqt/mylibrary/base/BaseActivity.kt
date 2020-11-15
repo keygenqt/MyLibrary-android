@@ -1,7 +1,6 @@
 package com.keygenqt.mylibrary.base
 
 import android.os.Bundle
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.NavigationRes
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.ui.chat.FragmentChat
-import com.keygenqt.mylibrary.ui.local.FragmentLocal
-import com.keygenqt.mylibrary.ui.online.FragmentOnline
+import com.keygenqt.mylibrary.ui.books.FragmentBooks
 import com.keygenqt.mylibrary.ui.other.FragmentLogin
 import kotlin.reflect.full.findAnnotation
 
@@ -62,8 +60,7 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
     override fun onBackPressed() {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let {
             when (it.childFragmentManager.fragments[0]) {
-                is FragmentLocal -> if (info.isShown) finishAffinity() else info.show()
-                is FragmentOnline -> if (info.isShown) finishAffinity() else info.show()
+                is FragmentBooks -> if (info.isShown) finishAffinity() else info.show()
                 is FragmentChat -> if (info.isShown) finishAffinity() else info.show()
                 is FragmentLogin -> if (info.isShown) finishAffinity() else info.show()
                 else -> super.onBackPressed()

@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.online
+package com.keygenqt.mylibrary.ui.settings
 
-import com.keygenqt.mylibrary.*
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
+import androidx.lifecycle.*
+import com.keygenqt.mylibrary.data.services.*
 
-@ActionBarEnable
-@BottomNavigationEnable
-@FragmentTitle("Users Libs")
-class FragmentOnline : BaseFragment(R.layout.common_fragment_list) {
-    override fun onCreateView() {}
-}
+class ViewSettings(private val service: OtherService) : ViewModel()

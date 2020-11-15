@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.other
+package com.keygenqt.mylibrary.hal
 
-import androidx.lifecycle.*
-import com.keygenqt.mylibrary.data.services.*
+const val API_KEY_MODEL_BOOK = "books"
+const val API_KEY_MODEL_GENRE = "genres"
+const val API_KEY_MODEL_USERS = "users"
 
-class ViewSettings(private val service: OtherService) : ViewModel()
+const val API_KEY_PROFILE = "profile"
+const val API_KEY_SEARCH = "search"
+const val API_KEY_SELF = "self"
+const val API_KEY_FIRST = "first"
+const val API_KEY_NEXT = "next"
+const val API_KEY_LAST = "last"

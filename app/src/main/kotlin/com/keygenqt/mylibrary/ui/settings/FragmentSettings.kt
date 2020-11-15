@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.other
+package com.keygenqt.mylibrary.ui.settings
 
 import androidx.navigation.fragment.*
 import com.keygenqt.mylibrary.R

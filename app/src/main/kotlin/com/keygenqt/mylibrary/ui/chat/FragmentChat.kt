@@ -22,7 +22,7 @@ import com.keygenqt.mylibrary.base.*
 
 @ActionBarEnable
 @BottomNavigationEnable
-@FragmentTitle("Chat")
-class FragmentChat : BaseFragment(R.layout.common_fragment_list) {
+@FragmentTitle("My Library - Chat")
+class FragmentChat : BaseFragment(R.layout.fragment_chat) {
     override fun onCreateView() {}
 }

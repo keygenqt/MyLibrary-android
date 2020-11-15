@@ -28,8 +28,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, R.navigation.nav_graph
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.FragmentLocal,
-                R.id.FragmentOnline,
+                R.id.FragmentBooks,
                 R.id.FragmentChat
             )
         )

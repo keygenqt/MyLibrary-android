@@ -16,13 +16,18 @@
 
 package com.keygenqt.mylibrary.data.services
 
-import android.util.Log
 import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.checkResponse
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
 import com.keygenqt.mylibrary.hal.ListData
+import com.keygenqt.mylibrary.ui.books.SearchModelBooks
 
 class BookService(private val api: BookApi) {
     suspend fun getList(link: String, response: suspend (ListData<ModelBook>) -> Unit) {
         api.getList(link).checkResponse(response)
+    }
+
+    suspend fun getSearch(response: suspend (SearchModelBooks) -> Unit) {
+        api.getSearch(API_KEY_MODEL_BOOK).checkResponse(response)
     }
 }

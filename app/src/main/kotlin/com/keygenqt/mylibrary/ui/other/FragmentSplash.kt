@@ -30,7 +30,7 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
     override fun onCreateView() {
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.links.observe(viewLifecycleOwner, {
-                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentLocal())
+                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
             })
         }, 500)
     }

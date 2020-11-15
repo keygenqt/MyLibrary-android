@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.local
+package com.keygenqt.mylibrary.ui.books
 
-import android.view.*
-import androidx.annotation.*
-import com.keygenqt.mylibrary.data.models.*
-import com.keygenqt.mylibrary.hal.*
-import com.keygenqt.mylibrary.interfaces.*
-import kotlinx.android.synthetic.main.item_book_list.view.*
+import android.view.View
+import androidx.annotation.LayoutRes
+import com.keygenqt.mylibrary.base.ListAdapterSearch
+import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.interfaces.ViewModelPage
+import kotlinx.android.synthetic.main.item_book_list.view.subtitle
+import kotlinx.android.synthetic.main.item_book_list.view.title
 
-class AdapterLocal(@LayoutRes layout: Int, viewModel: ViewModelPage) : Adapter<ModelBook>(layout, viewModel) {
+class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage) : ListAdapterSearch<ModelBook>(layout, viewModel) {
+
     override fun onBindViewHolder(holder: View, model: ModelBook) {
         holder.apply {
             title.text = model.title

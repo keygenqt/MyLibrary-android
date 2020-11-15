@@ -10,29 +10,21 @@
       android:name="com.keygenqt.mylibrary.ui.other.FragmentSplash"
       tools:layout="@layout/fragment_splash">
     <action
-        android:id="@+id/action_FragmentSplash_to_FragmentLocal"
-        app:destination="@id/FragmentLocal" />
-    <action
-        android:id="@+id/action_FragmentSplash_to_FragmentOnline"
-        app:destination="@id/FragmentOnline" />
+        android:id="@+id/action_FragmentSplash_to_FragmentBooks"
+        app:destination="@id/FragmentBooks" />
     <action
         android:id="@+id/action_FragmentSplash_to_FragmentChat"
         app:destination="@id/FragmentChat" />
   </fragment>
 
   <fragment
-      android:id="@+id/FragmentLocal"
-      android:name="com.keygenqt.mylibrary.ui.local.FragmentLocal"
+      android:id="@+id/FragmentBooks"
+      android:name="com.keygenqt.mylibrary.ui.books.FragmentBooks"
       tools:layout="@layout/common_fragment_list">
     <action
-        android:id="@+id/action_FragmentLocal_to_FragmentSettings"
+        android:id="@+id/action_FragmentBooks_to_FragmentSettings"
         app:destination="@id/FragmentSettings" />
   </fragment>
-
-  <fragment
-      android:id="@+id/FragmentOnline"
-      android:name="com.keygenqt.mylibrary.ui.online.FragmentOnline"
-      tools:layout="@layout/common_fragment_list" />
 
   <fragment
       android:id="@+id/FragmentChat"
@@ -41,6 +33,6 @@
 
   <fragment
       android:id="@+id/FragmentSettings"
-      android:name="com.keygenqt.mylibrary.ui.other.FragmentSettings"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentSettings"
       tools:layout="@layout/fragment_settings" />
 </navigation>

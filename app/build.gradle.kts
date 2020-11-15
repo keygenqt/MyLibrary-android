@@ -58,6 +58,11 @@ android {
     }
 }
 
+// material
+dependencies {
+    implementation("com.google.android.material:material:1.2.1")
+}
+
 // room
 dependencies {
     implementation("androidx.room:room-runtime:${findProperty("room_version")}")

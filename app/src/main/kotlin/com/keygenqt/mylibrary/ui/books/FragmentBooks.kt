@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.local
+package com.keygenqt.mylibrary.ui.books
 
-import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -29,9 +28,7 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.hal.Adapter
-import com.keygenqt.mylibrary.ui.activities.GuestActivity
+import com.keygenqt.mylibrary.base.ListAdapter
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
@@ -40,15 +37,14 @@ import org.koin.android.ext.android.inject
 @ActionBarEnable
 @BottomNavigationEnable
 @FragmentTitle("My Library")
-class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
+class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
-    private val viewModel: ViewLocal by inject()
-    private val sharedPreferences: BaseSharedPreferences by inject()
+    private val viewModel: ViewBooks by inject()
 
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterLocal(R.layout.item_book_list, viewModel)
+            recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
                 viewModel.link.postValue(null)
@@ -64,11 +60,19 @@ class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
+    @CallOnCreate fun observeSearchModel() {
+        initView {
+            viewModel.search.observe(viewLifecycleOwner, { searchModel ->
+                (recyclerView.adapter as ListAdapter<*>).setSearchModel(searchModel)
+            })
+        }
+    }
+
     @CallOnCreate fun observeListData() {
         initView {
             viewModel.listData.observe(viewLifecycleOwner) { listData ->
-                (recyclerView.adapter as Adapter<*>).setListData(listData) { type ->
-                    if (type == Adapter.LIST_DATA_TYPE_SET) {
+                (recyclerView.adapter as ListAdapter<*>).setListData(listData) { type ->
+                    if (type == ListAdapter.LIST_DATA_TYPE_SET) {
                         notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
                         recyclerView.smoothScrollToPosition(0)
                     }
@@ -85,12 +89,7 @@ class FragmentLocal : BaseFragment(R.layout.common_fragment_list) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                findNavController().navigate(FragmentLocalDirections.actionFragmentLocalToFragmentSettings())
-                return true
-            }
-            R.id.action_logout -> {
-                sharedPreferences.token = null
-                context?.startActivity(Intent(context, GuestActivity::class.java))
+                findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
                 return true
             }
             else -> super.onOptionsItemSelected(item)

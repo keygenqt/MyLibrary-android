@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.hal
+package com.keygenqt.mylibrary.base
 
-import android.net.*
-import android.view.*
-import androidx.annotation.*
-import androidx.recyclerview.widget.*
+import android.net.Uri
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
-import com.keygenqt.mylibrary.*
-import com.keygenqt.mylibrary.interfaces.*
-import java.util.*
-import kotlin.concurrent.*
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.hal.ListData
+import com.keygenqt.mylibrary.interfaces.ViewModelPage
+import java.util.ArrayList
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class AdapterHolder(
     @LayoutRes id: Int, group: ViewGroup,
@@ -37,7 +41,13 @@ class AdapterHolderLoading(
         .inflate(R.layout.common_item_loading, group, false)
 ) : ViewHolder(view)
 
-abstract class Adapter<T>(
+class AdapterHolderFilter(
+    @LayoutRes id: Int, group: ViewGroup,
+    var view: View = LayoutInflater.from(group.context).inflate(id, group, false)
+) : ViewHolder(view)
+
+@Suppress("UNCHECKED_CAST")
+abstract class ListAdapter<T>(
     @LayoutRes val id: Int,
     private val viewModel: ViewModelPage? = null
 ) :
@@ -52,13 +62,15 @@ abstract class Adapter<T>(
 
     private var timer = Timer()
 
-    private var items = mutableListOf<T>()
+    private var items = mutableListOf<Any>()
 
     abstract fun onBindViewHolder(holder: View, model: T)
+    open fun onBindViewHolderFilter(holder: View, model: BaseSearchModel) {}
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is AdapterHolder -> onBindViewHolder(holder.view, items[position])
+            is AdapterHolder -> onBindViewHolder(holder.view, items[position] as T)
+            is AdapterHolderFilter -> onBindViewHolderFilter(holder.view, items[position] as BaseSearchModel)
         }
     }
 
@@ -66,6 +78,7 @@ abstract class Adapter<T>(
         return when (viewType) {
             0 -> AdapterHolderLoading(parent)
             1 -> AdapterHolder(id, parent)
+            2 -> AdapterHolderFilter((items[0] as BaseSearchModel).filter, parent)
             else -> throw RuntimeException("Only AdapterHolderHAL")
         }
     }
@@ -91,6 +104,11 @@ abstract class Adapter<T>(
     }
 
     override fun getItemViewType(position: Int): Int {
+        if (items.size > position) {
+            when (items[position]) {
+                is BaseSearchModel -> return 2
+            }
+        }
         return when (items.size == position) {
             true -> 0
             false -> 1
@@ -101,22 +119,41 @@ abstract class Adapter<T>(
         return items.size + (if (viewModel != null && linkNext != null) 1 else 0)
     }
 
-    @Suppress("UNCHECKED_CAST") fun setListData(listData: ListData<*>, delegate: (type: Int) -> Unit) {
+    fun setListData(listData: ListData<*>, delegate: (type: Int) -> Unit) {
         listData.linkSelf?.let {
             Uri.parse(it).getQueryParameter("page")?.let { page ->
                 if (page.toInt() == 0) {
-                    this.items = listData.items as ArrayList<T>
+                    clearItems()
                     delegate.invoke(LIST_DATA_TYPE_SET)
                 } else {
-                    this.items.addAll(listData.items as ArrayList<T>)
                     delegate.invoke(LIST_DATA_TYPE_ADD)
                 }
             } ?: run {
-                this.items = listData.items as ArrayList<T>
+                clearItems()
                 delegate.invoke(LIST_DATA_TYPE_SET)
             }
         }
+        this.items.addAll(listData.items as ArrayList<Any>)
+        delegate.invoke(LIST_DATA_TYPE_ADD)
         this.linkNext = listData.linkNext
         notifyDataSetChanged()
+    }
+
+    fun setSearchModel(searchModel: BaseSearchModel) {
+        this.items.add(0, searchModel)
+        notifyDataSetChanged()
+    }
+
+    private fun clearItems() {
+        items.firstOrNull()?.let {
+            if (it is BaseSearchModel) {
+                items.clear()
+                items.add(it)
+            } else {
+                items.clear()
+            }
+        } ?: run {
+            items.clear()
+        }
     }
 }

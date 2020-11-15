@@ -16,12 +16,13 @@
 
 package com.keygenqt.mylibrary.di
 
-import com.keygenqt.mylibrary.ui.local.*
+import com.keygenqt.mylibrary.ui.books.*
 import com.keygenqt.mylibrary.ui.other.*
+import com.keygenqt.mylibrary.ui.settings.ViewSettings
 import org.koin.dsl.*
 
 val moduleViewModel = module {
-    factory { ViewLocal(get(), get()) }
+    factory { ViewBooks(get(), get()) }
     factory { ViewSettings(get()) }
     factory { ViewSplash(get(), get()) }
     factory { ViewLogin(get(), get()) }
