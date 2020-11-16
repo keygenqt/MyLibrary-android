@@ -7,4 +7,4 @@ Find a rare book among users MyLibrary.
 
 **It's Android part - [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)**
 
-![picture](data/Screenshot_1604909139.png)
+![picture](data/screenshot-26.png)
