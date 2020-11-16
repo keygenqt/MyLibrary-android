@@ -44,4 +44,14 @@
   <string name="settings_menu_about">About</string>
   <string name="settings_menu_logout">Log out</string>
 
+  // password
+  <string name="settings_password">Password</string>
+  <string name="settings_repeat_password">Repeat Password</string>
+
+  // edit profile
+  <string name="edit_profile_nickname">Nickname</string>
+  <string name="edit_profile_bio">Bio</string>
+  <string name="edit_profile_location">Location</string>
+  <string name="edit_profile_website">Website</string>
+
 </resources>

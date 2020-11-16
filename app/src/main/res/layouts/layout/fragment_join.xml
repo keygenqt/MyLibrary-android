@@ -18,10 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding"
-        android:layout_marginTop="@dimen/padding"
         android:layout_marginEnd="@dimen/padding"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/padding"
+        android:paddingTop="20dp"
+        android:paddingBottom="18dp"
         >
 
       <com.google.android.material.textfield.TextInputLayout
