@@ -41,11 +41,6 @@ class AdapterHolderLoading(
         .inflate(R.layout.common_item_loading, group, false)
 ) : ViewHolder(view)
 
-class AdapterHolderFilter(
-    @LayoutRes id: Int, group: ViewGroup,
-    var view: View = LayoutInflater.from(group.context).inflate(id, group, false)
-) : ViewHolder(view)
-
 @Suppress("UNCHECKED_CAST")
 abstract class ListAdapter<T>(
     @LayoutRes val id: Int,
@@ -62,7 +57,7 @@ abstract class ListAdapter<T>(
 
     private var timer = Timer()
 
-    private var items = mutableListOf<Any>()
+    internal var items = mutableListOf<Any>()
 
     abstract fun onBindViewHolder(holder: View, model: T)
     open fun onBindViewHolderFilter(holder: View, model: BaseSearchModel) {}
@@ -70,7 +65,6 @@ abstract class ListAdapter<T>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is AdapterHolder -> onBindViewHolder(holder.view, items[position] as T)
-            is AdapterHolderFilter -> onBindViewHolderFilter(holder.view, items[position] as BaseSearchModel)
         }
     }
 
@@ -78,7 +72,6 @@ abstract class ListAdapter<T>(
         return when (viewType) {
             0 -> AdapterHolderLoading(parent)
             1 -> AdapterHolder(id, parent)
-            2 -> AdapterHolderFilter((items[0] as BaseSearchModel).filter, parent)
             else -> throw RuntimeException("Only AdapterHolderHAL")
         }
     }
@@ -104,11 +97,6 @@ abstract class ListAdapter<T>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (items.size > position) {
-            when (items[position]) {
-                is BaseSearchModel -> return 2
-            }
-        }
         return when (items.size == position) {
             true -> 0
             false -> 1
@@ -123,13 +111,13 @@ abstract class ListAdapter<T>(
         listData.linkSelf?.let {
             Uri.parse(it).getQueryParameter("page")?.let { page ->
                 if (page.toInt() == 0) {
-                    clearItems()
+                    clearItemsBeforeSetList()
                     delegate.invoke(LIST_DATA_TYPE_SET)
                 } else {
                     delegate.invoke(LIST_DATA_TYPE_ADD)
                 }
             } ?: run {
-                clearItems()
+                clearItemsBeforeSetList()
                 delegate.invoke(LIST_DATA_TYPE_SET)
             }
         }
@@ -139,21 +127,7 @@ abstract class ListAdapter<T>(
         notifyDataSetChanged()
     }
 
-    fun setSearchModel(searchModel: BaseSearchModel) {
-        this.items.add(0, searchModel)
-        notifyDataSetChanged()
-    }
-
-    private fun clearItems() {
-        items.firstOrNull()?.let {
-            if (it is BaseSearchModel) {
-                items.clear()
-                items.add(it)
-            } else {
-                items.clear()
-            }
-        } ?: run {
-            items.clear()
-        }
+    open fun clearItemsBeforeSetList() {
+        items.clear()
     }
 }

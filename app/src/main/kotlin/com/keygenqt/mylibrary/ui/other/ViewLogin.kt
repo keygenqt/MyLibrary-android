@@ -33,6 +33,7 @@ class ViewLogin(private val service: OtherService, private val preferences: Base
     val login = params.switchMap {
         liveData(getExceptionHandler(error)) {
             service.login(it[PARAMS.EMAIL]!!, it[PARAMS.PASSWORD]!!) { model ->
+                preferences.userId = model.id
                 preferences.token = model.token
                 emit(model)
             }

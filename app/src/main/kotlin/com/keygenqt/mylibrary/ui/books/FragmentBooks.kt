@@ -28,7 +28,10 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListAdapter
+import com.keygenqt.mylibrary.base.ListAdapterSearch
+import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
@@ -40,14 +43,22 @@ import org.koin.android.ext.android.inject
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
+    private val sharedPreferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel)
+            recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel) { link ->
+                viewModel.link.postValue(link?.linkWithParams(hashMapOf("userId" to sharedPreferences.userId!!)))
+            }
+            notFound.text = getString(R.string.there_are_none_yet)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                viewModel.link.postValue(null)
+                if (viewModel.link.value?.contains(API_KEY_SEARCH) == true) {
+                    viewModel.link.postValue(viewModel.link.value)
+                } else {
+                    viewModel.link.postValue(null)
+                }
             }
         }
     }
@@ -63,7 +74,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     @CallOnCreate fun observeSearchModel() {
         initView {
             viewModel.search.observe(viewLifecycleOwner, { searchModel ->
-                (recyclerView.adapter as ListAdapter<*>).setSearchModel(searchModel)
+                (recyclerView.adapter as ListAdapterSearch<*>).setSearchModel(searchModel)
             })
         }
     }

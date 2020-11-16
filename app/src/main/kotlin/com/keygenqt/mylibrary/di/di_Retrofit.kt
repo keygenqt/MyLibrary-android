@@ -43,12 +43,7 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor(
-                object : HttpLoggingInterceptor.Logger {
-                    override fun log(message: String) {
-//                        Log.i("HttpLoggingInterceptor", message)
-                    }
-                }).apply {
+            .addInterceptor(HttpLoggingInterceptor { message -> Log.i("HttpLoggingInterceptor", message) }.apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .addInterceptor {

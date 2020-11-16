@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.hal
 
+import android.net.Uri
 import com.google.gson.annotations.SerializedName
 
 data class Link(
@@ -31,4 +32,14 @@ data class Link(
         get() {
             return href.substringAfter("{").replace("}", "").replace("?", "").split(",")
         }
+
+    fun linkWithParams(params: HashMap<String, String>): String {
+        val uri = Uri.parse(link).buildUpon()
+        this.params.forEach {
+            if (params.containsKey(it)) {
+                uri.appendQueryParameter(it, params[it])
+            }
+        }
+        return uri.toString()
+    }
 }

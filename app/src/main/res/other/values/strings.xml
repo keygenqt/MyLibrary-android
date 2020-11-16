@@ -8,6 +8,7 @@
 
   // common
   <string name="list_not_found">Not found</string>
+  <string name="there_are_none_yet">There are none yet.\nYou can add your book.</string>
   <string name="exit_info">Please click back again to exit</string>
   <string name="page_main_bottom_menu_item_my_library">My Library</string>
   <string name="page_main_bottom_menu_item_chat">Chat</string>
@@ -33,7 +34,7 @@
   <string name="menu_logout">Logout</string>
 
   //searchModel
-  <string name="search_self">All</string>
+  <string name="search_self">All Books</string>
   <string name="search_findAllByUserId">My Library</string>
 
 </resources>

@@ -16,15 +16,26 @@
 
 package com.keygenqt.mylibrary.base
 
-import android.content.*
-import android.util.Log
-import java.util.*
+import android.content.SharedPreferences
+import java.util.UUID
 
 class BaseSharedPreferences(private val preferences: SharedPreferences) {
 
+    var userId: String?
+        get() {
+            return preferences.getString("userId", null)
+        }
+        set(value) {
+            if (value == null) {
+                preferences.edit().remove("userId").apply()
+            } else {
+                preferences.edit().putString("userId", value).apply()
+            }
+        }
+
     var token: String?
         get() {
-             return preferences.getString("token", null)
+            return preferences.getString("token", null)
         }
         set(value) {
             if (value == null) {

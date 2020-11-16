@@ -20,11 +20,13 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import com.keygenqt.mylibrary.base.ListAdapterSearch
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import kotlinx.android.synthetic.main.item_book_list.view.subtitle
 import kotlinx.android.synthetic.main.item_book_list.view.title
 
-class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage) : ListAdapterSearch<ModelBook>(layout, viewModel) {
+class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (Link?) -> Unit)
+    : ListAdapterSearch<ModelBook>(layout, viewModel, search) {
 
     override fun onBindViewHolder(holder: View, model: ModelBook) {
         holder.apply {
