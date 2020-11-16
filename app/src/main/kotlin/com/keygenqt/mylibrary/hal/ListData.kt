@@ -35,42 +35,42 @@ data class ListData<T>(
             return emptyList()
         }
 
-    val linkFirst: String?
+    val linkFirst: Link?
         get() {
             if (links.containsKey("first")) {
-                return links["first"]!!.link
+                return links["first"]
             }
             return null
         }
 
-    val linkSelf: String?
+    val linkSelf: Link?
         get() {
             if (links.containsKey("self")) {
-                return links["self"]!!.link
+                return links["self"]
             }
             return null
         }
 
-    val linkNext: String?
+    val linkNext: Link?
         get() {
             if (links.containsKey("next")) {
-                return links["next"]!!.link
+                return links["next"]
             }
             return null
         }
 
-    val linkLast: String?
+    val linkLast: Link?
         get() {
             if (links.containsKey("last")) {
-                return links["last"]!!.link
+                return links["last"]
             }
             return null
         }
 
-    val linkProfile: String?
+    val linkProfile: Link?
         get() {
             if (links.containsKey("profile")) {
-                return links["profile"]!!.link
+                return links["profile"]
             }
             return null
         }

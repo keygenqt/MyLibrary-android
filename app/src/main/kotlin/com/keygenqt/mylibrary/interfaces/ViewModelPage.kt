@@ -16,7 +16,8 @@
 
 package com.keygenqt.mylibrary.interfaces
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import com.keygenqt.mylibrary.hal.Link
 
 /**
  * Interface for ViewModel with pagination
@@ -26,6 +27,6 @@ import androidx.lifecycle.*
  * @since       1.0
  */
 interface ViewModelPage {
-    val link: MutableLiveData<String?>
+    val link: MutableLiveData<Link?>
     val loading: MutableLiveData<Boolean>
 }

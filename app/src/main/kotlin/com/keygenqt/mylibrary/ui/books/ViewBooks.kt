@@ -22,6 +22,7 @@ import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.BookService
+import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import com.keygenqt.mylibrary.utils.API_VERSION
 
@@ -29,7 +30,7 @@ class ViewBooks(private val service: BookService, db: RoomDatabase) : ViewModel(
 
     private val linkModel = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
 
-    override val link: MutableLiveData<String?> = MutableLiveData()
+    override val link: MutableLiveData<Link?> = MutableLiveData()
     override val loading: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
@@ -39,7 +40,7 @@ class ViewBooks(private val service: BookService, db: RoomDatabase) : ViewModel(
     val listData = link.switchMap {
         liveData(getExceptionHandler()) {
             loading.postValue(true)
-            service.getList(link.value ?: linkModel.link) { listData ->
+            service.getList(link.value?.link ?: linkModel.link) { listData ->
                 loading.postValue(false)
                 emit(listData)
             }

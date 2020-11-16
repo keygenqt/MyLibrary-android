@@ -21,11 +21,23 @@ import com.google.gson.annotations.SerializedName
 
 data class Link(
     @SerializedName("href")
-    private var href: String = ""
+    var href: String = ""
 ) {
     val link: String
         get() {
             return href.substringBefore("{")
+        }
+
+    val linkClearPageable: Link
+        get() {
+            val uri = Uri.parse(link)
+            val uriClear = uri.buildUpon().clearQuery()
+            uri.queryParameterNames.forEach {
+                if (it != "page" && it != "size") {
+                    uriClear.appendQueryParameter(it, uri.getQueryParameter(it))
+                }
+            }
+            return Link(uriClear.toString())
         }
 
     val params: List<String>
@@ -33,13 +45,17 @@ data class Link(
             return href.substringAfter("{").replace("}", "").replace("?", "").split(",")
         }
 
-    fun linkWithParams(params: HashMap<String, String>): String {
+    fun linkWithParams(params: HashMap<String, String>): Link {
         val uri = Uri.parse(link).buildUpon()
         this.params.forEach {
             if (params.containsKey(it)) {
                 uri.appendQueryParameter(it, params[it])
             }
         }
-        return uri.toString()
+        return Link(uri.toString())
+    }
+
+    fun isSearch(): Boolean {
+        return href.contains(API_KEY_SEARCH)
     }
 }

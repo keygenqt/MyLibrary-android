@@ -31,7 +31,6 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.base.ListAdapterSearch
-import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
@@ -48,14 +47,23 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel) { link ->
-                viewModel.link.postValue(link?.linkWithParams(hashMapOf("userId" to sharedPreferences.userId!!)))
+            recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel) { key, link ->
+                when (key) {
+                    AdapterBooks.SEARCH_SELF -> {
+                        viewModel.link.postValue(null)
+                    }
+                    AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> {
+                        viewModel.link.postValue(link.linkWithParams(hashMapOf("userId" to sharedPreferences.userId!!)))
+                    }
+                    AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> {
+                        viewModel.link.postValue(link.linkWithParams(hashMapOf("sale" to "true")))
+                    }
+                }
             }
-            notFound.text = getString(R.string.there_are_none_yet)
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                if (viewModel.link.value?.contains(API_KEY_SEARCH) == true) {
-                    viewModel.link.postValue(viewModel.link.value)
+                if (viewModel.link.value?.isSearch() == true) {
+                    viewModel.link.postValue(viewModel.link.value!!.linkClearPageable)
                 } else {
                     viewModel.link.postValue(null)
                 }

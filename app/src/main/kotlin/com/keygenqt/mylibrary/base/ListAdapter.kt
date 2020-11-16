@@ -24,6 +24,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ListData
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import java.util.ArrayList
@@ -53,7 +54,7 @@ abstract class ListAdapter<T>(
         const val LIST_DATA_TYPE_SET = 2
     }
 
-    private var linkNext: String? = null
+    private var linkNext: Link? = null
 
     private var timer = Timer()
 
@@ -109,7 +110,7 @@ abstract class ListAdapter<T>(
 
     fun setListData(listData: ListData<*>, delegate: (type: Int) -> Unit) {
         listData.linkSelf?.let {
-            Uri.parse(it).getQueryParameter("page")?.let { page ->
+            Uri.parse(it.href).getQueryParameter("page")?.let { page ->
                 if (page.toInt() == 0) {
                     clearItemsBeforeSetList()
                     delegate.invoke(LIST_DATA_TYPE_SET)

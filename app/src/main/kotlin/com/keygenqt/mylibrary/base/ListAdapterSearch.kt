@@ -28,7 +28,6 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
-import com.keygenqt.mylibrary.utils.SEARCH_MODEL_STRINGS
 import kotlinx.android.synthetic.main.item_search.view.chipGroup
 
 class AdapterHolderSearch(
@@ -39,12 +38,16 @@ class AdapterHolderSearch(
 open class ListAdapterSearch<T>(
     @LayoutRes layout: Int,
     viewModel: ViewModelPage,
-    private val search: (Link?) -> Unit
+    private val search: (String, Link) -> Unit
 ) : ListAdapter<T>(layout, viewModel) {
 
     private var checkedKey = API_KEY_SELF
 
     private val idToKey = hashMapOf<Int, String>()
+
+    open fun getStrings(): LinkedHashMap<String, Int> {
+        return linkedMapOf()
+    }
 
     override fun onBindViewHolder(holder: View, model: T) {}
 
@@ -76,22 +79,15 @@ open class ListAdapterSearch<T>(
         holder.apply {
             chipGroup.setOnCheckedChangeListener(null)
             chipGroup.removeAllViews()
-            if (model.links.containsKey(API_KEY_SELF)) {
-                setChip(API_KEY_SELF, holder)
-            }
-            model.links.forEach {
-                if (it.key != API_KEY_SELF) {
+            getStrings().forEach {
+                if (model.links.containsKey(it.key)) {
                     setChip(it.key, holder)
                 }
             }
             chipGroup.setOnCheckedChangeListener { _, checkedId ->
                 idToKey[checkedId]?.let {
                     checkedKey = it
-                    if (it == API_KEY_SELF) {
-                        search.invoke(null)
-                    } else {
-                        search.invoke(model.links.getValue(checkedKey))
-                    }
+                    search.invoke(checkedKey, model.links.getValue(checkedKey))
                 }
             }
         }
@@ -117,15 +113,15 @@ open class ListAdapterSearch<T>(
 
     private fun setChip(key: String, holder: View) {
         holder.apply {
-            if (SEARCH_MODEL_STRINGS.containsKey(key)) {
-                val chip = (holder.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                    .inflate(R.layout.item_search_view_chip, null) as Chip
-                chip.id = View.generateViewId()
-                idToKey[chip.id] = key
-                chip.text = context.getString(SEARCH_MODEL_STRINGS.getValue(key))
-                chipGroup.addView(chip)
-                if (checkedKey == key) {
-                    chipGroup.check(chip.id)
+            (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.item_search_view_chip, null)?.let {
+                if (it is Chip) {
+                    it.id = View.generateViewId()
+                    idToKey[it.id] = key
+                    it.text = context.getString(getStrings().getValue(key))
+                    chipGroup.addView(it)
+                    if (checkedKey == key) {
+                        chipGroup.check(it.id)
+                    }
                 }
             }
         }
