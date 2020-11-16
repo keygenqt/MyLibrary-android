@@ -17,176 +17,254 @@
       >
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/layoutAvailableSearch"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="?android:selectableItemBackground"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          >
+
+        <TextView
+            android:id="@+id/tvAvailableSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="6dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="14dp"
+            android:text="@string/settings_title"
+            android:textAllCaps="true"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/colorGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/settingsBlockAppearance"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="?android:selectableItemBackground"
+          >
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layoutAvailableSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <TextView
-                    android:id="@+id/tvAvailableSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="6dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="6dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/page_settings_title"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorText"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/colorGray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settingsBlock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/settingsSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:clickable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/settingsTextBlock"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/settingsSwitch"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/settingsSwitch"
-                    tools:ignore="MissingConstraints">
-
-                    <TextView
-                        android:id="@+id/settingsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="55dp"
-                        android:paddingBottom="6dp"
-                        android:singleLine="true"
-                        android:text="By using AppCompat "
-                        android:textColor="@color/colorText" />
-
-                    <TextView
-                        android:id="@+id/settingsSubText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="55dp"
-                        android:text="There is one UI widgets that ships with AppCompat named CompatTextView is a Custom TextView extension that adds support for textAllCaps"
-                        android:textColor="@color/colorTextLite"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0.5dp"
-                    android:background="@color/colorGray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settingsBlock2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/settingsSwitch2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:clickable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/settingsTextBlock2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/settingsSwitch2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/settingsSwitch2"
-                    tools:ignore="MissingConstraints">
-
-                    <TextView
-                        android:id="@+id/settingsText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="55dp"
-                        android:paddingBottom="6dp"
-                        android:singleLine="true"
-                        android:text="By using AppCompat "
-                        android:textColor="@color/colorText" />
-
-                    <TextView
-                        android:id="@+id/settingsSubText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="55dp"
-                        android:text="There is one UI widgets that ships with AppCompat named CompatTextView is a Custom TextView extension that adds support for textAllCaps"
-                        android:textColor="@color/colorTextLite"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0.5dp"
-                    android:background="@color/colorGray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="6dp"
+              android:singleLine="true"
+              android:text="@string/settings_menu_appearance"
+              android:textColor="@color/colorText"
+              android:textSize="16sp"
+              tools:ignore="RtlSymmetry"
+              />
 
         </LinearLayout>
 
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/settingsBlockEditProfile"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="?android:selectableItemBackground"
+          >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            >
 
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="6dp"
+              android:singleLine="true"
+              android:text="@string/settings_menu_edit_profile"
+              android:textColor="@color/colorText"
+              android:textSize="16sp"
+              tools:ignore="RtlSymmetry"
+              />
+
+        </LinearLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/settingsBlockPassword"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="?android:selectableItemBackground"
+          >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            >
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="6dp"
+              android:singleLine="true"
+              android:text="@string/settings_menu_password"
+              android:textColor="@color/colorText"
+              android:textSize="16sp"
+              tools:ignore="RtlSymmetry"
+              />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="@color/colorGray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/settingsBlockAbout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="?android:selectableItemBackground"
+          >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            >
+
+          <ImageView
+              android:id="@+id/ivCorner"
+              android:layout_width="22dp"
+              android:layout_height="22dp"
+              android:layout_marginStart="4dp"
+              android:src="@drawable/ic_baseline_info"
+              tools:ignore="ContentDescription"
+              />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="10dp"
+              android:paddingEnd="55dp"
+              android:singleLine="true"
+              android:text="@string/settings_menu_about"
+              android:textColor="@color/colorText"
+              android:textSize="16sp"
+              />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="@color/colorGray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/settingsBlockLogout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="?android:selectableItemBackground"
+          >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            >
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="6dp"
+              android:singleLine="true"
+              android:text="@string/settings_menu_logout"
+              android:textColor="@color/colorText"
+              android:textSize="16sp"
+              android:textStyle="bold"
+              />
+
+        </LinearLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+  </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

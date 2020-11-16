@@ -16,29 +16,54 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
-import androidx.navigation.fragment.*
+import android.app.AlertDialog
+import android.content.Intent
+import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.ui.activities.GuestActivity
 import kotlinx.android.synthetic.main.fragment_settings.view.*
-import org.koin.android.ext.android.*
+import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @FragmentTitle("Settings")
 class FragmentSettings : BaseFragment(R.layout.fragment_settings) {
 
-    private val viewModel: ViewSettings by inject()
+    private val sharedPreferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
         initToolbar {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
         initView {
-            settingsBlock.setOnClickListener {
-                settingsSwitch.isChecked = !settingsSwitch.isChecked
+            settingsBlockAppearance.setOnClickListener {
+                findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
             }
-            settingsBlock2.setOnClickListener {
-                settingsSwitch2.isChecked = !settingsSwitch2.isChecked
+            settingsBlockEditProfile.setOnClickListener {
+                findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentEditProfile())
+            }
+            settingsBlockPassword.setOnClickListener {
+                findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentPassword())
+            }
+            settingsBlockAbout.setOnClickListener {
+                findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAbout())
+            }
+            settingsBlockLogout.setOnClickListener {
+                AlertDialog.Builder(context)
+                    .setMessage("Are you sure to log out?")
+                    .setPositiveButton("Yes") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                        sharedPreferences.token = null
+                        context?.startActivity(Intent(context, GuestActivity::class.java))
+                    }
+                    .setNegativeButton("No") { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+                    .show()
+
             }
         }
     }

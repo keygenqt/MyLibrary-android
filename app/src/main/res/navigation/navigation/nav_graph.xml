@@ -34,5 +34,53 @@
   <fragment
       android:id="@+id/FragmentSettings"
       android:name="com.keygenqt.mylibrary.ui.settings.FragmentSettings"
-      tools:layout="@layout/fragment_settings" />
+      tools:layout="@layout/fragment_settings">
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentAbout"
+        app:destination="@id/FragmentAbout" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentAppearance"
+        app:destination="@id/FragmentAppearance" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentEditProfile"
+        app:destination="@id/FragmentEditProfile" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentPassword"
+        app:destination="@id/FragmentPassword" />
+
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentAbout"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentAbout"
+      tools:layout="@layout/fragment_about">
+    <action
+        android:id="@+id/action_FragmentAbout_to_FragmentLicenses"
+        app:destination="@id/FragmentLicenses" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentAppearance"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentAppearance"
+      tools:layout="@layout/fragment_appearance" />
+
+  <fragment
+      android:id="@+id/FragmentEditProfile"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentEditProfile"
+      tools:layout="@layout/fragment_edit_profile" />
+
+  <fragment
+      android:id="@+id/FragmentLicenses"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentLicenses"
+      tools:layout="@layout/fragment_licenses" />
+
+  <fragment
+      android:id="@+id/FragmentPassword"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentPassword"
+      tools:layout="@layout/fragment_password" />
+
 </navigation>

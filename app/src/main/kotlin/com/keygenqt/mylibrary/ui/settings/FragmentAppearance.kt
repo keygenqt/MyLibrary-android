@@ -16,7 +16,23 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
-import androidx.lifecycle.*
-import com.keygenqt.mylibrary.data.services.*
+import androidx.navigation.fragment.findNavController
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.base.BaseFragment
+import org.koin.android.ext.android.inject
 
-class ViewSettings(private val service: OtherService) : ViewModel()
+@ActionBarEnable
+@FragmentTitle("Appearance")
+class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
+
+    override fun onCreateView() {
+        initToolbar {
+            setNavigationOnClickListener { findNavController().navigateUp() }
+        }
+        initView {
+
+        }
+    }
+}

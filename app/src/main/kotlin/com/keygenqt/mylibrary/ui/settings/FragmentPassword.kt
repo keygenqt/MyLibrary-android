@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.di
+package com.keygenqt.mylibrary.ui.settings
 
-import com.keygenqt.mylibrary.ui.books.*
-import com.keygenqt.mylibrary.ui.other.*
-import org.koin.dsl.*
+import androidx.navigation.fragment.findNavController
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.FragmentTitle
+import com.keygenqt.mylibrary.base.BaseFragment
 
-val moduleViewModel = module {
-    factory { ViewBooks(get(), get()) }
-    factory { ViewSplash(get(), get()) }
-    factory { ViewLogin(get(), get()) }
-    factory { ViewJoin(get(), get()) }
+@ActionBarEnable
+@FragmentTitle("Appearance")
+class FragmentPassword : BaseFragment(R.layout.fragment_password) {
+
+    override fun onCreateView() {
+        initToolbar {
+            setNavigationOnClickListener { findNavController().navigateUp() }
+        }
+        initView {
+
+        }
+    }
 }
