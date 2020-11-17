@@ -37,7 +37,6 @@ import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-@BottomNavigationEnable
 @FragmentTitle("My Library")
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 

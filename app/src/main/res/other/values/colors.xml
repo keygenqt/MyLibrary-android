@@ -3,8 +3,8 @@
   <color name="colorPrimary">#0892CA</color>
   <color name="colorPrimaryDark">#2d2f31</color>
   <color name="colorAccent">#0892CA</color>
-  <color name="colorText">#515a61</color>
-  <color name="colorTextLite">#8D969E</color>
+  <color name="colorText">#1E1E1E</color>
+  <color name="colorTextLite">#3A3A3A</color>
   <color name="colorTextBlue">#66c1e6</color>
   <color name="colorBlack">#1E1E1E</color>
   <color name="colorGray">#8A8A8A</color>

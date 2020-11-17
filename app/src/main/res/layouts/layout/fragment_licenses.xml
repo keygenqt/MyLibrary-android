@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     >
+
   <ScrollView
       android:layout_width="0dp"
       android:layout_height="0dp"
@@ -13,18 +14,72 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
 
-      <TextView
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/layoutAvailableSearch"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_marginTop="@dimen/padding"
-          android:text="LICENSES"
-          />
+          android:layout_height="wrap_content"
+          android:background="?android:selectableItemBackground"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          >
+
+        <TextView
+            android:id="@+id/tvAvailableSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="6dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="14dp"
+            android:text="@string/licenses_title"
+            android:textAllCaps="true"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/colorGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <LinearLayout
+          android:id="@+id/containerLicenses"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingStart="16dp"
+          android:paddingTop="20dp"
+          android:paddingEnd="16dp"
+          >
+
+        <include
+            layout="@layout/view_fragment_licenses_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <include
+            layout="@layout/view_fragment_licenses_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+      </LinearLayout>
 
     </LinearLayout>
   </ScrollView>

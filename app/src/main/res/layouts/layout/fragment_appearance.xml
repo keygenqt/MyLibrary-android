@@ -34,10 +34,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="6dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="24dp"
                     android:paddingEnd="6dp"
                     android:paddingBottom="10dp"
-                    android:text="APPEARANCE"
+                    android:text="@string/appearance_title"
                     android:textAllCaps="true"
                     android:textColor="@color/colorText"
                     android:textStyle="bold"
@@ -55,19 +55,20 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settingsBlock"
+                android:id="@+id/constraintLayoutItemDarkTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:selectableItemBackground"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/settingsSwitch"
+                    android:id="@+id/switchItemDarkTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="6dp"
                     android:clickable="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -80,9 +81,9 @@
                     android:orientation="vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/settingsSwitch"
+                    app:layout_constraintBottom_toBottomOf="@+id/switchItemDarkTheme"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/settingsSwitch"
+                    app:layout_constraintTop_toTopOf="@+id/switchItemDarkTheme"
                     tools:ignore="MissingConstraints">
 
                     <TextView
@@ -93,7 +94,7 @@
                         android:paddingEnd="55dp"
                         android:paddingBottom="6dp"
                         android:singleLine="true"
-                        android:text="By using AppCompat "
+                        android:text="@string/appearance_dark_theme"
                         android:textColor="@color/colorText" />
 
                     <TextView
@@ -102,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="6dp"
                         android:paddingEnd="55dp"
-                        android:text="There is one UI widgets that ships with AppCompat named CompatTextView is a Custom TextView extension that adds support for textAllCaps"
+                        android:text="@string/appearance_dark_theme_desc"
                         android:textColor="@color/colorTextLite"
                         android:textSize="13sp" />
 
@@ -117,76 +118,6 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settingsBlock2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/settingsSwitch2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:clickable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/settingsTextBlock2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/settingsSwitch2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/settingsSwitch2"
-                    tools:ignore="MissingConstraints">
-
-                    <TextView
-                        android:id="@+id/settingsText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="55dp"
-                        android:paddingBottom="6dp"
-                        android:singleLine="true"
-                        android:text="By using AppCompat "
-                        android:textColor="@color/colorText" />
-
-                    <TextView
-                        android:id="@+id/settingsSubText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="55dp"
-                        android:text="There is one UI widgets that ships with AppCompat named CompatTextView is a Custom TextView extension that adds support for textAllCaps"
-                        android:textColor="@color/colorTextLite"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0.5dp"
-                    android:background="@color/colorGray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </LinearLayout>
-
-
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,29 +16,23 @@
 
 package com.keygenqt.mylibrary.base
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import com.jakewharton.processphoenix.ProcessPhoenix
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import com.keygenqt.mylibrary.base.response.BaseResponseError
-import com.keygenqt.mylibrary.base.response.HttpException
-import com.keygenqt.mylibrary.ui.activities.GuestActivity
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import java.net.ConnectException
 import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment(
@@ -88,7 +82,7 @@ abstract class BaseFragment(
         setHasOptionsMenu(true)
         onCreateView()
         callOnCreate()
-        listenErrorResponse()
+        BaseResponseError.init(requireContext(), sharedPreferences, viewLifecycleOwner)
         return _view
     }
 
@@ -98,28 +92,5 @@ abstract class BaseFragment(
             method.isAccessible = true
             method.invoke(this)
         }
-    }
-
-    private fun listenErrorResponse() {
-        if (!BaseResponseError.error.hasActiveObservers()) {
-            BaseResponseError.error.observe(viewLifecycleOwner, { throwable ->
-                when (throwable) {
-                    is HttpException -> {
-                        if (throwable.status == 403) {
-                            sharedPreferences.token = null
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                val intent = Intent(context, GuestActivity::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                                requireActivity().startActivity(intent)
-                            }, 100)
-                        }
-                    }
-                    is ConnectException -> {
-                        Toast.makeText(context, "Failed to connect API", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
-        }
-
     }
 }

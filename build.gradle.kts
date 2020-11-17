@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0")
+        classpath("com.android.tools.build:gradle:4.1.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${findProperty("kotlin_version")}")
         classpath("org.koin:koin-gradle-plugin:${findProperty("koin_version")}")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:${findProperty("dokka_version")}")

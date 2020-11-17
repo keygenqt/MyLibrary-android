@@ -16,12 +16,20 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
+import android.net.Uri
 import androidx.navigation.fragment.findNavController
+import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
-import org.koin.android.ext.android.inject
+import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockFeedback
+import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockLicenses
+import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockRate
+import kotlinx.android.synthetic.main.fragment_about.view.settingsTextVersion
 
 @ActionBarEnable
 @FragmentTitle("Appearance")
@@ -33,6 +41,26 @@ class FragmentAbout : BaseFragment(R.layout.fragment_about) {
         }
         initView {
 
+            settingsTextVersion.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
+
+            settingsBlockFeedback.setOnClickListener {
+                val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:dev@keygenqt.com")
+                    putExtra(Intent.EXTRA_SUBJECT, "Feedback MyLibrary (mobile)")
+                    addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                }
+                startActivity(Intent.createChooser(emailIntent, "Send feedback"))
+            }
+            settingsBlockRate.setOnClickListener { v ->
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${v.context.packageName}")))
+                } catch (ex: ActivityNotFoundException) {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${v.context.packageName}")))
+                }
+            }
+            settingsBlockLicenses.setOnClickListener {
+                findNavController().navigate(FragmentAboutDirections.actionFragmentAboutToFragmentLicenses())
+            }
         }
     }
 }

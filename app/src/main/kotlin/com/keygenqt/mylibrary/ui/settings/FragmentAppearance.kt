@@ -21,18 +21,27 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemDarkTheme
+import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemDarkTheme
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @FragmentTitle("Appearance")
 class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
 
+    private val sharedPreferences: BaseSharedPreferences by inject()
+
     override fun onCreateView() {
         initToolbar {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
         initView {
-
+            switchItemDarkTheme.isChecked = sharedPreferences.darkTheme
+            constraintLayoutItemDarkTheme.setOnClickListener {
+                switchItemDarkTheme.isChecked = !switchItemDarkTheme.isChecked
+                sharedPreferences.darkTheme = switchItemDarkTheme.isChecked
+            }
         }
     }
 }

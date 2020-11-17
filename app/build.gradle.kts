@@ -26,7 +26,7 @@ android {
         minSdkVersion(24)
         targetSdkVersion(30)
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -117,9 +117,3 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 }
-
-dependencies {
-//    implementation("com.j256.ormlite:ormlite-android:5.1")
-//    kapt("com.keygenqt.artifactory:gen-ormlite-android:1.0.1")
-}
-

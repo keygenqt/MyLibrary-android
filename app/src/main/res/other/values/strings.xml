@@ -54,4 +54,19 @@
   <string name="edit_profile_location">Location</string>
   <string name="edit_profile_website">Website</string>
 
+  // appearance
+  <string name="appearance_title">APPEARANCE</string>
+  <string name="appearance_dark_theme">Dark Theme</string>
+  <string name="appearance_dark_theme_desc">If you want to use MyLibrary in Dark theme</string>
+
+  // about
+  <string name="about_title">ABOUT</string>
+  <string name="about_version">Version: %s</string>
+  <string name="about_feedback">Feedback</string>
+  <string name="about_rate">Rate App</string>
+  <string name="about_licenses">Licenses</string>
+
+  // licenses
+  <string name="licenses_title">LICENSES</string>
+
 </resources>
