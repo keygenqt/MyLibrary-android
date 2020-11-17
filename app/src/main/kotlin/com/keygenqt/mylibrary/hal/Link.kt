@@ -58,4 +58,8 @@ data class Link(
     fun isSearch(): Boolean {
         return href.contains(API_KEY_SEARCH)
     }
+
+    fun isFirstPage(): Boolean {
+        return !href.contains("""page=[1-9]+""".toRegex())
+    }
 }

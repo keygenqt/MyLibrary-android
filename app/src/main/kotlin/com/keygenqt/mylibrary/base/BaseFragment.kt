@@ -104,7 +104,9 @@ abstract class BaseFragment(
                     is HttpException -> {
                         if (throwable.status == 403) {
                             sharedPreferences.token = null
-                            context?.startActivity(Intent(context, GuestActivity::class.java))
+                            val intent = Intent(context, GuestActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                            requireActivity().startActivity(intent)
                         }
                     }
                     is ConnectException -> {

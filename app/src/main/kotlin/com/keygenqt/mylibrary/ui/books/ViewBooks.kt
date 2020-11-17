@@ -39,7 +39,7 @@ class ViewBooks(private val service: BookService, db: RoomDatabase) : ViewModel(
 
     val listData = link.switchMap {
         liveData(getExceptionHandler()) {
-            loading.postValue(true)
+            loading.postValue(link.value?.isFirstPage() == true)
             service.getList(link.value?.link ?: linkModel.link) { listData ->
                 loading.postValue(false)
                 emit(listData)

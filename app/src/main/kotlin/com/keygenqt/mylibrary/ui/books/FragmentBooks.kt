@@ -41,6 +41,7 @@ import org.koin.android.ext.android.inject
 @FragmentTitle("My Library")
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
+    private var changeSearch = false
     private val viewModel: ViewBooks by inject()
     private val sharedPreferences: BaseSharedPreferences by inject()
 
@@ -48,6 +49,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel) { key, link ->
+                changeSearch = true
                 when (key) {
                     AdapterBooks.SEARCH_SELF -> {
                         viewModel.link.postValue(null)
@@ -74,7 +76,11 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.loading.observe(viewLifecycleOwner, { status ->
-                refresh.isRefreshing = status
+                if (!changeSearch) {
+                    refresh.isRefreshing = status
+                } else {
+                    changeSearch = false
+                }
             })
         }
     }

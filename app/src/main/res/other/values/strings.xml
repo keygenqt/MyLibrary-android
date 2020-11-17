@@ -34,7 +34,7 @@
   //searchModel
   <string name="search_books_self">All Books</string>
   <string name="search_books_findAllByUserId">My Library</string>
-  <string name="search_books_findAllBySale">Shop Books</string>
+  <string name="search_books_findAllBySale">Book Swap</string>
 
   // settings
   <string name="settings_title">SETTINGS</string>

@@ -57,7 +57,9 @@ class FragmentSettings : BaseFragment(R.layout.fragment_settings) {
                     .setPositiveButton("Yes") { dialogInterface, _ ->
                         dialogInterface.dismiss()
                         sharedPreferences.token = null
-                        context?.startActivity(Intent(context, GuestActivity::class.java))
+                        val intent = Intent(context, GuestActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        requireActivity().startActivity(intent)
                     }
                     .setNegativeButton("No") { dialogInterface, _ ->
                         dialogInterface.dismiss()
