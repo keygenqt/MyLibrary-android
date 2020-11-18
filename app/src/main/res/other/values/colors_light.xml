@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="Light.AppThemeColors" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorText">#222222</item>
+        <item name="colorTextLite">#444444</item>
+        <item name="colorTextLink">#0892CA</item>
+        <item name="colorBackgroundPage">#ffffff</item>
+        <item name="colorBackgroundList">#DEDEDE</item>
+        <item name="colorBackgroundListItem">#FFFFFF</item>
+        <item name="colorDividingLine">#818181</item>
+        <item name="colorChipEnable">#79D9FF</item>
+        <item name="colorChipDisable">#FFFFFF</item>
+        <item name="colorChipText">#222222</item>
+    </style>
+
+</resources>

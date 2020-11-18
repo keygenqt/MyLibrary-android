@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="DayNight.AppThemeColors" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorText">#FFFFFF</item>
+        <item name="colorTextLite">#EDEDED</item>
+        <item name="colorTextLink">#0892CA</item>
+        <item name="colorBackgroundPage">#1E1E1E</item>
+        <item name="colorBackgroundList">#1E1E1E</item>
+        <item name="colorBackgroundListItem">#323232</item>
+        <item name="colorDividingLine">#B6B6B6</item>
+        <item name="colorChipEnable">#79D9FF</item>
+        <item name="colorChipDisable">#FFFFFF</item>
+        <item name="colorChipText">#222222</item>
+    </style>
+
+</resources>

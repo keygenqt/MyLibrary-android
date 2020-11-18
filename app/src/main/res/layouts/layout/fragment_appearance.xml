@@ -41,6 +41,7 @@
             android:text="@string/appearance_title"
             android:textAllCaps="true"
             android:textStyle="bold"
+            android:textColor="?attr/colorText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -48,7 +49,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch"
@@ -99,6 +100,7 @@
               android:paddingEnd="55dp"
               android:paddingBottom="6dp"
               android:singleLine="true"
+              android:textColor="?attr/colorText"
               android:text="@string/appearance_dark_theme"
               />
 
@@ -110,6 +112,7 @@
               android:paddingEnd="55dp"
               android:text="@string/appearance_dark_theme_desc"
               android:textSize="13sp"
+              android:textColor="?attr/colorTextLite"
               />
 
         </LinearLayout>
@@ -117,7 +120,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

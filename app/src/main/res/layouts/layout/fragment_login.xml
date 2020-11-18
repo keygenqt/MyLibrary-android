@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
     >
   <ScrollView
       android:layout_width="0dp"
@@ -71,6 +70,7 @@
           android:layout_height="match_parent"
           android:layout_marginTop="@dimen/padding"
           android:text="@string/login_reg_info"
+          android:textColor="?attr/colorText"
           />
 
       <Button

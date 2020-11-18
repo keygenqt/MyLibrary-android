@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <attr name="colorText" format="color" />
+  <attr name="colorTextLite" format="color" />
+  <attr name="colorTextLink" format="color" />
+  <attr name="colorBackgroundPage" format="color" />
+  <attr name="colorBackgroundList" format="color" />
+  <attr name="colorBackgroundListItem" format="color" />
+  <attr name="colorDividingLine" format="color" />
+  <attr name="colorChipEnable" format="color" />
+  <attr name="colorChipDisable" format="color" />
+  <attr name="colorChipText" format="color" />
+</resources>

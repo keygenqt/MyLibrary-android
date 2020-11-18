@@ -18,7 +18,7 @@
       android:paddingStart="6dp"
       android:singleLine="true"
       android:text="@string/settings_menu_appearance"
-      android:textColor="@color/colorText"
+      android:textColor="?attr/colorText"
       android:textSize="16sp"
       android:textStyle="bold"
       tools:ignore="RtlSymmetry"
@@ -32,7 +32,7 @@
       android:layout_marginBottom="10dp"
       android:paddingStart="6dp"
       android:text=""
-      android:textColor="@color/colorTextLite"
+      android:textColor="?attr/colorTextLite"
       android:textSize="14sp"
       tools:ignore="RtlSymmetry"
       />
@@ -40,7 +40,7 @@
   <View
       android:layout_width="match_parent"
       android:layout_height="0.5dp"
-      android:background="@color/colorGray"
+      android:background="?attr/colorDividingLine"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

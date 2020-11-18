@@ -39,7 +39,7 @@
             android:paddingEnd="6dp"
             android:paddingBottom="14dp"
             android:text="@string/about_title"
-            android:textColor="@color/colorText"
+            android:textColor="?attr/colorText"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -48,7 +48,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch"
@@ -83,7 +83,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/about_feedback"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />
@@ -118,7 +118,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/about_rate"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />
@@ -128,7 +128,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,7 +172,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/about_licenses"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />
@@ -182,7 +182,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -217,7 +217,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/about_version"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />

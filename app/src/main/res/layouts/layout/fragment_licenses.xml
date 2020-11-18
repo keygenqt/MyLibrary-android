@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
     >
 
   <ScrollView
@@ -40,7 +39,7 @@
             android:paddingBottom="14dp"
             android:text="@string/licenses_title"
             android:textAllCaps="true"
-            android:textColor="@color/colorText"
+            android:textColor="?attr/colorText"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -49,7 +48,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch"

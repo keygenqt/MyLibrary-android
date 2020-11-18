@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="@style/chipTextTheme"
-    android:textColor="@color/colorBlack"
+    android:textColor="?attr/colorChipText"
     android:textSize="14sp"
     app:chipBackgroundColor="@drawable/common_search_bg_chip"
     />

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
     >
 
   <ScrollView
@@ -41,7 +40,7 @@
             android:paddingBottom="14dp"
             android:text="@string/settings_title"
             android:textAllCaps="true"
-            android:textColor="@color/colorText"
+            android:textColor="?attr/colorText"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -50,7 +49,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAvailableSearch"
@@ -85,7 +84,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/settings_menu_appearance"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />
@@ -121,7 +120,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/settings_menu_edit_profile"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />
@@ -157,7 +156,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/settings_menu_password"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               tools:ignore="RtlSymmetry"
               />
@@ -167,7 +166,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -213,7 +212,7 @@
               android:paddingEnd="55dp"
               android:singleLine="true"
               android:text="@string/settings_menu_about"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               />
 
@@ -222,7 +221,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:background="@color/colorGray"
+            android:background="?attr/colorDividingLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -257,7 +256,7 @@
               android:paddingStart="6dp"
               android:singleLine="true"
               android:text="@string/settings_menu_logout"
-              android:textColor="@color/colorText"
+              android:textColor="?attr/colorText"
               android:textSize="16sp"
               android:textStyle="bold"
               tools:ignore="RtlSymmetry"
