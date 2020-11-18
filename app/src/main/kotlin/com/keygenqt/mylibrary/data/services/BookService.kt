@@ -16,7 +16,7 @@
 
 package com.keygenqt.mylibrary.data.services
 
-import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.checkResponse
+import com.keygenqt.mylibrary.base.response.CheckResponse.Companion.checkResponse
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
 import com.keygenqt.mylibrary.hal.ListData

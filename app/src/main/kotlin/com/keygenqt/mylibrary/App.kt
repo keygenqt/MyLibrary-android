@@ -17,15 +17,18 @@
 package com.keygenqt.mylibrary
 
 import android.app.*
-import android.content.Context
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import com.facebook.stetho.Stetho
+import com.keygenqt.mylibrary.base.BaseExceptionHandler
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.di.*
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.*
 import org.koin.core.context.*
 
 class App : Application() {
+
+    private val exceptionHandler: BaseExceptionHandler by inject()
+
     override fun onCreate() {
         super.onCreate()
         Stetho.initializeWithDefaults(this)
@@ -33,10 +36,11 @@ class App : Application() {
             androidLogger()
             androidContext(this@App)
             modules(
-                moduleSharedPreferences,
+                moduleOther,
                 moduleRetrofit,
                 moduleViewModel
             )
         }
+        registerActivityLifecycleCallbacks(exceptionHandler)
     }
 }

@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.base.response.BaseResponseError
+import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.data.services.OtherService
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.*
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
@@ -32,7 +32,7 @@ class ViewJoin(private val service: OtherService, private val preferences: BaseS
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
     val join = params.switchMap {
-        liveData(BaseResponseError.getExceptionHandler(error)) {
+        liveData(BaseExceptionHandler.getExceptionHandler(error)) {
             service.join(it[NICKNAME]!!, it[EMAIL]!!, it[PASSWORD]!!) { model ->
                 preferences.userId = model.id
                 preferences.token = model.token

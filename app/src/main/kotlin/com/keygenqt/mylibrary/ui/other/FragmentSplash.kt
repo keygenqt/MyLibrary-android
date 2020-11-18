@@ -28,10 +28,12 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
     private val viewModel: ViewSplash by inject()
 
     override fun onCreateView() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.links.observe(viewLifecycleOwner, {
-                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
-            })
-        }, 500)
+        if (!requireActivity().intent.hasExtra("ConnectException")) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewModel.links.observe(viewLifecycleOwner, {
+                    findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
+                })
+            }, 500)
+        }
     }
 }

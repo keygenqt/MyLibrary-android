@@ -18,12 +18,13 @@ package com.keygenqt.mylibrary.di
 
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-val moduleSharedPreferences = module {
+val moduleOther = module {
     single {
         BaseSharedPreferences(
             EncryptedSharedPreferences.create(
@@ -36,4 +37,5 @@ val moduleSharedPreferences = module {
         )
     }
     single { RoomDatabase(androidContext()) }
+    single { BaseExceptionHandler(get()) }
 }

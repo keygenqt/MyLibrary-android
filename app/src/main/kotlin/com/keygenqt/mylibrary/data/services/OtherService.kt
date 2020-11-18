@@ -17,7 +17,7 @@
 package com.keygenqt.mylibrary.data.services
 
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.checkResponse
+import com.keygenqt.mylibrary.base.response.CheckResponse.Companion.checkResponse
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
 

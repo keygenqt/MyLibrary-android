@@ -17,7 +17,6 @@
 package com.keygenqt.mylibrary.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +24,10 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
-import com.keygenqt.mylibrary.base.response.BaseResponseError
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
@@ -82,7 +79,6 @@ abstract class BaseFragment(
         setHasOptionsMenu(true)
         onCreateView()
         callOnCreate()
-        BaseResponseError.init(requireContext(), sharedPreferences, viewLifecycleOwner)
         return _view
     }
 

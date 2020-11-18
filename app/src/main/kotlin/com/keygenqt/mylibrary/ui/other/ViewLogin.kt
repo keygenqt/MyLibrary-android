@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.services.OtherService
 import com.keygenqt.mylibrary.ui.other.FragmentLogin.*
 

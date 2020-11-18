@@ -17,7 +17,7 @@
 package com.keygenqt.mylibrary.ui.books
 
 import androidx.lifecycle.*
-import com.keygenqt.mylibrary.base.response.BaseResponseError.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook

@@ -12,12 +12,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.FragmentTitle
-import com.keygenqt.mylibrary.ui.chat.FragmentChat
 import com.keygenqt.mylibrary.ui.books.FragmentBooks
+import com.keygenqt.mylibrary.ui.chat.FragmentChat
 import com.keygenqt.mylibrary.ui.other.FragmentLogin
 import kotlin.reflect.full.findAnnotation
 
-abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val graphId: Int): AppCompatActivity() {
+abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val graphId: Int) : AppCompatActivity() {
 
     lateinit var controller: NavController
 
@@ -76,5 +76,12 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
     override fun onPause() {
         controller.removeOnDestinationChangedListener(listener)
         super.onPause()
+    }
+
+    fun getCurrentFragment(): BaseFragment? {
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let {
+            return it.childFragmentManager.fragments[0] as? BaseFragment
+        }
+        return null
     }
 }
