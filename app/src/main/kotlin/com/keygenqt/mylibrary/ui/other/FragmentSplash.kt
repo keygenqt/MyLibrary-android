@@ -21,6 +21,8 @@ import android.os.Looper
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.ui.books.FragmentBooksDirections
+import com.keygenqt.mylibrary.ui.settings.FragmentSettingsDirections
 import org.koin.android.ext.android.inject
 
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
@@ -28,7 +30,11 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
     private val viewModel: ViewSplash by inject()
 
     override fun onCreateView() {
-        if (!requireActivity().intent.hasExtra("ConnectException")) {
+        if (requireActivity().intent.hasExtra("changeTheme")) {
+            findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
+            findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
+            findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
+        } else {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModel.links.observe(viewLifecycleOwner, {
                     findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())

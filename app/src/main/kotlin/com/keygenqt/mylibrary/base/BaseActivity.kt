@@ -15,9 +15,12 @@ import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.ui.books.FragmentBooks
 import com.keygenqt.mylibrary.ui.chat.FragmentChat
 import com.keygenqt.mylibrary.ui.other.FragmentLogin
+import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
 
 abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val graphId: Int) : AppCompatActivity() {
+
+    private val sharedPreferences: BaseSharedPreferences by inject()
 
     lateinit var controller: NavController
 
@@ -41,6 +44,16 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        when (sharedPreferences.darkTheme) {
+            true -> {
+                setTheme(R.style.DarkTheme)
+            }
+            false -> {
+                setTheme(R.style.AppTheme)
+            }
+        }
+
         setContentView(contentId)
         setSupportActionBar(findViewById(R.id.toolbar))
 

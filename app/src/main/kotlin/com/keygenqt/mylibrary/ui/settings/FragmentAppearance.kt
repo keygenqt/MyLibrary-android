@@ -16,12 +16,16 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemDarkTheme
 import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemDarkTheme
 import org.koin.android.ext.android.inject
@@ -41,6 +45,14 @@ class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
             constraintLayoutItemDarkTheme.setOnClickListener {
                 switchItemDarkTheme.isChecked = !switchItemDarkTheme.isChecked
                 sharedPreferences.darkTheme = switchItemDarkTheme.isChecked
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(context, MainActivity::class.java)
+                    intent.putExtra("changeTheme", true)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    context.startActivity(intent)
+                }, 200)
+
             }
         }
     }
