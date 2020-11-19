@@ -30,6 +30,7 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_licenses.view.containerLicenses
 import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceDesc
 import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceTitle
+import org.json.JSONObject
 
 @ActionBarEnable
 @FragmentTitle("Licenses")
@@ -42,18 +43,41 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
         }
         initView {
             containerLicenses.removeAllViews()
-            linkedMapOf(
-                R.string.retrofit_title to R.string.retrofit_desc,
-                R.string.okhttp_title to R.string.okhttp_desc,
-                R.string.kotlin_title to R.string.kotlin_desc,
-            ).forEach { item ->
-                (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                    .inflate(R.layout.view_fragment_licenses_item, null)?.let { view ->
-                        view.licenceTitle.text = getString(item.key)
-                        view.licenceDesc.text = Html.fromHtml(getString(item.value), HtmlCompat.FROM_HTML_MODE_LEGACY)
-                        view.licenceDesc.movementMethod = LinkMovementMethod.getInstance()
-                        containerLicenses.addView(view)
-                    }
+
+            val body = JSONObject(context.resources.openRawResource(R.raw.licenses)
+                .bufferedReader().use { it.readText() })
+
+            val licenses = body.getJSONArray("libraries")
+
+            for (i in 0 until licenses.length()) {
+                val item = licenses.getJSONObject(i)
+                if (item.has("libraryName") && item.has("license") && item.has("licenseUrl")) {
+                    (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                        .inflate(R.layout.view_fragment_licenses_item, null)?.let { view ->
+                            if (item.has("url")) {
+                                containerLicenses.addView(view.apply {
+                                    licenceTitle.text = item.getString("libraryName")
+                                    licenceDesc.text = Html.fromHtml(getString(R.string.licenses_desc_website,
+                                        item.getString("license"),
+                                        item.getString("url"),
+                                        item.getString("url"),
+                                        item.getString("licenseUrl"),
+                                        item.getString("licenseUrl")),
+                                        HtmlCompat.FROM_HTML_MODE_LEGACY)
+                                    licenceDesc.movementMethod = LinkMovementMethod.getInstance()
+                                })
+                            } else {
+                                containerLicenses.addView(view.apply {
+                                    licenceDesc.text = Html.fromHtml(getString(R.string.licenses_desc,
+                                        item.getString("license"),
+                                        item.getString("licenseUrl"),
+                                        item.getString("licenseUrl")),
+                                        HtmlCompat.FROM_HTML_MODE_LEGACY)
+                                    licenceDesc.movementMethod = LinkMovementMethod.getInstance()
+                                })
+                            }
+                        }
+                }
             }
         }
     }

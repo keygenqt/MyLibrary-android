@@ -68,5 +68,23 @@
 
   // licenses
   <string name="licenses_title">LICENSES</string>
+  <string name="licenses_desc_website"><![CDATA[
+%s
+<br><br>
+Url:
+<br>
+<a href="%s">%s</a>
+<br><br>
+License:
+<br>
+<a href="%s">%s</a>
+]]></string>
+
+  <string name="licenses_desc"><![CDATA[
+%s
+<br><br>
+License:<br>
+<a href="%s">%s</a>
+]]></string>
 
 </resources>

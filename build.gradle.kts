@@ -2,6 +2,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.1.1")
@@ -9,6 +10,7 @@ buildscript {
         classpath("org.koin:koin-gradle-plugin:${findProperty("koin_version")}")
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:${findProperty("dokka_version")}")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1")
+        classpath("gradle.plugin.com.cookpad.android.plugin:plugin:1.2.5")
     }
 }
 

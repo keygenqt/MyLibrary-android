@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("org.jetbrains.dokka")
+    id("com.cookpad.android.plugin.license-tools")
 }
 
 tasks.dokkaHtml.configure {
@@ -15,6 +16,10 @@ tasks.dokkaHtml.configure {
             noAndroidSdkLink.set(false)
         }
     }
+}
+
+licenseTools {
+    outputJson = "../res/assets/raw/licenses.json"
 }
 
 android {
