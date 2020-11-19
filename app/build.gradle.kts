@@ -63,6 +63,16 @@ android {
     }
 }
 
+// RoundedImageView
+dependencies {
+    implementation("com.makeramen:roundedimageview:2.3.0")
+}
+
+// Material View Pager Dots Indicator
+dependencies {
+    implementation("com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2")
+}
+
 // material
 dependencies {
     implementation("com.google.android.material:material:1.2.1")

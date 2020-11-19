@@ -21,7 +21,9 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
-import org.koin.android.ext.android.inject
+import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
+import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 
 @ActionBarEnable
 @FragmentTitle("Edit Profile")
@@ -32,7 +34,10 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
         initView {
-
+            spring_dots_indicator.setViewPager(viewPager.apply {
+                adapter = DotIndicatorPagerAdapter()
+                setPageTransformer(true, ZoomOutPageTransformer())
+            })
         }
     }
 }
