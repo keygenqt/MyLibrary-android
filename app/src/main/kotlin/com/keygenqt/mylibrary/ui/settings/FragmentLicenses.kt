@@ -30,6 +30,7 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_licenses.view.containerLicenses
 import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceDesc
 import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceTitle
+import org.json.JSONArray
 import org.json.JSONObject
 
 @ActionBarEnable
@@ -44,11 +45,29 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
         initView {
             containerLicenses.removeAllViews()
 
+            loadJsonArray(JSONArray().apply {
+
+                // add freevector
+                put(JSONObject().apply {
+                    put("libraryName", "FreeVector.com")
+                    put("license",
+                        "This file is distributed under the <a href='https://www.freevector.com/standard-license'>Our Standard License</a> license")
+                    put("url", "https://www.freevector.com")
+                    put("urlName", "www.freevector.com")
+                    put("licenseUrl", "https://www.freevector.com/cute-cartoon-faces-19020")
+                    put("licenseUrlName", "FreeVector.com")
+                })
+            })
+
             val body = JSONObject(context.resources.openRawResource(R.raw.licenses)
                 .bufferedReader().use { it.readText() })
 
-            val licenses = body.getJSONArray("libraries")
+            loadJsonArray(body.getJSONArray("libraries"))
+        }
+    }
 
+    private fun loadJsonArray(licenses: JSONArray) {
+        initView {
             for (i in 0 until licenses.length()) {
                 val item = licenses.getJSONObject(i)
                 if (item.has("libraryName") && item.has("license") && item.has("licenseUrl")) {
@@ -60,9 +79,9 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                                     licenceDesc.text = Html.fromHtml(getString(R.string.licenses_desc_website,
                                         item.getString("license"),
                                         item.getString("url"),
-                                        item.getString("url"),
+                                        if (item.has("urlName")) item.getString("urlName") else item.getString("url"),
                                         item.getString("licenseUrl"),
-                                        item.getString("licenseUrl")),
+                                        if (item.has("licenseUrlName")) item.getString("licenseUrlName") else item.getString("licenseUrl")),
                                         HtmlCompat.FROM_HTML_MODE_LEGACY)
                                     licenceDesc.movementMethod = LinkMovementMethod.getInstance()
                                 })

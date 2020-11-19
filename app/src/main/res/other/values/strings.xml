@@ -75,7 +75,7 @@ Url:
 <br>
 <a href="%s">%s</a>
 <br><br>
-License:
+Link:
 <br>
 <a href="%s">%s</a>
 ]]></string>
@@ -83,7 +83,7 @@ License:
   <string name="licenses_desc"><![CDATA[
 %s
 <br><br>
-License:<br>
+Link:<br>
 <a href="%s">%s</a>
 ]]></string>
 
