@@ -84,6 +84,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.join.observe(viewLifecycleOwner) {
+                viewModel.error.postValue(null)
                 this.hideKeyboard()
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
@@ -95,10 +96,12 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     @CallOnCreate fun observeError() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
+
+                textInputLayoutNickname.error = null
+                textInputLayoutEmail.error = null
+                textInputLayoutPassw.error = null
+
                 if (throwable is ValidateException) {
-                    textInputLayoutNickname.error = null
-                    textInputLayoutEmail.error = null
-                    textInputLayoutPassw.error = null
                     throwable.errors.forEach {
                         when (it.field) {
                             NICKNAME.name.toLowerCase(Locale.ROOT) ->

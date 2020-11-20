@@ -17,7 +17,7 @@
 package com.keygenqt.mylibrary.base
 
 import android.app.Activity
-import android.app.Application.ActivityLifecycleCallbacks
+import android.app.Application.*
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -61,6 +61,9 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
         error.observe(activity as LifecycleOwner, { throwable ->
             when (throwable) {
                 is HttpException -> {
+                    if (throwable.status == 405) {
+                        Toast.makeText(activity, "Method Not Allowed", Toast.LENGTH_SHORT).show()
+                    }
                     if (throwable.status == 403) {
                         sharedPreferences.token = null
                         error.removeObservers(activity as LifecycleOwner)

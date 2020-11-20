@@ -2,6 +2,7 @@ package com.keygenqt.mylibrary.base.response
 
 import android.util.Log
 import com.google.gson.Gson
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -13,17 +14,21 @@ class CheckResponse {
                 delegate.invoke()
             } else {
                 this@checkResponse.errorBody()?.let {
-                    val jsonObject = JSONObject(it.string())
-                    if (jsonObject.has("status")) {
-                        if (jsonObject.getInt("status") == 422) {
-                            throw Gson().fromJson(
-                                jsonObject.toString(),
-                                ValidateException::class.java
-                            )
-                        } else {
-                            Log.e("TAG", jsonObject.toString())
-                            throw Gson().fromJson(jsonObject.toString(), HttpException::class.java)
+                    try {
+                        val jsonObject = JSONObject(it.string())
+                        if (jsonObject.has("status")) {
+                            if (jsonObject.getInt("status") == 422) {
+                                throw Gson().fromJson(jsonObject.toString(), ValidateException::class.java)
+                            } else {
+                                throw Gson().fromJson(jsonObject.toString(), HttpException::class.java)
+                            }
                         }
+                    } catch (ex: JSONException) {
+                        throw HttpException(
+                            status = this@checkResponse.code(),
+                            error = this@checkResponse.message(),
+                            message = this@checkResponse.message(),
+                        )
                     }
                 }
                 throw RuntimeException("Response api has error")

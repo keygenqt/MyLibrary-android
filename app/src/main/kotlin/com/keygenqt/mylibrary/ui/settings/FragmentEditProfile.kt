@@ -67,6 +67,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.updateUser.observe(viewLifecycleOwner) {
+                viewModel.error.postValue(null)
                 this.hideKeyboard()
                 viewPager.requestFocus()
                 Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_SHORT).show()
@@ -89,13 +90,13 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     @CallOnCreate fun observeError() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
+
+                textInputLayoutNickname.error = null
+                textInputLayoutWebsite.error = null
+                textInputLayoutLocation.error = null
+                textInputLayoutBio.error = null
+
                 if (throwable is ValidateException) {
-
-                    textInputLayoutNickname.error = null
-                    textInputLayoutWebsite.error = null
-                    textInputLayoutLocation.error = null
-                    textInputLayoutBio.error = null
-
                     throwable.errors.forEach {
                         when (it.field) {
                             "nickname" ->

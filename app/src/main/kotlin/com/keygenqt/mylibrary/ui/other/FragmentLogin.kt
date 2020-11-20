@@ -63,6 +63,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.login.observe(viewLifecycleOwner) {
+                viewModel.error.postValue(null)
                 this.hideKeyboard()
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
@@ -74,9 +75,11 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     @CallOnCreate fun observeError() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
+
+                textInputLayoutEmail.error = null
+                textInputLayoutPassw.error = null
+
                 if (throwable is ValidateException) {
-                    textInputLayoutEmail.error = null
-                    textInputLayoutPassw.error = null
                     throwable.errors.forEach {
                         when (it.field) {
                             EMAIL.name.toLowerCase(Locale.ROOT) ->
