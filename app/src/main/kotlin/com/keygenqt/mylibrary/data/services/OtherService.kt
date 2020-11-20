@@ -77,8 +77,8 @@ class OtherService(
         }
     }
 
-    suspend fun getUserMe(response: suspend (ModelUser) -> Unit) {
-        api.getUserMe().checkResponse { model ->
+    suspend fun getUserMe(link: String, response: suspend (ModelUser) -> Unit) {
+        api.getUserMe("$link/${preferences.userId}").checkResponse { model ->
             db.getDao<ModelUserDao>()?.let {
                 it.deleteAll()
                 it.insert(model)

@@ -16,29 +16,33 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
+import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewEditProfile(
     private val db: RoomDatabase,
     private val service: OtherService,
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
+
     var user = db.getDao<ModelUserDao>()!!.getModel()
+    private val linkModel = db.getDao<ModelRootDao>()!!.getModel(API_VERSION).getLink(API_KEY_MODEL_USERS)
 
     val params: MutableLiveData<ModelUser> = MutableLiveData()
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
     val userMe: LiveData<ModelUser> = liveData(BaseExceptionHandler.getExceptionHandler()) {
         emit(user)
-        service.getUserMe { model ->
+        service.getUserMe(linkModel.link) { model ->
             user = model
             emit(model)
         }

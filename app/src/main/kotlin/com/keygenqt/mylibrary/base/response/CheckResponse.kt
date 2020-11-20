@@ -52,7 +52,6 @@ class CheckResponse {
                                 ValidateException::class.java
                             )
                         } else {
-                            Log.e("TAG", jsonObject.toString())
                             throw Gson().fromJson(jsonObject.toString(), HttpException::class.java)
                         }
                     }

@@ -50,6 +50,8 @@ interface OtherApi {
     @GET("/")
     suspend fun getRootLinks(): Response<ModelRoot>
 
-    @GET("/users/me")
-    suspend fun getUserMe(): Response<ModelUser>
+    @GET
+    suspend fun getUserMe(
+        @Url link: String
+    ): Response<ModelUser>
 }

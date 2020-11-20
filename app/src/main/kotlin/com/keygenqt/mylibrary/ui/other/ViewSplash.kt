@@ -24,10 +24,8 @@ import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
-import com.keygenqt.mylibrary.data.services.BookApi
 import com.keygenqt.mylibrary.data.services.OtherService
-import org.koin.android.ext.android.inject
-import org.koin.java.KoinJavaComponent.inject
+import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 
 class ViewSplash(
     private val db: RoomDatabase,
@@ -35,14 +33,17 @@ class ViewSplash(
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
 
+    lateinit var modelRoot: ModelRoot
+
     val userMe: LiveData<ModelUser> = liveData(getExceptionHandler()) {
-        service.getUserMe { user ->
+        service.getUserMe(modelRoot.links[API_KEY_MODEL_USERS]?.link!!) { user ->
             emit(user)
         }
     }
 
     val links: LiveData<ModelRoot> = liveData(getExceptionHandler()) {
         service.getRootLinks { links ->
+            modelRoot = links
             emit(links)
         }
     }
