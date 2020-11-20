@@ -24,12 +24,13 @@ import com.keygenqt.mylibrary.data.models.ModelUser
 class OtherService(private val api: OtherApi, private val preferences: BaseSharedPreferences) {
 
     suspend fun join(
+        avatar: String,
         nickname: String,
         email: String,
         passw: String,
         response: suspend (ModelUser) -> Unit
     ) {
-        api.join(nickname, email, passw, preferences.uid).checkResponse(response)
+        api.join(avatar, nickname, email, passw, preferences.uid).checkResponse(response)
     }
 
     suspend fun login(

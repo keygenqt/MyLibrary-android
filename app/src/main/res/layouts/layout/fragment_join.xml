@@ -16,71 +16,107 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding"
-        android:layout_marginEnd="@dimen/padding"
         android:orientation="vertical"
         android:paddingTop="20dp"
         android:paddingBottom="18dp"
         >
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/textInputLayoutNickname"
+      <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/join_nickname"
+          android:gravity="center"
+          android:orientation="vertical"
           >
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextNickname"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:layout_height="210dp"
+            app:layout_constraintDimensionRatio="1:1"
             />
 
-      </com.google.android.material.textfield.TextInputLayout>
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/dotsIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
+            app:dotsColor="@color/colorGray"
+            app:dotsSize="10dp"
+            app:dotsSpacing="1.5dp"
+            app:selectedDotColor="@color/colorAccent"
+            />
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/textInputLayoutEmail"
+      </LinearLayout>
+
+      <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/padding"
-          android:hint="@string/join_email"
+          android:layout_marginStart="@dimen/padding"
+          android:layout_marginEnd="@dimen/padding"
+          android:orientation="vertical"
           >
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextEmail"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutNickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            />
+            android:hint="@string/join_nickname"
+            >
 
-      </com.google.android.material.textfield.TextInputLayout>
+          <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/textInputEditTextNickname"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="textPersonName"
+              />
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/textInputLayoutPassw"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/padding"
-          android:hint="@string/join_passw"
-          app:passwordToggleEnabled="true"
-          >
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextPassw"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberPassword"
+            android:layout_marginTop="@dimen/padding"
+            android:hint="@string/join_email"
+            >
+
+          <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/textInputEditTextEmail"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="textEmailAddress"
+              />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPassw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding"
+            android:hint="@string/join_passw"
+            app:passwordToggleEnabled="true"
+            >
+
+          <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/textInputEditTextPassw"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="numberPassword"
+              />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding"
+            android:text="@string/button_submit"
             />
 
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <Button
-          android:id="@+id/buttonSubmit"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/padding"
-          android:text="@string/button_submit"
-          />
+      </LinearLayout>
 
     </LinearLayout>
   </ScrollView>

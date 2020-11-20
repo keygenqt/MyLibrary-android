@@ -66,6 +66,23 @@
   <string name="about_rate">Rate App</string>
   <string name="about_licenses">Licenses</string>
 
+  // avatars
+  <string name="avatar_0">Happy</string>
+  <string name="avatar_1">Surprised</string>
+  <string name="avatar_2">Tired</string>
+  <string name="avatar_3">Upset</string>
+  <string name="avatar_4">Overwhelmed</string>
+  <string name="avatar_5">Deer</string>
+  <string name="avatar_6">Enamored</string>
+  <string name="avatar_7">Birdie</string>
+  <string name="avatar_8">What?</string>
+  <string name="avatar_9">I\'m shocked</string>
+  <string name="avatar_10">Touched</string>
+  <string name="avatar_11">Angry</string>
+  <string name="avatar_12">Zombie</string>
+  <string name="avatar_13">Playful</string>
+  <string name="avatar_14">Sleepy</string>
+
   // licenses
   <string name="licenses_title">LICENSES</string>
   <string name="licenses_desc_website"><![CDATA[

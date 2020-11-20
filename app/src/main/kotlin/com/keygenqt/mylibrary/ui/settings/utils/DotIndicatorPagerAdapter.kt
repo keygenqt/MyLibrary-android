@@ -5,31 +5,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.keygenqt.mylibrary.R
-import kotlinx.android.synthetic.main.material_page.view.*
+import kotlinx.android.synthetic.main.view_avatar.view.imageViewAvatar
+import kotlinx.android.synthetic.main.view_avatar.view.textViewName
 
-class DotIndicatorPagerAdapter : PagerAdapter() {
+class DotIndicatorPagerAdapter(private val items: LinkedHashMap<Int, Int>) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val item = LayoutInflater.from(container.context).inflate(R.layout.material_page, container, false)
-        item.imageViewAvatar.setImageResource(listOf(
-            R.drawable.img_1,
-            R.drawable.img_2,
-            R.drawable.img_3,
-            R.drawable.img_4,
-            R.drawable.img_5
-        ).random())
-        item.textViewName.setText(listOf(
-            "Sad",
-            "Cheerful",
-            "Happy",
-            "Evil"
-        ).random())
+        val item = LayoutInflater.from(container.context).inflate(R.layout.view_avatar, container, false)
+        items.keys.toList()[position].let { key ->
+            item.imageViewAvatar.setImageResource(key)
+            item.textViewName.text = container.resources.getString(items[key]!!)
+        }
         container.addView(item)
         return item
     }
 
     override fun getCount(): Int {
-        return 15
+        return items.size
     }
 
     override fun isViewFromObject(view: View, any: Any): Boolean {

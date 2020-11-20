@@ -7,7 +7,7 @@
 
   <ScrollView
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="26dp"
+        android:paddingTop="24dp"
         android:paddingBottom="18dp"
         >
 
@@ -32,19 +32,19 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
+            android:layout_height="210dp"
             app:layout_constraintDimensionRatio="1:1"
             />
 
         <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-            android:id="@+id/spring_dots_indicator"
+            android:id="@+id/dotsIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:layout_marginBottom="26dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
             app:dotsColor="@color/colorGray"
-            app:dotsSize="12dp"
-            app:dotsSpacing="2dp"
+            app:dotsSize="10dp"
+            app:dotsSpacing="1.5dp"
             app:selectedDotColor="@color/colorAccent"
             />
 

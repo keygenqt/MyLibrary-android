@@ -29,6 +29,7 @@ interface OtherApi {
     @POST("/join")
     @FormUrlEncoded
     suspend fun join(
+        @Field("avatar") avatar: String,
         @Field("nickname") nickname: String,
         @Field("email") email: String,
         @Field("password") password: String,

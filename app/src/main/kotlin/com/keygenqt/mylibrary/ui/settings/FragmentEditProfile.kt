@@ -17,13 +17,16 @@
 package com.keygenqt.mylibrary.ui.settings
 
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
+import com.keygenqt.mylibrary.utils.AVATARS
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.dotsIndicator
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.viewPager
 
 @ActionBarEnable
 @FragmentTitle("Edit Profile")
@@ -34,9 +37,16 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
         initView {
-            spring_dots_indicator.setViewPager(viewPager.apply {
-                adapter = DotIndicatorPagerAdapter()
+            dotsIndicator.setViewPager(viewPager.apply {
+                adapter = DotIndicatorPagerAdapter(AVATARS)
                 setPageTransformer(true, ZoomOutPageTransformer())
+                addOnPageChangeListener(object : OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {}
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                    override fun onPageSelected(position: Int) {
+                        val key = "avatar_${position + 1}"
+                    }
+                })
             })
         }
     }
