@@ -16,13 +16,19 @@
 
 package com.keygenqt.mylibrary.data.services
 
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.response.CheckResponse.Companion.checkResponse
+import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
 import com.keygenqt.mylibrary.hal.ListData
 import com.keygenqt.mylibrary.ui.books.SearchModelBooks
 
-class BookService(private val api: BookApi) {
+class BookService(
+    private val api: BookApi,
+    private val db: RoomDatabase,
+    private val preferences: BaseSharedPreferences
+) {
     suspend fun getList(link: String, response: suspend (ListData<ModelBook>) -> Unit) {
         api.getList(link).checkResponse(response)
     }

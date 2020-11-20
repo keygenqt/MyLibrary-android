@@ -18,6 +18,7 @@ package com.keygenqt.mylibrary.ui.books
 
 import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
@@ -26,9 +27,13 @@ import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import com.keygenqt.mylibrary.utils.API_VERSION
 
-class ViewBooks(private val service: BookService, db: RoomDatabase) : ViewModel(), ViewModelPage {
+class ViewBooks(
+    private val db: RoomDatabase,
+    private val service: BookService,
+    private val preferences: BaseSharedPreferences
+) : ViewModel(), ViewModelPage {
 
-    private val linkModel = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
+    private val linkModel = db.getDao<ModelRootDao>()!!.getModel(API_VERSION).getLink(ModelBook.API_KEY)
 
     override val link: MutableLiveData<Link?> = MutableLiveData()
     override val loading: MutableLiveData<Boolean> = MutableLiveData()

@@ -33,6 +33,8 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="210dp"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
             app:layout_constraintDimensionRatio="1:1"
             />
 

@@ -14,7 +14,7 @@ class RoomDatabase(val context: Context) {
         .fallbackToDestructiveMigration()
         .build()
 
-    inline fun <reified T> getDao(): T {
+    inline fun <reified T> getDao(): T? {
         val className = T::class.qualifiedName!!
         T::class.java.annotations.firstOrNull { it !is Dao }?.let {
             db::class.declaredFunctions.forEach { method ->
@@ -23,6 +23,6 @@ class RoomDatabase(val context: Context) {
                 }
             }
         }
-        throw RuntimeException("${T::class.java.simpleName} not found")
+        return null
     }
 }

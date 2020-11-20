@@ -65,7 +65,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
                     override fun onPageScrollStateChanged(state: Int) {}
                     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                     override fun onPageSelected(position: Int) {
-                        keyAvatar = "avatar_${position + 1}"
+                        keyAvatar = "avatar_$position"
                     }
                 })
             })

@@ -16,11 +16,16 @@
 
 package com.keygenqt.mylibrary.data.models
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.keygenqt.mylibrary.base.BaseModel
 
+@Entity(tableName = "ModelUser")
 data class ModelUser(
 
+    @PrimaryKey
     @SerializedName("id")
     var id: String = "",
 
@@ -33,8 +38,20 @@ data class ModelUser(
     @SerializedName("image")
     var image: String = "",
 
+    @SerializedName("avatar")
+    var avatar: String = "",
+
+    @SerializedName("website")
+    @Ignore var website: String = "",
+
+    @SerializedName("location")
+    @Ignore var location: String = "",
+
+    @SerializedName("bio")
+    @Ignore var bio: String = "",
+
     @SerializedName("token")
-    var token: String = ""
+    @Ignore var token: String = ""
 
 ) : BaseModel() {
     companion object {

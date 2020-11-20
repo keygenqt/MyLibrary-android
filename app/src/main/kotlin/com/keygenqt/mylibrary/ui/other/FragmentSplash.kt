@@ -36,8 +36,10 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
             findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.links.observe(viewLifecycleOwner, {
-                    findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
+                viewModel.userMe.observe(viewLifecycleOwner, {
+                    viewModel.links.observe(viewLifecycleOwner, {
+                        findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
+                    })
                 })
             }, 500)
         }

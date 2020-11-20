@@ -20,15 +20,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelRoot
+import com.keygenqt.mylibrary.data.models.ModelUser
+import com.keygenqt.mylibrary.data.services.BookApi
 import com.keygenqt.mylibrary.data.services.OtherService
+import org.koin.android.ext.android.inject
+import org.koin.java.KoinJavaComponent.inject
 
-class ViewSplash(private val service: OtherService, private val db: RoomDatabase) : ViewModel() {
+class ViewSplash(
+    private val db: RoomDatabase,
+    private val service: OtherService,
+    private val preferences: BaseSharedPreferences
+) : ViewModel() {
+
+    val userMe: LiveData<ModelUser> = liveData(getExceptionHandler()) {
+        service.getUserMe { user ->
+            emit(user)
+        }
+    }
+
     val links: LiveData<ModelRoot> = liveData(getExceptionHandler()) {
         service.getRootLinks { links ->
-            db.getDao<ModelRootDao>().insert(links)
             emit(links)
         }
     }

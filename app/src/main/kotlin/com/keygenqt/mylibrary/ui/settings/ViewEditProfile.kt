@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.other
+package com.keygenqt.mylibrary.ui.settings
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
+import android.util.Log
+import androidx.lifecycle.*
+import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelUserDao
+import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.OtherService
-import com.keygenqt.mylibrary.ui.other.FragmentLogin.*
+import com.keygenqt.mylibrary.hal.API_KEY_SELF
 
-class ViewLogin(
+class ViewEditProfile(
     private val db: RoomDatabase,
     private val service: OtherService,
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
+    var user = db.getDao<ModelUserDao>()!!.getModel()
 
-    val params: MutableLiveData<HashMap<PARAMS, String>> = MutableLiveData()
+    val params: MutableLiveData<ModelUser> = MutableLiveData()
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
-    val login = params.switchMap {
-        liveData(getExceptionHandler(error)) {
-            service.login(it[PARAMS.EMAIL]!!, it[PARAMS.PASSWORD]!!) { model ->
-                preferences.userId = model.id
-                preferences.token = model.token
-                emit(model)
+    val userMe: LiveData<ModelUser> = liveData(BaseExceptionHandler.getExceptionHandler()) {
+        emit(user)
+        service.getUserMe { model ->
+            user = model
+            emit(model)
+        }
+    }
+
+    val updateUser = params.switchMap {
+        liveData(BaseExceptionHandler.getExceptionHandler(error)) {
+            service.updateUser(user.links.getValue(API_KEY_SELF).link, user) {
+                emit(true)
             }
         }
     }

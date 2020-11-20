@@ -18,10 +18,17 @@ package com.keygenqt.mylibrary.data.services
 
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.response.CheckResponse.Companion.checkResponse
+import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelRootDao
+import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
 
-class OtherService(private val api: OtherApi, private val preferences: BaseSharedPreferences) {
+class OtherService(
+    private val api: OtherApi,
+    private val db: RoomDatabase,
+    private val preferences: BaseSharedPreferences
+) {
 
     suspend fun join(
         avatar: String,
@@ -30,7 +37,13 @@ class OtherService(private val api: OtherApi, private val preferences: BaseShare
         passw: String,
         response: suspend (ModelUser) -> Unit
     ) {
-        api.join(avatar, nickname, email, passw, preferences.uid).checkResponse(response)
+        api.join(avatar, nickname, email, passw, preferences.uid).checkResponse { model ->
+            db.getDao<ModelUserDao>()?.let {
+                it.deleteAll()
+                it.insert(model)
+            }
+            response.invoke(model)
+        }
     }
 
     suspend fun login(
@@ -38,10 +51,39 @@ class OtherService(private val api: OtherApi, private val preferences: BaseShare
         passw: String,
         response: suspend (ModelUser) -> Unit
     ) {
-        api.login(email, passw, preferences.uid).checkResponse(response)
+        api.login(email, passw, preferences.uid).checkResponse { model ->
+            db.getDao<ModelUserDao>()?.let {
+                it.deleteAll()
+                it.insert(model)
+            }
+            response.invoke(model)
+        }
+    }
+
+    suspend fun updateUser(link: String, model: ModelUser, response: suspend () -> Unit) {
+        api.updateUser(link, model).checkResponse {
+            db.getDao<ModelUserDao>()?.let {
+                it.deleteAll()
+                it.insert(model)
+            }
+            response.invoke()
+        }
     }
 
     suspend fun getRootLinks(response: suspend (ModelRoot) -> Unit) {
-        api.getRootLinks().checkResponse(response)
+        api.getRootLinks().checkResponse { model ->
+            db.getDao<ModelRootDao>()?.insert(model)
+            response.invoke(model)
+        }
+    }
+
+    suspend fun getUserMe(response: suspend (ModelUser) -> Unit) {
+        api.getUserMe().checkResponse { model ->
+            db.getDao<ModelUserDao>()?.let {
+                it.deleteAll()
+                it.insert(model)
+            }
+            response.invoke(model)
+        }
     }
 }
