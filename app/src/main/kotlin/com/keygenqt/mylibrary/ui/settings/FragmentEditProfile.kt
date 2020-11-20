@@ -32,6 +32,8 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.viewPager
 @FragmentTitle("Edit Profile")
 class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
 
+    private var keyAvatar = "avatar_6"
+
     override fun onCreateView() {
         initToolbar {
             setNavigationOnClickListener { findNavController().navigateUp() }
@@ -39,12 +41,13 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         initView {
             dotsIndicator.setViewPager(viewPager.apply {
                 adapter = DotIndicatorPagerAdapter(AVATARS)
+                currentItem = keyAvatar.replace("avatar_", "").toInt()
                 setPageTransformer(true, ZoomOutPageTransformer())
                 addOnPageChangeListener(object : OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) {}
                     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                     override fun onPageSelected(position: Int) {
-                        val key = "avatar_${position + 1}"
+                        keyAvatar = "avatar_${position + 1}"
                     }
                 })
             })
