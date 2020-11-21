@@ -75,7 +75,8 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                     }
                 }
                 is ConnectException -> {
-                    if ((activity as BaseActivity).getCurrentFragment() !is FragmentSplash) {
+                    val fragment = (activity as BaseActivity).getCurrentFragment()
+                    if (fragment !is FragmentSplash) {
                         error.removeObservers(activity as LifecycleOwner)
                         Handler(Looper.getMainLooper()).postDelayed({
                             val intent = Intent(activity, MainActivity::class.java)
@@ -83,6 +84,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                             activity.startActivity(intent)
                         }, 100)
                     } else {
+                        fragment.statusProgress(false)
                         Toast.makeText(activity, "Failed to connect API", Toast.LENGTH_SHORT).show()
                     }
                 }

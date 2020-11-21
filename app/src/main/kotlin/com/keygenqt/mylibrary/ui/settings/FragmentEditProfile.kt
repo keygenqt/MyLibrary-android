@@ -18,7 +18,7 @@ package com.keygenqt.mylibrary.ui.settings
 
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
@@ -48,7 +48,9 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile, R.strin
                     override fun onPageScrollStateChanged(state: Int) {}
                     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                     override fun onPageSelected(position: Int) {
-                        viewModel.user!!.avatar = "avatar_$position"
+                        viewModel.user?.apply {
+                            avatar = "avatar_$position"
+                        }
                     }
                 })
             })
