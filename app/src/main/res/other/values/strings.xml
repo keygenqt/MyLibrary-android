@@ -12,6 +12,7 @@
   <string name="page_main_bottom_menu_item_my_library">My Library</string>
   <string name="page_main_bottom_menu_item_chat">Chat</string>
   <string name="button_submit">Submit</string>
+  <string name="profile_updated_successfully">Profile updated successfully</string>
 
   // login
   <string name="login_email">Email</string>
@@ -46,7 +47,7 @@
 
   // password
   <string name="settings_password">Password</string>
-  <string name="settings_repeat_password">Repeat Password</string>
+  <string name="settings_repeat_password">Confirm Password</string>
 
   // edit profile
   <string name="edit_profile_nickname">Nickname</string>

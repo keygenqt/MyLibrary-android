@@ -18,6 +18,7 @@ package com.keygenqt.mylibrary.data.services
 
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
+import com.keygenqt.mylibrary.ui.settings.FragmentPassword
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -39,6 +40,11 @@ interface OtherApi {
         @Field("email") email: String,
         @Field("password") password: String,
         @Field("uid") uid: String,
+    ): Response<ModelUser>
+
+    @POST("/password")
+    suspend fun password(
+        @Body password: FragmentPassword.RequestPassword
     ): Response<ModelUser>
 
     @PUT

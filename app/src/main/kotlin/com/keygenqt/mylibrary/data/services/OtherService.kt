@@ -23,6 +23,7 @@ import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
+import com.keygenqt.mylibrary.ui.settings.FragmentPassword
 
 class OtherService(
     private val api: OtherApi,
@@ -57,6 +58,15 @@ class OtherService(
                 it.insert(model)
             }
             response.invoke(model)
+        }
+    }
+
+    suspend fun password(
+        password: FragmentPassword.RequestPassword,
+        response: suspend (Boolean) -> Unit
+    ) {
+        api.password(password).checkResponse { model ->
+            response.invoke(true)
         }
     }
 

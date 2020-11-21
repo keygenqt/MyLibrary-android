@@ -21,6 +21,7 @@ import com.keygenqt.mylibrary.ui.other.ViewJoin
 import com.keygenqt.mylibrary.ui.other.ViewLogin
 import com.keygenqt.mylibrary.ui.other.ViewSplash
 import com.keygenqt.mylibrary.ui.settings.ViewEditProfile
+import com.keygenqt.mylibrary.ui.settings.ViewPassword
 import org.koin.dsl.module
 
 val moduleViewModel = module {
@@ -29,4 +30,5 @@ val moduleViewModel = module {
     factory { ViewLogin(get(), get(), get()) }
     factory { ViewJoin(get(), get(), get()) }
     factory { ViewEditProfile(get(), get(), get()) }
+    factory { ViewPassword(get(), get(), get()) }
 }

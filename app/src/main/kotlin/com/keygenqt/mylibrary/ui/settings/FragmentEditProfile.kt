@@ -69,8 +69,8 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
             viewModel.updateUser.observe(viewLifecycleOwner) {
                 viewModel.error.postValue(null)
                 this.hideKeyboard()
-                viewPager.requestFocus()
-                Toast.makeText(activity, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                body.requestFocus()
+                Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
             }
         }
     }

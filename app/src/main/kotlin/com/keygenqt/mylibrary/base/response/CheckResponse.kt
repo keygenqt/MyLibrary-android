@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CheckResponse {
     companion object {
@@ -25,6 +27,7 @@ class CheckResponse {
                         }
                     } catch (ex: JSONException) {
                         throw HttpException(
+                            datetime = SimpleDateFormat("d MMM yyyy", Locale.US).format(Date()),
                             status = this@checkResponse.code(),
                             error = this@checkResponse.message(),
                             message = this@checkResponse.message(),
