@@ -127,6 +127,77 @@
             />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/constraintLayoutItemGrayTheme"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="?android:selectableItemBackground"
+          >
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchItemGrayTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <LinearLayout
+            android:id="@+id/settingsTextBlockGray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/switchItemGrayTheme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switchItemGrayTheme"
+            tools:ignore="MissingConstraints"
+            >
+
+          <TextView
+              android:id="@+id/settingsTextGray"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="6dp"
+              android:paddingEnd="55dp"
+              android:paddingBottom="6dp"
+              android:singleLine="true"
+              android:textColor="?attr/colorText"
+              android:text="@string/appearance_gray_theme"
+              />
+
+          <TextView
+              android:id="@+id/settingsSubTextGray"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingStart="6dp"
+              android:paddingEnd="55dp"
+              android:text="@string/appearance_gray_theme_desc"
+              android:textSize="13sp"
+              android:textColor="?attr/colorTextLite"
+              />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="?attr/colorDividingLine"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
   </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

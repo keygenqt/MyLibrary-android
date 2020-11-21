@@ -59,6 +59,9 @@
   <string name="appearance_title">APPEARANCE</string>
   <string name="appearance_dark_theme">Dark Theme</string>
   <string name="appearance_dark_theme_desc">If you want to use MyLibrary in Dark theme</string>
+  <string name="appearance_gray_theme">Lite Dark Theme</string>
+  <string name="appearance_gray_theme_desc">If you want to use MyLibrary in Lite Dark theme</string>
+
 
   // about
   <string name="about_title">ABOUT</string>

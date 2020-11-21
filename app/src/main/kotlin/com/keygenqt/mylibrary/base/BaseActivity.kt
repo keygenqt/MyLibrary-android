@@ -46,11 +46,14 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        when (sharedPreferences.darkTheme) {
-            true -> {
+        when {
+            sharedPreferences.darkTheme -> {
                 setTheme(R.style.DarkTheme)
             }
-            false -> {
+            sharedPreferences.grayTheme -> {
+                setTheme(R.style.DarkThemeGray)
+            }
+            else -> {
                 setTheme(R.style.AppTheme)
             }
         }

@@ -16,14 +16,16 @@
 
 package com.keygenqt.mylibrary
 
-import android.app.*
+import android.app.Application
 import com.facebook.stetho.Stetho
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.di.*
+import com.keygenqt.mylibrary.di.moduleOther
+import com.keygenqt.mylibrary.di.moduleRetrofit
+import com.keygenqt.mylibrary.di.moduleViewModel
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.koin.*
-import org.koin.core.context.*
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class App : Application() {
 

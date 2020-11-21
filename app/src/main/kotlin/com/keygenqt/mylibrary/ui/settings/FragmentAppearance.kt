@@ -27,7 +27,9 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.ui.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemDarkTheme
+import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemGrayTheme
 import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemDarkTheme
+import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemGrayTheme
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -41,19 +43,34 @@ class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
         initView {
+
             switchItemDarkTheme.isChecked = sharedPreferences.darkTheme
             constraintLayoutItemDarkTheme.setOnClickListener {
+                switchItemGrayTheme.isChecked = false
+                sharedPreferences.grayTheme = false
                 switchItemDarkTheme.isChecked = !switchItemDarkTheme.isChecked
                 sharedPreferences.darkTheme = switchItemDarkTheme.isChecked
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra("changeTheme", true)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    context.startActivity(intent)
-                }, 200)
+                updateTheme()
+            }
 
+            switchItemGrayTheme.isChecked = sharedPreferences.grayTheme
+            constraintLayoutItemGrayTheme.setOnClickListener {
+                switchItemDarkTheme.isChecked = false
+                sharedPreferences.darkTheme = false
+                switchItemGrayTheme.isChecked = !switchItemGrayTheme.isChecked
+                sharedPreferences.grayTheme = switchItemGrayTheme.isChecked
+                updateTheme()
             }
         }
+    }
+
+    private fun updateTheme() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(requireActivity(), MainActivity::class.java)
+            intent.putExtra("changeTheme", true)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            requireActivity().startActivity(intent)
+        }, 200)
     }
 }

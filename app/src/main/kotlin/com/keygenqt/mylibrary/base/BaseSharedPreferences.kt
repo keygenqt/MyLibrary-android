@@ -53,6 +53,14 @@ class BaseSharedPreferences(private val preferences: SharedPreferences) {
             preferences.edit().putBoolean("darkTheme", value).apply()
         }
 
+    var grayTheme: Boolean
+        get() {
+            return preferences.getBoolean("grayTheme", false)
+        }
+        set(value) {
+            preferences.edit().putBoolean("grayTheme", value).apply()
+        }
+
     val uid: String
         get() {
             val value = preferences.getString("uid", null)
