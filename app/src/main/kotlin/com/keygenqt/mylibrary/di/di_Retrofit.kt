@@ -28,6 +28,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 val moduleRetrofit = module {
@@ -50,8 +51,8 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
             .addInterceptor {
                 val original = it.request()
                 val request = original.newBuilder()
-                    .header("authorization", sharedPreferences.token ?: "")
-                    .header("uid", sharedPreferences.uid)
+                    .header("Authorization", sharedPreferences.token ?: "")
+                    .header("Accept-Language", Locale.getDefault().toLanguageTag())
                     .method(original.method, original.body)
                     .build()
                 it.proceed(request)

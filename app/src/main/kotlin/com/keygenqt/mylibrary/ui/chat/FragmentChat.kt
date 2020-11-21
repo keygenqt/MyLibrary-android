@@ -16,13 +16,13 @@
 
 package com.keygenqt.mylibrary.ui.chat
 
-import com.keygenqt.mylibrary.*
-import com.keygenqt.mylibrary.annotations.*
-import com.keygenqt.mylibrary.base.*
+import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import com.keygenqt.mylibrary.base.BaseFragment
 
 @ActionBarEnable
 @BottomNavigationEnable
-@FragmentTitle("My Library - Chat")
-class FragmentChat : BaseFragment(R.layout.fragment_chat) {
+class FragmentChat : BaseFragment(R.layout.fragment_chat, R.string.fragment_chat_title) {
     override fun onCreateView() {}
 }

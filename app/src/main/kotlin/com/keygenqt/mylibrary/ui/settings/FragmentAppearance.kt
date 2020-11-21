@@ -22,7 +22,6 @@ import android.os.Looper
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.ui.activities.MainActivity
@@ -33,8 +32,7 @@ import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemGrayThe
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-@FragmentTitle("Appearance")
-class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
+class FragmentAppearance : BaseFragment(R.layout.fragment_appearance, R.string.fragment_appearance_title) {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 

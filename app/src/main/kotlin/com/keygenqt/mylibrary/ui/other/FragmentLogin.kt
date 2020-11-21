@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
@@ -32,8 +31,7 @@ import org.koin.android.ext.android.inject
 import java.util.Locale
 
 @ActionBarEnable
-@FragmentTitle("Login")
-class FragmentLogin : BaseFragment(R.layout.fragment_login) {
+class FragmentLogin : BaseFragment(R.layout.fragment_login, R.string.fragment_login_title) {
 
     private val viewModel: ViewLogin by inject()
 

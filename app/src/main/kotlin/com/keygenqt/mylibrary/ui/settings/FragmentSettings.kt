@@ -21,7 +21,6 @@ import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.ui.activities.GuestActivity
@@ -29,8 +28,7 @@ import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-@FragmentTitle("Settings")
-class FragmentSettings : BaseFragment(R.layout.fragment_settings) {
+class FragmentSettings : BaseFragment(R.layout.fragment_settings, R.string.fragment_settings_title) {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 

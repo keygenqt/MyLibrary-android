@@ -25,7 +25,6 @@ import androidx.core.text.HtmlCompat
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_licenses.view.containerLicenses
 import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceDesc
@@ -34,8 +33,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @ActionBarEnable
-@FragmentTitle("Licenses")
-class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
+class FragmentLicenses : BaseFragment(R.layout.fragment_licenses, R.string.fragment_licenses_title) {
 
     @SuppressLint("InflateParams")
     override fun onCreateView() {

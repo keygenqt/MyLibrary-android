@@ -18,13 +18,11 @@ package com.keygenqt.mylibrary.ui.settings
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.net.Uri
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockFeedback
 import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockLicenses
@@ -32,8 +30,7 @@ import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockRate
 import kotlinx.android.synthetic.main.fragment_about.view.settingsTextVersion
 
 @ActionBarEnable
-@FragmentTitle("Appearance")
-class FragmentAbout : BaseFragment(R.layout.fragment_about) {
+class FragmentAbout : BaseFragment(R.layout.fragment_about, R.string.fragment_about_title) {
 
     override fun onCreateView() {
         initToolbar {
@@ -46,8 +43,8 @@ class FragmentAbout : BaseFragment(R.layout.fragment_about) {
             settingsBlockFeedback.setOnClickListener {
                 val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:dev@keygenqt.com")
-                    putExtra(Intent.EXTRA_SUBJECT, "Feedback MyLibrary (mobile)")
-                    addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_feedback_subject))
+                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                 }
                 startActivity(Intent.createChooser(emailIntent, "Send feedback"))
             }

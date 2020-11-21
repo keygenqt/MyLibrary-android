@@ -9,7 +9,7 @@
     <item name="colorBackgroundPage">#353535</item>
     <item name="colorBackgroundList">#353535</item>
     <item name="colorBackgroundListItem">#ECECEC</item>
-    <item name="colorDividingLine">#000000</item>
+    <item name="colorDividingLine">#A8A8A8</item>
     <item name="colorChipEnable">#DCEBF7</item>
     <item name="colorChipDisable">#414F59</item>
     <item name="colorChipText">#000000</item>

@@ -25,8 +25,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListAdapter
@@ -37,8 +35,7 @@ import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-@FragmentTitle("My Library")
-class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
+class FragmentBooks : BaseFragment(R.layout.common_fragment_list, R.string.fragment_books_title) {
 
     private var changeSearch = false
     private val viewModel: ViewBooks by inject()

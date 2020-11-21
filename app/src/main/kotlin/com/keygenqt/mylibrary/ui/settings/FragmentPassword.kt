@@ -20,7 +20,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
@@ -29,8 +28,7 @@ import kotlinx.android.synthetic.main.fragment_password.view.buttonSubmit
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-@FragmentTitle("Change Password")
-class FragmentPassword : BaseFragment(R.layout.fragment_password) {
+class FragmentPassword : BaseFragment(R.layout.fragment_password, R.string.fragment_password_title) {
 
     private val viewModel: ViewPassword by inject()
 

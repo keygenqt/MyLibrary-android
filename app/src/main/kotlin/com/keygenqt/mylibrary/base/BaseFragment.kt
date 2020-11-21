@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -31,14 +32,12 @@ import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import kotlinx.android.synthetic.main.activity_main.appBarLayout
 import kotlinx.android.synthetic.main.activity_main.view.progressBar
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment(
-    @LayoutRes private val layoutId: Int
+    @LayoutRes private val layoutId: Int,
+    @StringRes val title: Int? = null,
 ) : Fragment() {
-
-    private val sharedPreferences: BaseSharedPreferences by inject()
 
     annotation class CallOnCreate
 

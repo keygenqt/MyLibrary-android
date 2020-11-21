@@ -1,0 +1,123 @@
+<!DOCTYPE resources [<!ENTITY spaces "\u0020\u0020\u0020\u0020\u0020">]>
+<resources>
+  <string name="app_name">MyLibrary</string>
+
+  // fragment titles
+  <string name="fragment_books_title">MyLibrary</string>
+  <string name="fragment_chat_title">MyLibrary</string>
+  <string name="fragment_join_title">Присоединится</string>
+  <string name="fragment_login_title">Вход</string>
+  <string name="fragment_about_title">О приложении</string>
+  <string name="fragment_appearance_title">Внешний вид</string>
+  <string name="fragment_edit_profile_title">Редактировать профайл</string>
+  <string name="fragment_licenses_title">Лицензии</string>
+  <string name="fragment_password_title">Изменить пароль</string>
+  <string name="fragment_settings_title">Настройки</string>
+
+  // test credentials
+  <string name="user_email">user@gmail.com1</string>
+  <string name="user_passw">12345</string>
+
+  // common
+  <string name="list_not_found">Ничего не найдено</string>
+  <string name="exit_info">Для выхода кликните еще раз</string>
+  <string name="page_main_bottom_menu_item_my_library">MyLibrary</string>
+  <string name="page_main_bottom_menu_item_chat">Чат</string>
+  <string name="button_submit">Отправить</string>
+  <string name="profile_updated_successfully">Профайл обновлен успешно</string>
+
+  // login
+  <string name="login_email">Мыло</string>
+  <string name="login_passw">Пароль</string>
+  <string name="login_reg_info">Если ли вы не присоединились к нам, вы можете легко это сделать</string>
+  <string name="login_reg">Присоединиться</string>
+
+  // join
+  <string name="join_nickname">Имя</string>
+  <string name="join_email">Мыло</string>
+  <string name="join_passw">Пароль</string>
+
+  // other
+  <string name="page_settings_title">Настройки</string>
+  <string name="page_coming_soon">Скоро будет</string>
+
+  // menu
+  <string name="menu_settings">Настройки</string>
+
+  //searchModel
+  <string name="search_books_self">Все книги</string>
+  <string name="search_books_findAllByUserId">Мои книги</string>
+  <string name="search_books_findAllBySale">Барахолка</string>
+
+  // settings
+  <string name="settings_title">Настройки</string>
+  <string name="settings_menu_appearance">Внешний вид</string>
+  <string name="settings_menu_edit_profile">Редактировать профайл</string>
+  <string name="settings_menu_password">Изменить пароль</string>
+  <string name="settings_menu_about">О приложении</string>
+  <string name="settings_menu_logout">Выход</string>
+
+  // password
+  <string name="settings_password">Пароль</string>
+  <string name="settings_repeat_password">Подтвердить пароль</string>
+
+  // edit profile
+  <string name="edit_profile_nickname">Имя</string>
+  <string name="edit_profile_bio">О себе</string>
+  <string name="edit_profile_location">Локация</string>
+  <string name="edit_profile_website">Твой сайт</string>
+
+  // appearance
+  <string name="appearance_title">Внешний вид</string>
+  <string name="appearance_dark_theme">Dark Theme</string>
+  <string name="appearance_dark_theme_desc">Найчернейшая тема этого приложения. Любишь темноту - включай.</string>
+  <string name="appearance_gray_theme">Lite Dark Theme</string>
+  <string name="appearance_gray_theme_desc">Тема для спокойнойго чтения текста на белом фоне, но не режущая глаз.</string>
+
+  // about
+  <string name="about_title">О приложении</string>
+  <string name="about_version">Версия: %s</string>
+  <string name="about_feedback">Написать</string>
+  <string name="about_rate">Оценить прилу</string>
+  <string name="about_licenses">Лицензии</string>
+  <string name="about_feedback_subject">MyLibrary (android)</string>
+
+  // avatars
+  <string name="avatar_0">Счастливый</string>
+  <string name="avatar_1">Удивленный</string>
+  <string name="avatar_2">Уставший</string>
+  <string name="avatar_3">Расстроенный</string>
+  <string name="avatar_4">Ошеломленный</string>
+  <string name="avatar_5">Какой-то олень</string>
+  <string name="avatar_6">Влюбленный</string>
+  <string name="avatar_7">Птичка</string>
+  <string name="avatar_8">Че?</string>
+  <string name="avatar_9">Я в шоке</string>
+  <string name="avatar_10">Милый</string>
+  <string name="avatar_11">Злючный</string>
+  <string name="avatar_12">Зомби</string>
+  <string name="avatar_13">Игрывый</string>
+  <string name="avatar_14">Сонный</string>
+
+  // licenses
+  <string name="licenses_title">Лицензии</string>
+  <string name="licenses_desc_website"><![CDATA[
+%s
+<br><br>
+Url:
+<br>
+<a href="%s">%s</a>
+<br><br>
+Link:
+<br>
+<a href="%s">%s</a>
+]]></string>
+
+  <string name="licenses_desc"><![CDATA[
+%s
+<br><br>
+Link:<br>
+<a href="%s">%s</a>
+]]></string>
+
+</resources>

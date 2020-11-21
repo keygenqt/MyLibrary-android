@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
@@ -39,8 +38,7 @@ import org.koin.android.ext.android.inject
 import java.util.Locale
 
 @ActionBarEnable
-@FragmentTitle("Join")
-class FragmentJoin : BaseFragment(R.layout.fragment_join) {
+class FragmentJoin : BaseFragment(R.layout.fragment_join, R.string.fragment_join_title) {
 
     private val viewModel: ViewJoin by inject()
 

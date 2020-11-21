@@ -13,7 +13,7 @@ import com.keygenqt.mylibrary.data.models.ModelUser
 @Database(entities = [
     ModelRoot::class,
     ModelUser::class,
-], version = 5, exportSchema = false)
+], version = 6, exportSchema = false)
 @TypeConverters(value = [
     ListConverter::class,
     MapConverter::class,

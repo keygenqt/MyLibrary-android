@@ -36,19 +36,19 @@ data class ModelUser(
     var nickname: String = "",
 
     @SerializedName("image")
-    var image: String = "",
+    var image: String? = null,
 
     @SerializedName("avatar")
     var avatar: String = "",
 
     @SerializedName("website")
-    @Ignore var website: String = "",
+    @Ignore var website: String? = null,
 
     @SerializedName("location")
-    @Ignore var location: String = "",
+    @Ignore var location: String? = null,
 
     @SerializedName("bio")
-    @Ignore var bio: String = "",
+    @Ignore var bio: String? = null,
 
     @SerializedName("token")
     @Ignore var token: String = ""

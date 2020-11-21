@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
-import com.keygenqt.mylibrary.annotations.FragmentTitle
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
@@ -32,8 +31,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-@FragmentTitle("Edit Profile")
-class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
+class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile, R.string.fragment_edit_profile_title) {
 
     private val viewModel: ViewEditProfile by inject()
 
