@@ -1,6 +1,7 @@
 package com.keygenqt.mylibrary.base
 
 import android.os.Bundle
+import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.annotation.NavigationRes
 import androidx.appcompat.app.AppCompatActivity

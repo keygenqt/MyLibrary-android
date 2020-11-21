@@ -71,6 +71,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
             })
 
             buttonSubmit.setOnClickListener {
+                statusProgress(true)
                 viewModel.params.postValue(hashMapOf(
                     AVATAR to keyAvatar,
                     NICKNAME to textInputEditTextNickname.text.toString(),
@@ -85,6 +86,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
         initView {
             viewModel.join.observe(viewLifecycleOwner) {
                 viewModel.error.postValue(null)
+                statusProgress(false)
                 this.hideKeyboard()
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
@@ -97,9 +99,11 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
 
-                textInputLayoutNickname.error = null
-                textInputLayoutEmail.error = null
-                textInputLayoutPassw.error = null
+                statusProgress(false)
+
+                textInputLayoutNickname.isErrorEnabled = false
+                textInputLayoutEmail.isErrorEnabled = false
+                textInputLayoutPassw.isErrorEnabled = false
 
                 if (throwable is ValidateException) {
                     throwable.errors.forEach {

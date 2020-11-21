@@ -18,7 +18,7 @@ package com.keygenqt.mylibrary.ui.settings
 
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager.*
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.FragmentTitle
@@ -38,6 +38,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     private val viewModel: ViewEditProfile by inject()
 
     override fun onCreateView() {
+        statusProgress(true)
         initToolbar {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
@@ -49,12 +50,13 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
                     override fun onPageScrollStateChanged(state: Int) {}
                     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
                     override fun onPageSelected(position: Int) {
-                        viewModel.user.avatar = "avatar_$position"
+                        viewModel.user!!.avatar = "avatar_$position"
                     }
                 })
             })
             buttonSubmit.setOnClickListener {
-                viewModel.params.postValue(viewModel.user.apply {
+                statusProgress(true)
+                viewModel.params.postValue(viewModel.user?.apply {
                     nickname = textInputEditTextNickname.text.toString()
                     website = textInputEditTextWebsite.text.toString()
                     location = textInputEditTextLocation.text.toString()
@@ -67,6 +69,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.updateUser.observe(viewLifecycleOwner) {
+                statusProgress(false)
                 viewModel.error.postValue(null)
                 this.hideKeyboard()
                 body.requestFocus()
@@ -78,7 +81,9 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     @CallOnCreate fun observeUserMe() {
         initView {
             viewModel.userMe.observe(viewLifecycleOwner, { model ->
-                viewPager.currentItem = viewModel.user.avatar.replace("avatar_", "").toInt()
+                statusProgress(viewModel.user == null)
+                viewModel.user = model
+                viewPager.currentItem = model.avatar.replace("avatar_", "").toInt()
                 textInputEditTextNickname.setText(model.nickname)
                 textInputEditTextWebsite.setText(model.website)
                 textInputEditTextLocation.setText(model.location)
@@ -91,10 +96,12 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
 
-                textInputLayoutNickname.error = null
-                textInputLayoutWebsite.error = null
-                textInputLayoutLocation.error = null
-                textInputLayoutBio.error = null
+                statusProgress(false)
+
+                textInputLayoutNickname.isErrorEnabled = false
+                textInputLayoutWebsite.isErrorEnabled = false
+                textInputLayoutLocation.isErrorEnabled = false
+                textInputLayoutBio.isErrorEnabled = false
 
                 if (throwable is ValidateException) {
                     throwable.errors.forEach {

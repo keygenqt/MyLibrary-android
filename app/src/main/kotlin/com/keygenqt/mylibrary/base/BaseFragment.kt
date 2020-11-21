@@ -28,6 +28,8 @@ import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import kotlinx.android.synthetic.main.activity_main.appBarLayout
+import kotlinx.android.synthetic.main.activity_main.view.progressBar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
@@ -77,6 +79,7 @@ abstract class BaseFragment(
         }
         _view = inflater.inflate(layoutId, container, false)
         setHasOptionsMenu(true)
+        statusProgress(false)
         onCreateView()
         callOnCreate()
         return _view
@@ -88,5 +91,9 @@ abstract class BaseFragment(
             method.isAccessible = true
             method.invoke(this)
         }
+    }
+
+    fun statusProgress(status: Boolean) {
+        requireActivity().appBarLayout.progressBar.visibility = if (status) View.VISIBLE else View.GONE
     }
 }

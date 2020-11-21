@@ -42,6 +42,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
         }
         initView {
             buttonSubmit.setOnClickListener {
+                statusProgress(true)
                 viewModel.params.postValue(RequestPassword(
                     textInputEditTextPassword.text.toString(),
                     textInputEditTextRPassword.text.toString()
@@ -67,8 +68,10 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
 
-                textInputLayoutPassword.error = null
-                textInputLayoutRPassword.error = null
+                statusProgress(false)
+
+                textInputLayoutPassword.isErrorEnabled = false
+                textInputLayoutRPassword.isErrorEnabled = false
 
                 if (throwable is ValidateException) {
                     throwable.errors.forEach {

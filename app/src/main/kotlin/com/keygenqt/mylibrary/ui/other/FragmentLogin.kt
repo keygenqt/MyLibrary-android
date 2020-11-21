@@ -49,6 +49,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
                 textInputEditTextPassw.setText(R.string.user_passw)
             }
             buttonSubmit.setOnClickListener {
+                statusProgress(true)
                 viewModel.params.postValue(hashMapOf(
                     EMAIL to textInputEditTextEmail.text.toString(),
                     PASSWORD to textInputEditTextPassw.text.toString()
@@ -76,8 +77,10 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { throwable ->
 
-                textInputLayoutEmail.error = null
-                textInputLayoutPassw.error = null
+                statusProgress(false)
+
+                textInputLayoutEmail.isErrorEnabled = false
+                textInputLayoutPassw.isErrorEnabled = false
 
                 if (throwable is ValidateException) {
                     throwable.errors.forEach {

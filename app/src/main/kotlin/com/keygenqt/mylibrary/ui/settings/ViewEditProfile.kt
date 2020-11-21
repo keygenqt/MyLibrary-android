@@ -34,24 +34,26 @@ class ViewEditProfile(
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
 
-    var user = db.getDao<ModelUserDao>()!!.getModel()
+    var user: ModelUser? = null
+
     private val linkModel = db.getDao<ModelRootDao>()!!.getModel(API_VERSION).getLink(API_KEY_MODEL_USERS)
 
     val params: MutableLiveData<ModelUser> = MutableLiveData()
     val error: MutableLiveData<Throwable> = MutableLiveData()
 
     val userMe: LiveData<ModelUser> = liveData(BaseExceptionHandler.getExceptionHandler()) {
-        emit(user)
+        emit(db.getDao<ModelUserDao>()!!.getModel())
         service.getUserMe(linkModel.link) { model ->
-            user = model
             emit(model)
         }
     }
 
     val updateUser = params.switchMap {
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            service.updateUser(user.links.getValue(API_KEY_SELF).link, user) {
-                emit(true)
+            user?.let {
+                service.updateUser(it.links.getValue(API_KEY_SELF).link, it) {
+                    emit(true)
+                }
             }
         }
     }

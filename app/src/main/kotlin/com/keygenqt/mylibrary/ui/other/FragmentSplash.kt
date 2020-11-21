@@ -31,6 +31,7 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
     private val viewModel: ViewSplash by inject()
 
     override fun onCreateView() {
+        statusProgress(true)
         if (requireActivity().intent.hasExtra("changeTheme")) {
             findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
             findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
