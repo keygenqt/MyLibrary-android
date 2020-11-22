@@ -21,6 +21,18 @@ import java.util.UUID
 
 class BaseSharedPreferences(private val preferences: SharedPreferences) {
 
+    var locale: String?
+        get() {
+            return preferences.getString("locale", null)
+        }
+        set(value) {
+            if (value == null) {
+                preferences.edit().remove("locale").apply()
+            } else {
+                preferences.edit().putString("locale", value).apply()
+            }
+        }
+
     var userId: String?
         get() {
             return preferences.getString("userId", null)

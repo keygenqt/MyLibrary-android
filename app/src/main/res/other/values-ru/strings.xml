@@ -25,6 +25,7 @@
   <string name="page_main_bottom_menu_item_chat">Чат</string>
   <string name="button_submit">Отправить</string>
   <string name="profile_updated_successfully">Профайл обновлен успешно</string>
+  <string name="language_app_update">Язык приложения был обновлен</string>
 
   // login
   <string name="login_email">Мыло</string>

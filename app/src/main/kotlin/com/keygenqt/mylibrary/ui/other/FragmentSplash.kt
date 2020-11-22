@@ -18,31 +18,50 @@ package com.keygenqt.mylibrary.ui.other
 
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.ui.books.FragmentBooksDirections
 import com.keygenqt.mylibrary.ui.settings.FragmentSettingsDirections
 import org.koin.android.ext.android.inject
+import java.util.Locale
 
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
 
     private val viewModel: ViewSplash by inject()
+    private val sharedPreferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
         statusProgress(true)
-        if (requireActivity().intent.hasExtra("changeTheme")) {
-            findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
-            findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
-            findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
-        } else {
+
+        sharedPreferences.locale?.let {
+            if (sharedPreferences.locale != Locale.getDefault().toLanguageTag()) {
+                Toast.makeText(activity, getString(R.string.language_app_update), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val defaultInit = {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModel.links.observe(viewLifecycleOwner, {
                     viewModel.userMe.observe(viewLifecycleOwner, {
                         findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
                     })
                 })
-            }, 500)
+            }, 1000)
         }
+
+        when {
+            sharedPreferences.locale != Locale.getDefault().toLanguageTag() -> defaultInit.invoke()
+            requireActivity().intent.hasExtra("changeTheme") -> {
+                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
+                findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
+                findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
+            }
+            else -> defaultInit.invoke()
+        }
+
+        sharedPreferences.locale = Locale.getDefault().toLanguageTag()
     }
 }
