@@ -23,6 +23,6 @@ import com.keygenqt.mylibrary.base.BaseFragment
 
 @ActionBarEnable
 @BottomNavigationEnable
-class FragmentChat : BaseFragment(R.layout.fragment_chat, R.string.fragment_chat_title) {
+class FragmentChat : BaseFragment(R.layout.fragment_chat) {
     override fun onCreateView() {}
 }

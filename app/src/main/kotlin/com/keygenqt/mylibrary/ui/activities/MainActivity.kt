@@ -17,22 +17,36 @@
 package com.keygenqt.mylibrary.ui.activities
 
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseActivity
+import com.keygenqt.mylibrary.ui.books.FragmentBooks
+import com.keygenqt.mylibrary.ui.chat.FragmentChat
+import com.keygenqt.mylibrary.ui.other.FragmentLogin
+import kotlinx.android.synthetic.main.activity_main.bottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.toolbar
 
-class MainActivity : BaseActivity(R.layout.activity_main, R.navigation.nav_graph) {
+class MainActivity : BaseActivity(R.layout.activity_main, R.navigation.nav_graph_app) {
     override fun onCreate() {
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.FragmentBooks,
+                R.id.FragmentLogin,
                 R.id.FragmentChat
             )
         )
-        setupActionBarWithNavController(controller, appBarConfiguration)
-        navView.setupWithNavController(controller)
+        toolbar.setupWithNavController(controller, appBarConfiguration)
+        bottomNavigationView.setupWithNavController(controller)
+    }
+
+    override fun onBackPressed() {
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let {
+            when (it.childFragmentManager.fragments[0]) {
+                is FragmentBooks -> if (info.isShown) finishAffinity() else info.show()
+                is FragmentChat -> if (info.isShown) finishAffinity() else info.show()
+                is FragmentLogin -> if (info.isShown) finishAffinity() else info.show()
+                else -> super.onBackPressed()
+            }
+        }
     }
 }

@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockRate
 import kotlinx.android.synthetic.main.fragment_about.view.settingsTextVersion
 
 @ActionBarEnable
-class FragmentAbout : BaseFragment(R.layout.fragment_about, R.string.fragment_about_title) {
+class FragmentAbout : BaseFragment(R.layout.fragment_about) {
 
     override fun onCreateView() {
         initToolbar {

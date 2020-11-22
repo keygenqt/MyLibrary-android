@@ -18,16 +18,13 @@ package com.keygenqt.mylibrary.base
 
 import android.app.Activity
 import android.app.Application.*
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.findNavController
+import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.response.HttpException
-import com.keygenqt.mylibrary.ui.activities.GuestActivity
-import com.keygenqt.mylibrary.ui.activities.MainActivity
 import com.keygenqt.mylibrary.ui.other.FragmentSplash
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.net.ConnectException
@@ -67,22 +64,16 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                     if (throwable.status == 403) {
                         sharedPreferences.token = null
                         error.removeObservers(activity as LifecycleOwner)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            val intent = Intent(activity, GuestActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                            activity.startActivity(intent)
-                        }, 100)
+                        activity.findNavController(R.id.nav_host_fragment)
+                            .createDeepLink().setDestination(R.id.FragmentLogin).createPendingIntent().send()
                     }
                 }
                 is ConnectException -> {
                     val fragment = (activity as BaseActivity).getCurrentFragment()
                     if (fragment !is FragmentSplash) {
                         error.removeObservers(activity as LifecycleOwner)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            val intent = Intent(activity, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            activity.startActivity(intent)
-                        }, 100)
+                        activity.findNavController(R.id.nav_host_fragment)
+                            .createDeepLink().setDestination(R.id.FragmentSplash).createPendingIntent().send()
                     } else {
                         fragment.statusProgress(false)
                         Toast.makeText(activity, "Failed to connect API", Toast.LENGTH_SHORT).show()

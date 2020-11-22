@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -29,15 +28,13 @@ import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.appBarLayout
 import kotlinx.android.synthetic.main.activity_main.view.progressBar
 import kotlinx.coroutines.launch
 import kotlin.reflect.full.findAnnotation
 
-abstract class BaseFragment(
-    @LayoutRes private val layoutId: Int,
-    @StringRes val title: Int? = null,
-) : Fragment() {
+abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
     annotation class CallOnCreate
 
@@ -70,13 +67,17 @@ abstract class BaseFragment(
             (requireActivity() as AppCompatActivity).supportActionBar?.hide()
         }
         this::class.java.kotlin.findAnnotation<BottomNavigationEnable>()?.let {
-            (requireActivity() as AppCompatActivity).findViewById<View>(R.id.nav_view)?.visibility =
+            (requireActivity() as AppCompatActivity).findViewById<View>(R.id.bottomNavigationView)?.visibility =
                 View.VISIBLE
         } ?: run {
-            (requireActivity() as AppCompatActivity).findViewById<View>(R.id.nav_view)?.visibility =
+            (requireActivity() as AppCompatActivity).findViewById<View>(R.id.bottomNavigationView)?.visibility =
                 View.GONE
         }
+
+        requireActivity().currentFocus?.hideKeyboard()
+
         _view = inflater.inflate(layoutId, container, false)
+
         setHasOptionsMenu(true)
         statusProgress(false)
         onCreateView()

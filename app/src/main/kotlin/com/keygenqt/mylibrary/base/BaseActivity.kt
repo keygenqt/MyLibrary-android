@@ -4,10 +4,8 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.annotation.NavigationRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.keygenqt.mylibrary.R
@@ -15,7 +13,6 @@ import com.keygenqt.mylibrary.ui.books.FragmentBooks
 import com.keygenqt.mylibrary.ui.chat.FragmentChat
 import com.keygenqt.mylibrary.ui.other.FragmentLogin
 import org.koin.android.ext.android.inject
-import kotlin.reflect.full.memberProperties
 
 abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val graphId: Int) : AppCompatActivity() {
 
@@ -23,7 +20,7 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
 
     lateinit var controller: NavController
 
-    private lateinit var info: Snackbar
+    protected lateinit var info: Snackbar
 
     abstract fun onCreate()
 
@@ -58,15 +55,9 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
         onCreate()
     }
 
-    override fun onBackPressed() {
-        supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let {
-            when (it.childFragmentManager.fragments[0]) {
-                is FragmentBooks -> if (info.isShown) finishAffinity() else info.show()
-                is FragmentChat -> if (info.isShown) finishAffinity() else info.show()
-                is FragmentLogin -> if (info.isShown) finishAffinity() else info.show()
-                else -> super.onBackPressed()
-            }
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        findNavController(R.id.nav_host_fragment).navigateUp()
+        return super.onSupportNavigateUp()
     }
 
     fun getCurrentFragment(): BaseFragment? {
@@ -74,31 +65,5 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
             return it.childFragmentManager.fragments[0] as? BaseFragment
         }
         return null
-    }
-
-    // set title fragment without delay
-    private val listener = NavController.OnDestinationChangedListener { controller, _, _ ->
-        findViewById<Toolbar>(R.id.toolbar)?.let { toolbar ->
-            val destinationClassName = (controller.currentDestination as FragmentNavigator.Destination).className
-            Class.forName(destinationClassName).kotlin.memberProperties.forEach { p ->
-                if (p.name == "title") {
-                    (p.getter.call(Class.forName(destinationClassName).newInstance()) as Int?)?.let { resId ->
-                        toolbar.title = getString(resId)
-                    } ?: run {
-                        toolbar.title = ""
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        controller.addOnDestinationChangedListener(listener)
-    }
-
-    override fun onPause() {
-        controller.removeOnDestinationChangedListener(listener)
-        super.onPause()
     }
 }

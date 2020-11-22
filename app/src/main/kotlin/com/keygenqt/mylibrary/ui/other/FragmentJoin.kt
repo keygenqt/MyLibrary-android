@@ -16,15 +16,12 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.response.ValidateException
-import com.keygenqt.mylibrary.extensions.hideKeyboard
-import com.keygenqt.mylibrary.ui.activities.MainActivity
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
@@ -38,7 +35,7 @@ import org.koin.android.ext.android.inject
 import java.util.Locale
 
 @ActionBarEnable
-class FragmentJoin : BaseFragment(R.layout.fragment_join, R.string.fragment_join_title) {
+class FragmentJoin : BaseFragment(R.layout.fragment_join) {
 
     private val viewModel: ViewJoin by inject()
 
@@ -52,9 +49,9 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join, R.string.fragment_join
     }
 
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
+        //        initToolbar {
+        //            setNavigationOnClickListener { findNavController().navigateUp() }
+        //        }
         initView {
             dotsIndicator.setViewPager(viewPager.apply {
                 adapter = DotIndicatorPagerAdapter(AVATARS)
@@ -83,12 +80,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join, R.string.fragment_join
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.join.observe(viewLifecycleOwner) {
-                viewModel.error.postValue(null)
-                statusProgress(false)
-                this.hideKeyboard()
-                val intent = Intent(context, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-                context.startActivity(intent)
+                findNavController().navigate(FragmentJoinDirections.actionFragmentJoinToUserApp())
             }
         }
     }

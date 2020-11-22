@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentBooks : BaseFragment(R.layout.common_fragment_list, R.string.fragment_books_title) {
+class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private var changeSearch = false
     private val viewModel: ViewBooks by inject()

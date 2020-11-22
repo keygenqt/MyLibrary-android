@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_password.view.buttonSubmit
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentPassword : BaseFragment(R.layout.fragment_password, R.string.fragment_password_title) {
+class FragmentPassword : BaseFragment(R.layout.fragment_password) {
 
     private val viewModel: ViewPassword by inject()
 

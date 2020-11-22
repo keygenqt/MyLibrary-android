@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/FragmentSplash">
+
+
+  <fragment
+      android:id="@+id/FragmentSplash"
+      android:name="com.keygenqt.mylibrary.ui.other.FragmentSplash"
+      tools:layout="@layout/fragment_splash">
+    <action
+        android:id="@+id/action_FragmentSplash_to_UserApp"
+        app:destination="@id/userApp" />
+    <action
+        android:id="@+id/action_FragmentSplash_to_GuestApp"
+        app:destination="@id/guestApp"/>
+  </fragment>
+
+  <navigation
+      android:id="@+id/guestApp"
+      app:startDestination="@id/FragmentLogin">
+    <fragment
+        android:id="@+id/FragmentLogin"
+        android:name="com.keygenqt.mylibrary.ui.other.FragmentLogin"
+        android:label="@string/fragment_login_title"
+        tools:layout="@layout/fragment_login">
+      <action
+          android:id="@+id/action_FragmentLogin_to_FragmentJoin"
+          app:destination="@id/FragmentJoin" />
+      <action
+          android:id="@+id/action_FragmentLogin_to_UserApp"
+          app:destination="@id/userApp" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragmentJoin"
+        android:name="com.keygenqt.mylibrary.ui.other.FragmentJoin"
+        android:label="@string/fragment_join_title"
+        tools:layout="@layout/fragment_join" >
+      <action
+          android:id="@+id/action_FragmentJoin_to_UserApp"
+          app:destination="@id/userApp" />
+    </fragment>
+
+  </navigation>
+
+  <navigation
+      android:id="@+id/userApp"
+      app:startDestination="@id/FragmentBooks">
+    <fragment
+        android:id="@+id/FragmentBooks"
+        android:name="com.keygenqt.mylibrary.ui.books.FragmentBooks"
+        android:label="@string/fragment_books_title"
+        tools:layout="@layout/common_fragment_list">
+      <action
+          android:id="@+id/action_FragmentBooks_to_FragmentSettings"
+          app:destination="@id/test_navigation" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragmentChat"
+        android:name="com.keygenqt.mylibrary.ui.chat.FragmentChat"
+        android:label="@string/fragment_chat_title"
+        tools:layout="@layout/common_fragment_list" />
+
+    <include app:graph="@navigation/nav_graph_settings" />
+
+  </navigation>
+
+</navigation>

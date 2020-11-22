@@ -17,18 +17,16 @@
 package com.keygenqt.mylibrary.ui.settings
 
 import android.app.AlertDialog
-import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.ui.activities.GuestActivity
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentSettings : BaseFragment(R.layout.fragment_settings, R.string.fragment_settings_title) {
+class FragmentSettings : BaseFragment(R.layout.fragment_settings) {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 
@@ -55,9 +53,7 @@ class FragmentSettings : BaseFragment(R.layout.fragment_settings, R.string.fragm
                     .setPositiveButton("Yes") { dialogInterface, _ ->
                         dialogInterface.dismiss()
                         sharedPreferences.token = null
-                        val intent = Intent(context, GuestActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                        requireActivity().startActivity(intent)
+                        findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToGuestApp())
                     }
                     .setNegativeButton("No") { dialogInterface, _ ->
                         dialogInterface.dismiss()

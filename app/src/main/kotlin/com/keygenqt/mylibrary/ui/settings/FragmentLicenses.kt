@@ -33,7 +33,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @ActionBarEnable
-class FragmentLicenses : BaseFragment(R.layout.fragment_licenses, R.string.fragment_licenses_title) {
+class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
 
     @SuppressLint("InflateParams")
     override fun onCreateView() {

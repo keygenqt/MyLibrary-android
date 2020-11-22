@@ -19,6 +19,8 @@
   <string name="user_passw">12345</string>
 
   // common
+  <string name="filter_view_example_gizmos">filter_view_example_gizmos</string>
+
   <string name="list_not_found">Ничего не найдено</string>
   <string name="exit_info">Для выхода кликните еще раз</string>
   <string name="page_main_bottom_menu_item_my_library">MyLibrary</string>

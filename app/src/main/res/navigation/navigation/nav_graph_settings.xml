@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test_navigation"
+    app:startDestination="@+id/FragmentSettings">
+
+  <fragment
+      android:id="@+id/FragmentSettings"
+      android:label="@string/fragment_settings_title"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentSettings"
+      tools:layout="@layout/fragment_settings">
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentAbout"
+        app:destination="@id/test_navigation_about" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentAppearance"
+        app:destination="@id/FragmentAppearance" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentEditProfile"
+        app:destination="@id/FragmentEditProfile" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_FragmentPassword"
+        app:destination="@id/FragmentPassword" />
+
+    <action
+        android:id="@+id/action_FragmentSettings_to_GuestApp"
+        app:destination="@id/guestApp" />
+
+    <deepLink
+        android:id="@+id/deepLink"
+        app:uri="app://myapp/frag3" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentAppearance"
+      android:label="@string/fragment_appearance_title"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentAppearance"
+      tools:layout="@layout/fragment_appearance" />
+
+  <fragment
+      android:id="@+id/FragmentEditProfile"
+      android:label="@string/fragment_edit_profile_title"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentEditProfile"
+      tools:layout="@layout/fragment_edit_profile" />
+
+  <fragment
+      android:id="@+id/FragmentPassword"
+      android:label="@string/fragment_password_title"
+      android:name="com.keygenqt.mylibrary.ui.settings.FragmentPassword"
+      tools:layout="@layout/fragment_password" />
+
+  <include app:graph="@navigation/nav_graph_about" />
+
+
+</navigation>

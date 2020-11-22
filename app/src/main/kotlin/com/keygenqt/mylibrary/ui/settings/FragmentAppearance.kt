@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemGrayThe
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentAppearance : BaseFragment(R.layout.fragment_appearance, R.string.fragment_appearance_title) {
+class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 

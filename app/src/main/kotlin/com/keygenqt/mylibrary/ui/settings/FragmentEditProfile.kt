@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile, R.string.fragment_edit_profile_title) {
+class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
 
     private val viewModel: ViewEditProfile by inject()
 

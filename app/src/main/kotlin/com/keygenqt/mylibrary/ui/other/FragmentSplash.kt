@@ -23,8 +23,6 @@ import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.ui.books.FragmentBooksDirections
-import com.keygenqt.mylibrary.ui.settings.FragmentSettingsDirections
 import org.koin.android.ext.android.inject
 import java.util.Locale
 
@@ -46,7 +44,7 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModel.links.observe(viewLifecycleOwner, {
                     viewModel.userMe.observe(viewLifecycleOwner, {
-                        findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
+                        findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
                     })
                 })
             }, 1000)
@@ -54,10 +52,15 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
 
         when {
             sharedPreferences.locale != Locale.getDefault().toLanguageTag() -> defaultInit.invoke()
+            requireActivity().intent.hasExtra("code") -> {
+
+            }
             requireActivity().intent.hasExtra("changeTheme") -> {
-                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToFragmentBooks())
-                findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
-                findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
+                findNavController().createDeepLink().setDestination(R.id.FragmentAppearance).createPendingIntent().send()
+
+                // @todo example deep link
+                // val request = NavDeepLinkRequest.Builder.fromUri("app://myapp/frag3".toUri()).build()
+                // findNavController().navigate(request)
             }
             else -> defaultInit.invoke()
         }
