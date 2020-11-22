@@ -19,6 +19,10 @@
       android:id="@+id/FragmentLicenses"
       android:name="com.keygenqt.mylibrary.ui.settings.FragmentLicenses"
       android:label="@string/fragment_licenses_title"
-      tools:layout="@layout/fragment_licenses" />
+      tools:layout="@layout/fragment_licenses">
+    <deepLink
+        android:id="@+id/deepLink"
+        app:uri="https://keygenqt.com/licenses" />
+  </fragment>
 
 </navigation>
