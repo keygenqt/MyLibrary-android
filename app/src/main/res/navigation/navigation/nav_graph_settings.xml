@@ -7,8 +7,8 @@
 
   <fragment
       android:id="@+id/FragmentSettings"
-      android:label="@string/fragment_settings_title"
       android:name="com.keygenqt.mylibrary.ui.settings.FragmentSettings"
+      android:label="@string/fragment_settings_title"
       tools:layout="@layout/fragment_settings">
 
     <action
@@ -30,28 +30,24 @@
     <action
         android:id="@+id/action_FragmentSettings_to_GuestApp"
         app:destination="@id/guestApp" />
-
-    <deepLink
-        android:id="@+id/deepLink"
-        app:uri="app://myapp/frag3" />
   </fragment>
 
   <fragment
       android:id="@+id/FragmentAppearance"
-      android:label="@string/fragment_appearance_title"
       android:name="com.keygenqt.mylibrary.ui.settings.FragmentAppearance"
+      android:label="@string/fragment_appearance_title"
       tools:layout="@layout/fragment_appearance" />
 
   <fragment
       android:id="@+id/FragmentEditProfile"
-      android:label="@string/fragment_edit_profile_title"
       android:name="com.keygenqt.mylibrary.ui.settings.FragmentEditProfile"
+      android:label="@string/fragment_edit_profile_title"
       tools:layout="@layout/fragment_edit_profile" />
 
   <fragment
       android:id="@+id/FragmentPassword"
-      android:label="@string/fragment_password_title"
       android:name="com.keygenqt.mylibrary.ui.settings.FragmentPassword"
+      android:label="@string/fragment_password_title"
       tools:layout="@layout/fragment_password" />
 
   <include app:graph="@navigation/nav_graph_about" />
