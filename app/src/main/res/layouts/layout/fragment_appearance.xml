@@ -99,7 +99,8 @@
               android:paddingStart="6dp"
               android:paddingEnd="55dp"
               android:paddingBottom="6dp"
-              android:singleLine="true"
+              android:ellipsize="end"
+              android:maxLines="1"
               android:textColor="?attr/colorText"
               android:text="@string/appearance_dark_theme"
               />
@@ -170,7 +171,8 @@
               android:paddingStart="6dp"
               android:paddingEnd="55dp"
               android:paddingBottom="6dp"
-              android:singleLine="true"
+              android:ellipsize="end"
+              android:maxLines="1"
               android:textColor="?attr/colorText"
               android:text="@string/appearance_gray_theme"
               />

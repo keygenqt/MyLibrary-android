@@ -110,6 +110,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.jakewharton:process-phoenix:2.0.0")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
 }
 
 dependencies {
