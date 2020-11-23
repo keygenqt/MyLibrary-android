@@ -49,9 +49,6 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     }
 
     override fun onCreateView() {
-        //        initToolbar {
-        //            setNavigationOnClickListener { findNavController().navigateUp() }
-        //        }
         initView {
             dotsIndicator.setViewPager(viewPager.apply {
                 adapter = DotIndicatorPagerAdapter(AVATARS)

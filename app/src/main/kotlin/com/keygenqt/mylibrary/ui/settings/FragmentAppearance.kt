@@ -37,9 +37,6 @@ class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
     private val sharedPreferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
         initView {
 
             switchItemDarkTheme.isChecked = sharedPreferences.darkTheme

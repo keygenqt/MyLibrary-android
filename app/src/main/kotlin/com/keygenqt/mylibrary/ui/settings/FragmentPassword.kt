@@ -35,9 +35,6 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
     class RequestPassword(var password: String, var rpassword: String)
 
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
         initView {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)

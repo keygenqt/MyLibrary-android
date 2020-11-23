@@ -33,9 +33,6 @@ import kotlinx.android.synthetic.main.fragment_about.view.settingsTextVersion
 class FragmentAbout : BaseFragment(R.layout.fragment_about) {
 
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
         initView {
 
             settingsTextVersion.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)

@@ -16,11 +16,11 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
@@ -28,10 +28,7 @@ import com.keygenqt.mylibrary.base.ListAdapterSearch
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
-import kotlinx.android.synthetic.main.item_book_list.view.author
-import kotlinx.android.synthetic.main.item_book_list.view.imageBook
-import kotlinx.android.synthetic.main.item_book_list.view.subtitle
-import kotlinx.android.synthetic.main.item_book_list.view.title
+import kotlinx.android.synthetic.main.item_book_list.view.*
 import org.koin.java.KoinJavaComponent.inject
 
 class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (String, Link) -> Unit)
@@ -64,6 +61,12 @@ class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (St
                 .placeholder(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
                 .error(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
                 .into(imageBook)
+
+            itemBlock.setOnClickListener {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBook(model.id, model.title))
+                }, 200)
+            }
         }
     }
 }

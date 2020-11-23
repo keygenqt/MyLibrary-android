@@ -11,12 +11,9 @@
     app:cardUseCompatPadding="true"
     >
 
-  <LinearLayout
-      android:id="@+id/itemBlock"
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?android:selectableItemBackground"
-      android:orientation="horizontal"
+      android:layout_height="match_parent"
       >
 
     <com.makeramen.roundedimageview.RoundedImageView
@@ -24,21 +21,27 @@
         android:layout_width="100dp"
         android:layout_height="155dp"
         android:adjustViewBounds="true"
+        android:background="?attr/colorBackgroundListItem"
         android:scaleType="fitXY"
         android:src="@drawable/img_default_book"
+        app:layout_constraintEnd_toStartOf="@+id/dataBook"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:riv_corner_radius="5dp"
-        android:background="?attr/colorBackgroundListItem"
-
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/dataBook"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:background="?attr/colorBackgroundListItem"
         android:paddingLeft="22dp"
         android:paddingTop="16dp"
         android:paddingRight="22dp"
         android:paddingBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageBook"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
       <TextView
@@ -85,6 +88,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-  </LinearLayout>
+    <View
+        android:id="@+id/itemBlock"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

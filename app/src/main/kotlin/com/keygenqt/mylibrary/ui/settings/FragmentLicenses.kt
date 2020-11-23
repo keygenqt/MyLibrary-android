@@ -37,9 +37,6 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
 
     @SuppressLint("InflateParams")
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
         initView {
             containerLicenses.removeAllViews()
 

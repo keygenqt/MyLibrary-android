@@ -31,9 +31,6 @@ class FragmentSettings : BaseFragment(R.layout.fragment_settings) {
     private val sharedPreferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
         initView {
             settingsBlockAppearance.setOnClickListener {
                 findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())

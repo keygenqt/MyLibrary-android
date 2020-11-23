@@ -15,7 +15,7 @@
         app:destination="@id/userApp" />
     <action
         android:id="@+id/action_FragmentSplash_to_GuestApp"
-        app:destination="@id/guestApp"/>
+        app:destination="@id/guestApp" />
   </fragment>
 
   <navigation
@@ -38,7 +38,7 @@
         android:id="@+id/FragmentJoin"
         android:name="com.keygenqt.mylibrary.ui.other.FragmentJoin"
         android:label="@string/fragment_join_title"
-        tools:layout="@layout/fragment_join" >
+        tools:layout="@layout/fragment_join">
       <action
           android:id="@+id/action_FragmentJoin_to_UserApp"
           app:destination="@id/userApp" />
@@ -56,7 +56,10 @@
         tools:layout="@layout/common_fragment_list">
       <action
           android:id="@+id/action_FragmentBooks_to_FragmentSettings"
-          app:destination="@id/test_navigation" />
+          app:destination="@id/nav_graph_settings" />
+      <action
+          android:id="@+id/action_FragmentBooks_to_FragmentBook"
+          app:destination="@id/FragmentBook" />
     </fragment>
 
     <fragment
@@ -64,6 +67,19 @@
         android:name="com.keygenqt.mylibrary.ui.chat.FragmentChat"
         android:label="@string/fragment_chat_title"
         tools:layout="@layout/common_fragment_list" />
+
+    <fragment
+        android:id="@+id/FragmentBook"
+        android:name="com.keygenqt.mylibrary.ui.books.FragmentBook"
+        android:label="{title}"
+        tools:layout="@layout/fragment_book">
+      <argument
+          android:name="modelId"
+          app:argType="string" />
+      <argument
+          android:name="title"
+          app:argType="string" />
+    </fragment>
 
     <include app:graph="@navigation/nav_graph_settings" />
 

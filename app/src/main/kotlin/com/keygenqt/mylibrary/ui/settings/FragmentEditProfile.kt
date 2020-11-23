@@ -37,9 +37,6 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
 
     override fun onCreateView() {
         statusProgress(true)
-        initToolbar {
-            setNavigationOnClickListener { findNavController().navigateUp() }
-        }
         initView {
             dotsIndicator.setViewPager(viewPager.apply {
                 adapter = DotIndicatorPagerAdapter(AVATARS)
