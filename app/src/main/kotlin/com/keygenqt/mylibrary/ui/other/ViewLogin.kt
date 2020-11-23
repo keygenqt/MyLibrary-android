@@ -24,6 +24,7 @@ import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 import com.keygenqt.mylibrary.ui.other.FragmentLogin.*
 
 class ViewLogin(
@@ -40,7 +41,12 @@ class ViewLogin(
             service.login(it[PARAMS.EMAIL]!!, it[PARAMS.PASSWORD]!!) { model ->
                 preferences.userId = model.id
                 preferences.token = model.token
-                emit(model)
+
+                service.getRootLinks { links ->
+                    service.getUserMe(links.links[API_KEY_MODEL_USERS]?.link!!) { user ->
+                        emit(model)
+                    }
+                }
             }
         }
     }

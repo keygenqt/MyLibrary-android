@@ -33,8 +33,6 @@ class ViewBooks(
     private val preferences: BaseSharedPreferences
 ) : ViewModel(), ViewModelPage {
 
-    private val linkModel = db.getDao<ModelRootDao>()!!.getModel(API_VERSION).getLink(ModelBook.API_KEY)
-
     override val link: MutableLiveData<Link?> = MutableLiveData()
     override val loading: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -45,7 +43,7 @@ class ViewBooks(
     val listData = link.switchMap {
         liveData(getExceptionHandler()) {
             loading.postValue(link.value?.isFirstPage() == true)
-            service.getList(link.value?.link ?: linkModel.link) { listData ->
+            service.getList(link.value?.link ?: db.getDao<ModelRootDao>()!!.getModel(API_VERSION).getLink(ModelBook.API_KEY).link) { listData ->
                 loading.postValue(false)
                 emit(listData)
             }

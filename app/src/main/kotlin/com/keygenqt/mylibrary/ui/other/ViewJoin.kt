@@ -24,6 +24,7 @@ import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.*
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 
@@ -41,7 +42,12 @@ class ViewJoin(
             service.join(it[AVATAR]!!, it[NICKNAME]!!, it[EMAIL]!!, it[PASSWORD]!!) { model ->
                 preferences.userId = model.id
                 preferences.token = model.token
-                emit(model)
+
+                service.getRootLinks { links ->
+                    service.getUserMe(links.links[API_KEY_MODEL_USERS]?.link!!) { user ->
+                        emit(model)
+                    }
+                }
             }
         }
     }

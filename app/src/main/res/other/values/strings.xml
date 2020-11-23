@@ -15,7 +15,7 @@
   <string name="fragment_settings_title">Settings</string>
 
   // test credentials
-  <string name="user_email">user@gmail.com1</string>
+  <string name="user_email">user@gmail.com</string>
   <string name="user_passw">12345</string>
 
   // common
