@@ -16,18 +16,28 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.util.Log
 import android.view.View
 import androidx.annotation.LayoutRes
+import com.bumptech.glide.Glide
 import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListAdapterSearch
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.interfaces.ViewModelPage
+import kotlinx.android.synthetic.main.item_book_list.view.author
+import kotlinx.android.synthetic.main.item_book_list.view.imageBook
 import kotlinx.android.synthetic.main.item_book_list.view.subtitle
 import kotlinx.android.synthetic.main.item_book_list.view.title
+import org.koin.java.KoinJavaComponent.inject
 
 class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (String, Link) -> Unit)
     : ListAdapterSearch<ModelBook>(layout, viewModel, search) {
+
+    private val sharedPreferences by inject(BaseSharedPreferences::class.java)
 
     companion object {
         const val SEARCH_SELF = "self"
@@ -46,7 +56,14 @@ class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (St
     override fun onBindViewHolder(holder: View, model: ModelBook) {
         holder.apply {
             title.text = model.title
+            author.text = model.author
             subtitle.text = model.description
+
+            Glide.with(this)
+                .load(model.image)
+                .placeholder(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
+                .error(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
+                .into(imageBook)
         }
     }
 }

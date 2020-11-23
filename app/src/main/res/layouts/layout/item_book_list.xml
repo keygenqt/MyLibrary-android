@@ -8,51 +8,83 @@
     android:layout_marginEnd="10dp"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    >
 
-    <LinearLayout
-        android:id="@+id/itemBlock"
+  <LinearLayout
+      android:id="@+id/itemBlock"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?android:selectableItemBackground"
+      android:orientation="horizontal"
+      >
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageBook"
+        android:layout_width="100dp"
+        android:layout_height="155dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_default_book"
+        app:riv_corner_radius="5dp"
+        android:background="?attr/colorBackgroundListItem"
+
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="?attr/colorBackgroundListItem"
+        android:paddingLeft="22dp"
+        android:paddingTop="16dp"
+        android:paddingRight="22dp"
+        android:paddingBottom="16dp"
+        >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorBackgroundListItem"
-            android:paddingLeft="22dp"
-            android:paddingTop="16dp"
-            android:paddingRight="22dp"
-            android:paddingBottom="16dp">
+      <TextView
+          android:id="@+id/title"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:paddingBottom="2dp"
+          android:singleLine="true"
+          android:textColor="?attr/colorTextItem"
+          android:textSize="16sp"
+          android:textStyle="bold"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:text="Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text."
+          />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
-                android:singleLine="true"
-                android:textColor="?attr/colorTextItem"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text." />
+      <TextView
+          android:id="@+id/author"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:paddingBottom="3dp"
+          android:singleLine="true"
+          android:textColor="?attr/colorTextLabel"
+          android:textSize="12sp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/title"
+          tools:text="Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text."
+          />
 
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorTextItemLite"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                tools:text="Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text. Test text." />
+      <TextView
+          android:id="@+id/subtitle"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:ellipsize="end"
+          android:maxLines="5"
+          android:textColor="?attr/colorTextItemLite"
+          android:textSize="13sp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/author"
+          />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+  </LinearLayout>
 
 </androidx.cardview.widget.CardView>

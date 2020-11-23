@@ -5,6 +5,7 @@
     <item name="colorTextLite">#D1D1D1</item>
     <item name="colorTextItem">#000000</item>
     <item name="colorTextItemLite">#2B2B2B</item>
+    <item name="colorTextLabel">#757575</item>
     <item name="colorTextLink">#2287AF</item>
     <item name="colorBackgroundPage">#353535</item>
     <item name="colorBackgroundList">#353535</item>

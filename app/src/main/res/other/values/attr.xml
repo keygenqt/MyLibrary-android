@@ -4,6 +4,7 @@
   <attr name="colorTextLite" format="color" />
   <attr name="colorTextItem" format="color" />
   <attr name="colorTextItemLite" format="color" />
+  <attr name="colorTextLabel" format="color" />
   <attr name="colorTextLink" format="color" />
   <attr name="colorBackgroundPage" format="color" />
   <attr name="colorBackgroundList" format="color" />

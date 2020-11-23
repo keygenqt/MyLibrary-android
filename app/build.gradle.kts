@@ -63,6 +63,12 @@ android {
     }
 }
 
+// Glide
+dependencies {
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+    kapt("com.github.bumptech.glide:compiler:4.11.0")
+}
+
 // RoundedImageView
 dependencies {
     implementation("com.makeramen:roundedimageview:2.3.0")
