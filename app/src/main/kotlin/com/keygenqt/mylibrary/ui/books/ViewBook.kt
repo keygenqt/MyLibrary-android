@@ -16,10 +16,16 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
+import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.services.BookService
+import com.keygenqt.mylibrary.hal.API_KEY_SELF
 
 class ViewBook(
     private val db: RoomDatabase,
@@ -27,4 +33,21 @@ class ViewBook(
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
 
+    val userId: MutableLiveData<String> = MutableLiveData()
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
+
+    val data = userId.switchMap { id ->
+        liveData(BaseExceptionHandler.getExceptionHandler()) {
+            db.getDao<ModelBookDao>().getModel(id)?.let { model ->
+                emit(model)
+                loading.postValue(true)
+                service.getView(model.getLink(API_KEY_SELF).link) { data ->
+                    loading.postValue(false)
+                    emit(data)
+                }
+            } ?: run {
+                emit(null)
+            }
+        }
+    }
 }

@@ -16,11 +16,15 @@
 
 package com.keygenqt.mylibrary.data.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.keygenqt.mylibrary.base.BaseModel
 
+@Entity(tableName = "ModelBook")
 data class ModelBook(
 
+    @PrimaryKey
     @SerializedName("id")
     var id: String = "",
 
@@ -41,6 +45,12 @@ data class ModelBook(
 
     @SerializedName("numberOfPages")
     var numberOfPages: String = "",
+
+    @SerializedName("isbn")
+    var isbn: String = "",
+
+    @SerializedName("sale")
+    var sale: Boolean = false,
 
     @SerializedName("coverType")
     var coverType: String = "",

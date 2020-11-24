@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackgroundList"
+    android:background="?attr/colorBackgroundPage"
     >
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
-      android:id="@+id/coordinatorLayout"
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/refresh"
       android:layout_width="0dp"
       android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -17,73 +17,364 @@
       app:layout_constraintTop_toTopOf="parent"
       >
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
-      <com.google.android.material.appbar.CollapsingToolbarLayout
-          android:id="@+id/collapseToolbar"
+      <com.google.android.material.appbar.AppBarLayout
+          android:id="@+id/appBarLayout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
           >
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapseToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
+            >
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/common_background_action_bar"
+              android:paddingStart="9dp"
+              android:paddingTop="@dimen/padding"
+              android:paddingEnd="@dimen/padding"
+              android:paddingBottom="5dp"
+              app:layout_collapseMode="parallax"
+              >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageBookCard"
+                android:layout_width="140dp"
+                android:layout_height="205dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+              <com.makeramen.roundedimageview.RoundedImageView
+                  android:id="@+id/bookImage"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:adjustViewBounds="true"
+                  android:scaleType="fitXY"
+                  android:src="@drawable/img_default_book"
+                  app:layout_constraintEnd_toStartOf="@+id/dataBook"
+                  app:riv_corner_radius="5dp"
+                  />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dataBook"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageBookCard"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+              <TextView
+                  android:id="@+id/bookTitle"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/colorWhite"
+                  android:textSize="18sp"
+                  android:textStyle="bold"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  tools:text="Saint X: A Novel"
+                  />
+
+              <TextView
+                  android:id="@+id/bookAuthor"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:alpha="0.8"
+                  android:ellipsize="end"
+                  android:maxLines="1"
+                  android:paddingTop="10dp"
+                  android:textColor="@color/colorWhite"
+                  android:textSize="12sp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toBottomOf="@+id/bookTitle"
+                  tools:text="Alexis Schaitkin"
+                  />
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="3dp"
+                  android:orientation="vertical"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toBottomOf="@+id/bookAuthor"
+                  >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bookPublisherBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/author"
+                    >
+
+                  <TextView
+                      android:id="@+id/bookPublisherTitle"
+                      android:layout_width="75dp"
+                      android:layout_height="wrap_content"
+                      android:text="@string/view_book_publisher"
+                      android:textColor="@color/colorWhite"
+                      android:textStyle="bold"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      tools:ignore="TooDeepLayout"
+                      />
+
+                  <TextView
+                      android:id="@+id/bookPublisher"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:alpha="0.8"
+                      android:ellipsize="end"
+                      android:maxLines="1"
+                      android:textColor="@color/colorWhite"
+                      app:layout_constraintBottom_toBottomOf="@+id/bookPublisherTitle"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toEndOf="@+id/bookPublisherTitle"
+                      app:layout_constraintTop_toTopOf="@+id/bookPublisherTitle"
+                      tools:text="Lee Child"
+                      />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bookISBNBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/author"
+                    >
+
+                  <TextView
+                      android:id="@+id/bookISBNTitle"
+                      android:layout_width="75dp"
+                      android:layout_height="wrap_content"
+                      android:text="@string/view_book_ISBN"
+                      android:textColor="@color/colorWhite"
+                      android:textStyle="bold"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      />
+
+                  <TextView
+                      android:id="@+id/bookISBN"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:alpha="0.8"
+                      android:ellipsize="end"
+                      android:maxLines="1"
+                      android:textColor="@color/colorWhite"
+                      app:layout_constraintBottom_toBottomOf="@+id/bookISBNTitle"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toEndOf="@+id/bookISBNTitle"
+                      app:layout_constraintTop_toTopOf="@+id/bookISBNTitle"
+                      tools:text="978-5-00131-235-2"
+                      />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bookYearBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/author"
+                    >
+
+                  <TextView
+                      android:id="@+id/bookYearTitle"
+                      android:layout_width="75dp"
+                      android:layout_height="wrap_content"
+                      android:text="@string/view_book_year"
+                      android:textColor="@color/colorWhite"
+                      android:textStyle="bold"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      />
+
+                  <TextView
+                      android:id="@+id/bookYear"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:alpha="0.8"
+                      android:ellipsize="end"
+                      android:maxLines="1"
+                      android:textColor="@color/colorWhite"
+                      app:layout_constraintBottom_toBottomOf="@+id/bookYearTitle"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toEndOf="@+id/bookYearTitle"
+                      app:layout_constraintTop_toTopOf="@+id/bookYearTitle"
+                      tools:text="2010"
+                      />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bookPagesBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/author"
+                    >
+
+                  <TextView
+                      android:id="@+id/bookPagesTitle"
+                      android:layout_width="75dp"
+                      android:layout_height="wrap_content"
+                      android:text="@string/view_book_pages"
+                      android:textColor="@color/colorWhite"
+                      android:textStyle="bold"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      />
+
+                  <TextView
+                      android:id="@+id/bookPages"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:alpha="0.8"
+                      android:ellipsize="end"
+                      android:maxLines="1"
+                      android:textColor="@color/colorWhite"
+                      app:layout_constraintBottom_toBottomOf="@+id/bookPagesTitle"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toEndOf="@+id/bookPagesTitle"
+                      app:layout_constraintTop_toTopOf="@+id/bookPagesTitle"
+                      tools:text="112"
+                      />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bookCoverBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/author"
+                    >
+
+                  <TextView
+                      android:id="@+id/bookCoverTitle"
+                      android:layout_width="75dp"
+                      android:layout_height="wrap_content"
+                      android:text="@string/view_book_cover"
+                      android:textColor="@color/colorWhite"
+                      android:textStyle="bold"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
+                      />
+
+                  <TextView
+                      android:id="@+id/bookCover"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:alpha="0.8"
+                      android:ellipsize="end"
+                      android:maxLines="1"
+                      android:textColor="@color/colorWhite"
+                      app:layout_constraintBottom_toBottomOf="@+id/bookCoverTitle"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toEndOf="@+id/bookCoverTitle"
+                      app:layout_constraintTop_toTopOf="@+id/bookCoverTitle"
+                      tools:text="Unknown"
+                      />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+              </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/common_background_action_bar"
-            android:paddingStart="9dp"
-            android:paddingTop="@dimen/padding"
+            android:paddingStart="@dimen/padding"
+            android:paddingTop="10dp"
             android:paddingEnd="@dimen/padding"
-            android:paddingBottom="5dp"
-            app:layout_collapseMode="parallax"
+            android:paddingBottom="10dp"
+            app:layout_collapseMode="pin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageBookCard"
             >
 
-          <androidx.cardview.widget.CardView
-              android:id="@+id/imageBookCard"
-              android:layout_width="140dp"
-              android:layout_height="205dp"
-              app:cardCornerRadius="5dp"
-              app:cardElevation="5dp"
-              app:cardUseCompatPadding="true"
+          <com.makeramen.roundedimageview.RoundedImageView
+              android:id="@+id/userAvatar"
+              android:layout_width="40dp"
+              android:layout_height="50dp"
+              android:src="@drawable/avatar_2"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"
-              >
-
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_default_book"
-                app:layout_constraintEnd_toStartOf="@+id/dataBook"
-                app:riv_corner_radius="5dp"
-                />
-
-          </androidx.cardview.widget.CardView>
+              app:riv_corner_radius="5dp"
+              />
 
           <androidx.constraintlayout.widget.ConstraintLayout
-              android:id="@+id/dataBook"
+              android:id="@+id/dataUser"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:layout_marginTop="5dp"
-              android:layout_marginBottom="5dp"
-              android:paddingLeft="@dimen/padding"
-              android:paddingRight="@dimen/padding"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toEndOf="@+id/imageBookCard"
+              android:paddingStart="@dimen/padding"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toStartOf="@+id/buttonMessage"
+              app:layout_constraintStart_toEndOf="@+id/userAvatar"
               app:layout_constraintTop_toTopOf="parent"
+              tools:ignore="RtlSymmetry"
               >
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/userName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Saint X: A Novel"
+                android:paddingBottom="2dp"
+                tools:text="Nickname"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,405 +382,139 @@
                 />
 
             <TextView
-                android:id="@+id/author"
+                android:id="@+id/userBio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:alpha="0.8"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:paddingTop="10dp"
-                android:text="Alexis Schaitkin"
+                android:maxLines="4"
+                android:paddingBottom="3dp"
+                tools:text="Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@+id/userName"
                 />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/author"
-                >
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="10dp"
-                  android:orientation="horizontal"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/author"
-                  >
-
-                <TextView
-                    android:id="@+id/titleISBN3"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:text="Publisher"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Lee Child"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@+id/titleISBN3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titleISBN3"
-                    app:layout_constraintTop_toTopOf="@+id/titleISBN3"
-                    />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="7dp"
-                  android:orientation="horizontal"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/author"
-                  >
-
-                <TextView
-                    android:id="@+id/titleISBN"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:text="ISBN"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="978-5-00131-235-2"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@+id/titleISBN"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titleISBN"
-                    app:layout_constraintTop_toTopOf="@+id/titleISBN"
-                    />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="7dp"
-                  android:orientation="horizontal"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/author"
-                  >
-
-                <TextView
-                    android:id="@+id/titleISBN2"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:text="Year"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="2010"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@+id/titleISBN2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titleISBN2"
-                    app:layout_constraintTop_toTopOf="@+id/titleISBN2"
-                    />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="7dp"
-                  android:orientation="horizontal"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/author"
-                  >
-
-                <TextView
-                    android:id="@+id/titleISBN4"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:text="Pages"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="112"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@+id/titleISBN4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titleISBN4"
-                    app:layout_constraintTop_toTopOf="@+id/titleISBN4"
-                    />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="7dp"
-                  android:orientation="horizontal"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/author"
-                  >
-
-                <TextView
-                    android:id="@+id/titleISBN5"
-                    android:layout_width="75dp"
-                    android:layout_height="wrap_content"
-                    android:text="Cover"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Unknown"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="@+id/titleISBN5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titleISBN5"
-                    app:layout_constraintTop_toTopOf="@+id/titleISBN5"
-                    />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
 
           </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-      </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/common_background_action_bar"
-          android:paddingStart="@dimen/padding"
-          android:paddingTop="10dp"
-          android:paddingEnd="@dimen/padding"
-          android:paddingBottom="10dp"
-          app:layout_collapseMode="pin"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/imageBookCard"
-          >
-
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/iconUser"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:src="@drawable/avatar_2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:riv_corner_radius="5dp"
-            />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/dataUser"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/padding"
-            app:layout_constraintBottom_toBottomOf="@+id/iconUser"
-            app:layout_constraintEnd_toStartOf="@+id/buttonMessage"
-            app:layout_constraintStart_toEndOf="@+id/iconUser"
-            app:layout_constraintTop_toTopOf="@+id/iconUser"
-            tools:ignore="RtlSymmetry"
-            >
-
-          <TextView
-              android:id="@+id/titleUser"
-              android:layout_width="0dp"
+          <Button
+              android:id="@+id/buttonMessage"
+              style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:paddingBottom="2dp"
-              android:text="Saint X: A Novel"
+              android:insetTop="0dp"
+              android:insetBottom="0dp"
+              android:minWidth="0dp"
+              android:minHeight="0dp"
+              android:paddingTop="7dp"
+              android:paddingBottom="7dp"
+              android:text="@string/view_book_btn_connect"
               android:textColor="@color/colorWhite"
-              android:textSize="14sp"
-              android:textStyle="bold"
+              app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
               app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              />
-
-          <TextView
-              android:id="@+id/authorUser"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:alpha="0.8"
-              android:ellipsize="end"
-              android:maxLines="1"
-              android:paddingBottom="3dp"
-              android:text="Alexis Schaitkin"
-              android:textColor="@color/colorWhite"
-              android:textSize="12sp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/titleUser"
+              app:layout_constraintStart_toEndOf="@+id/dataUser"
+              app:layout_constraintTop_toTopOf="@+id/userAvatar"
+              app:strokeColor="@color/colorWhite"
               />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/buttonMessage"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/view_book_btn_connect"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintBottom_toBottomOf="@+id/dataUser"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/dataUser"
-            app:layout_constraintTop_toTopOf="@+id/dataUser"
-            app:strokeColor="@color/colorWhite"
-            />
+      </com.google.android.material.appbar.AppBarLayout>
 
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
-
-      <LinearLayout
+      <androidx.core.widget.NestedScrollView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@drawable/common_background_action_bar"
-          android:orientation="vertical"
+          android:background="?android:selectableItemBackground"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
           >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorBackgroundPage"
+            android:background="@drawable/common_background_action_bar"
             android:orientation="vertical"
-            android:padding="@dimen/padding"
             >
 
-          <TextView
-              android:id="@+id/synopsisTitle"
+          <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="@string/view_book_synopsis"
-              android:textColor="?attr/colorText"
-              android:textSize="20sp"
-              android:textStyle="bold"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              />
+              android:background="?attr/colorBackgroundPage"
+              android:orientation="vertical"
+              android:padding="@dimen/padding"
+              >
 
-          <TextView
-              android:id="@+id/synopsis"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_book_synopsis"
+                android:textColor="?attr/colorText"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/bookSynopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="?attr/colorTextItemLite"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/synopsisTitle"
+                tools:text="Claire is only seven years old when her college-age sister"
+                />
+
+          </LinearLayout>
+
+          <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="10dp"
-              android:text="Claire is only seven years old when her college-age sister, Alison, disappears on the last night of their family vacation at a resort on the Caribbean island of Saint X. Several days later, Alison’s body is found in a remote spot on a nearby cay, and two local men–employees at the resort–are arrested. But the evidence is slim, the timeline against it, and the men are soon released. The story turns into national tabloid news, a lurid mystery that will go unsolved. For Claire and her parents, there is only the return home to broken lives.Claire is only seven years old when her college-age sister, Alison, disappears on the last night of their family vacation at a resort on the Caribbean island of Saint X. Several days later, Alison’s body is found in a remote spot on a nearby cay, and two local men–employees at the resort–are arrested. But the evidence is slim, the timeline against it, and the men are soon released. The story turns into national tabloid news, a lurid mystery that will go unsolved. For Claire and her parents, there is only the return home to broken lives.Claire is only seven years old when her college-age sister, Alison, disappears on the last night of their family vacation at a resort on the Caribbean island of Saint X. Several days later, Alison’s body is found in a remote spot on a nearby cay, and two local men–employees at the resort–are arrested. But the evidence is slim, the timeline against it, and the men are soon released. The story turns into national tabloid news, a lurid mystery that will go unsolved. For Claire and her parents, there is only the return home to broken lives.Claire is only seven years old when her college-age sister, Alison, disappears on the last night of their family vacation at a resort on the Caribbean island of Saint X. Several days later, Alison’s body is found in a remote spot on a nearby cay, and two local men–employees at the resort–are arrested. But the evidence is slim, the timeline against it, and the men are soon released. The story turns into national tabloid news, a lurid mystery that will go unsolved. For Claire and her parents, there is only the return home to broken lives.Claire is only seven years old when her college-age sister, Alison, disappears on the last night of their family vacation at a resort on the Caribbean island of Saint X. Several days later, Alison’s body is found in a remote spot on a nearby cay, and two local men–employees at the resort–are arrested. But the evidence is slim, the timeline against it, and the men are soon released. The story turns into national tabloid news, a lurid mystery that will go unsolved. For Claire and her parents, there is only the return home to broken lives.Claire is only seven years old when her college-age sister, Alison, disappears on the last night of their family vacation at a resort on the Caribbean island of Saint X. Several days later, Alison’s body is found in a remote spot on a nearby cay, and two local men–employees at the resort–are arrested. But the evidence is slim, the timeline against it, and the men are soon released. The story turns into national tabloid news, a lurid mystery that will go unsolved. For Claire and her parents, there is only the return home to broken lives."
-              android:textColor="?attr/colorTextItemLite"
-              android:textSize="16sp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/synopsisTitle"
-              />
+              android:background="?attr/colorBackgroundPage"
+              android:orientation="vertical"
+              android:padding="@dimen/padding"
+              >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_book_genre"
+                android:textColor="?attr/colorText"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/bookGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="?attr/colorTextItemLite"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/synopsisTitle"
+                tools:text="Christian Self Help | Military History"
+                />
+
+          </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorBackgroundPage"
-            android:orientation="vertical"
-            android:padding="@dimen/padding"
-            >
+      </androidx.core.widget.NestedScrollView>
 
-          <TextView
-              android:id="@+id/genreTitle"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Genre"
-              android:textColor="?attr/colorText"
-              android:textSize="20sp"
-              android:textStyle="bold"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-          <TextView
-              android:id="@+id/genre"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="10dp"
-              android:layout_marginBottom="20dp"
-              android:text="Christian Self Help | Military History"
-              android:textColor="?attr/colorTextItemLite"
-              android:textSize="16sp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/synopsisTitle"
-              />
-
-        </LinearLayout>
-
-      </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

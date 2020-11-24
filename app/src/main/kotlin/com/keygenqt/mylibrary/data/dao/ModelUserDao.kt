@@ -13,7 +13,7 @@ interface ModelUserDao {
     fun getModel(): ModelUser
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(model: ModelUser)
+    suspend fun insert(vararg model: ModelUser)
 
     @Query("DELETE FROM ModelUser")
     suspend fun deleteAll()

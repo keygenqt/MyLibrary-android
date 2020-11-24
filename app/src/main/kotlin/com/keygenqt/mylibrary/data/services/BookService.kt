@@ -19,6 +19,7 @@ package com.keygenqt.mylibrary.data.services
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.response.CheckResponse.Companion.checkResponse
 import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
 import com.keygenqt.mylibrary.hal.ListData
@@ -30,7 +31,20 @@ class BookService(
     private val preferences: BaseSharedPreferences
 ) {
     suspend fun getList(link: String, response: suspend (ListData<ModelBook>) -> Unit) {
-        api.getList(link).checkResponse(response)
+        api.getList(link).checkResponse { models ->
+            db.getDao<ModelBookDao>().let {
+                it.deleteAll()
+                it.insert(*(models.embedded[ModelBook.API_KEY])?.toTypedArray() ?: emptyArray())
+            }
+            response.invoke(models)
+        }
+    }
+
+    suspend fun getView(link: String, response: suspend (ModelBook) -> Unit) {
+        api.getView(link).checkResponse { model ->
+            db.getDao<ModelBookDao>().insert(model)
+            response.invoke(model)
+        }
     }
 
     suspend fun getSearch(response: suspend (SearchModelBooks) -> Unit) {

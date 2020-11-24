@@ -27,6 +27,9 @@ import retrofit2.http.Url
 interface BookApi {
     @GET
     suspend fun getList(@Url link: String): Response<ListData<ModelBook>>
+    
+    @GET
+    suspend fun getView(@Url link: String): Response<ModelBook>
 
     @GET("/{path}/search")
     suspend fun getSearch(@Path("path") path: String): Response<SearchModelBooks>

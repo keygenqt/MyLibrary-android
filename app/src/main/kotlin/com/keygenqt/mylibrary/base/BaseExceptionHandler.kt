@@ -19,6 +19,7 @@ package com.keygenqt.mylibrary.base
 import android.app.Activity
 import android.app.Application.*
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -80,6 +81,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                     }
                 }
             }
+            Log.e("TAG", throwable.stackTraceToString())
         })
     }
 

@@ -15,7 +15,7 @@ interface ModelRootDao {
     fun getModel(version: String): ModelRoot
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(model: ModelRoot)
+    suspend fun insert(vararg model: ModelRoot)
 
     @Query("DELETE FROM ModelRoot")
     suspend fun deleteAll()

@@ -54,7 +54,17 @@
 
   // view book
   <string name="view_book_synopsis">Synopsis</string>
+  <string name="view_book_genre">Genre</string>
   <string name="view_book_btn_connect">Connect</string>
+  <string name="view_book_publisher">Publisher</string>
+  <string name="view_book_ISBN">ISBN</string>
+  <string name="view_book_year">Year</string>
+  <string name="view_book_pages">Pages</string>
+  <string name="view_book_cover">Cover</string>
+  <string name="view_book_menu_edit">Edit Book</string>
+  <string name="view_book_menu_delete">Delete Book</string>
+  <string name="view_book_menu_share">Share Book</string>
+  <string name="view_book_get_error">Book Not Allowed</string>
 
   // settings
   <string name="settings_title">SETTINGS</string>
