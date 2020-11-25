@@ -24,15 +24,13 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.base.ListAdapterSearch
+import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import kotlinx.android.synthetic.main.item_book_list.view.*
 import org.koin.java.KoinJavaComponent.inject
 
-class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (String, Link) -> Unit)
-    : ListAdapterSearch<ModelBook>(layout, viewModel, search) {
+class AdapterBooks(@LayoutRes layout: Int, nextPage: (Link) -> Unit) : ListAdapter<ModelBook>(layout, nextPage) {
 
     private val sharedPreferences by inject(BaseSharedPreferences::class.java)
 
@@ -42,13 +40,13 @@ class AdapterBooks(@LayoutRes layout: Int, viewModel: ViewModelPage, search: (St
         const val SEARCH_FIND_ALL_BY_SALE = "findAllBySale"
     }
 
-    override fun getStrings(): LinkedHashMap<String, Int> {
-        return linkedMapOf(
-            SEARCH_SELF to R.string.search_books_self,
-            SEARCH_FIND_ALL_BY_USER_ID to R.string.search_books_findAllByUserId,
-            SEARCH_FIND_ALL_BY_SALE to R.string.search_books_findAllBySale
-        )
-    }
+    //    override fun getStrings(): LinkedHashMap<String, Int> {
+    //        return linkedMapOf(
+    //            SEARCH_SELF to R.string.search_books_self,
+    //            SEARCH_FIND_ALL_BY_USER_ID to R.string.search_books_findAllByUserId,
+    //            SEARCH_FIND_ALL_BY_SALE to R.string.search_books_findAllBySale
+    //        )
+    //    }
 
     override fun onBindViewHolder(holder: View, model: ModelBook) {
         holder.apply {

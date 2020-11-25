@@ -22,6 +22,7 @@ import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
+import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ListData
 import com.keygenqt.mylibrary.ui.books.SearchModelBooks
 
@@ -30,13 +31,18 @@ class BookService(
     private val db: RoomDatabase,
     private val preferences: BaseSharedPreferences
 ) {
-    suspend fun getList(link: String, response: suspend (ListData<ModelBook>) -> Unit) {
-        api.getList(link).checkResponse { models ->
-            db.getDao<ModelBookDao>().let {
-                it.deleteAll()
-                it.insert(*(models.embedded[ModelBook.API_KEY])?.toTypedArray() ?: emptyArray())
+    suspend fun getList(link: Link?, response: suspend (ListData<ModelBook>) -> Unit) {
+        link?.let {
+            api.getList(it.link).checkResponse { data ->
+                db.getDao<ModelBookDao>().let { dao ->
+                    if (it.isFirstPage()) {
+                        dao.deleteAll()
+                    }
+                    dao.insert(*(data.items).toTypedArray())
+                    data.items = dao.getAll()
+                    response.invoke(data)
+                }
             }
-            response.invoke(models)
         }
     }
 

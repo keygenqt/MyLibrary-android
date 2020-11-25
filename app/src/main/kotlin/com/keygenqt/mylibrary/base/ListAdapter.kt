@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.base
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +24,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.hal.ListData
-import com.keygenqt.mylibrary.interfaces.ViewModelPage
-import java.util.ArrayList
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -45,20 +41,15 @@ class AdapterHolderLoading(
 @Suppress("UNCHECKED_CAST")
 abstract class ListAdapter<T>(
     @LayoutRes val id: Int,
-    private val viewModel: ViewModelPage? = null
+    private var nextPage: ((Link) -> Unit)? = null
 ) :
     RecyclerView.Adapter<ViewHolder>() {
-
-    companion object {
-        const val LIST_DATA_TYPE_ADD = 1
-        const val LIST_DATA_TYPE_SET = 2
-    }
 
     private var linkNext: Link? = null
 
     private var timer = Timer()
 
-    internal var items = mutableListOf<Any>()
+    private var items = mutableListOf<Any>()
 
     abstract fun onBindViewHolder(holder: View, model: T)
     open fun onBindViewHolderFilter(holder: View, model: BaseSearchModel) {}
@@ -82,8 +73,8 @@ abstract class ListAdapter<T>(
         if (holder.itemViewType == 0) {
             timer = Timer()
             timer.schedule(800) {
-                linkNext?.let {
-                    viewModel?.link?.postValue(it)
+                linkNext?.let { link ->
+                    nextPage?.invoke(link)
                 }
                 timer.cancel()
             }
@@ -105,30 +96,17 @@ abstract class ListAdapter<T>(
     }
 
     override fun getItemCount(): Int {
-        return items.size + (if (viewModel != null && linkNext != null) 1 else 0)
+        return items.size + (if (nextPage != null && linkNext != null) 1 else 0)
     }
 
-    fun setListData(listData: ListData<*>, delegate: (type: Int) -> Unit) {
-        listData.linkSelf?.let {
-            Uri.parse(it.href).getQueryParameter("page")?.let { page ->
-                if (page.toInt() == 0) {
-                    clearItemsBeforeSetList()
-                    delegate.invoke(LIST_DATA_TYPE_SET)
-                } else {
-                    delegate.invoke(LIST_DATA_TYPE_ADD)
-                }
-            } ?: run {
-                clearItemsBeforeSetList()
-                delegate.invoke(LIST_DATA_TYPE_SET)
-            }
+    fun updateItems(items: List<Any>, linkNext: Link? = null) {
+        if (items.size == this.items.size || items.size < this.items.size) {
+            this.items.clear()
+            this.items.addAll(items)
+        } else {
+            this.items.addAll(items.subList(this.items.size, items.size))
         }
-        this.items.addAll(listData.items as ArrayList<Any>)
-        delegate.invoke(LIST_DATA_TYPE_ADD)
-        this.linkNext = listData.linkNext
+        this.linkNext = linkNext
         notifyDataSetChanged()
-    }
-
-    open fun clearItemsBeforeSetList() {
-        items.clear()
     }
 }

@@ -16,9 +16,11 @@
 
 package com.keygenqt.mylibrary.data.models
 
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseModel
 
 @Entity(tableName = "ModelBook")
@@ -61,5 +63,17 @@ data class ModelBook(
 ) : BaseModel() {
     companion object {
         const val API_KEY = "books"
+
+        const val COVER_TYPE_SOFT = "soft"
+        const val COVER_TYPE_SOLID = "solid"
+        const val COVER_TYPE_UNKNOWN = "unknown"
+    }
+
+    fun getCoverType(context: Context): String? {
+        return when (coverType) {
+            COVER_TYPE_SOFT -> context.getString(R.string.view_book_type_soft)
+            COVER_TYPE_SOLID -> context.getString(R.string.view_book_type_solid)
+            else -> null
+        }
     }
 }

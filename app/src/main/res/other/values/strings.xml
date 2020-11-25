@@ -65,6 +65,8 @@
   <string name="view_book_menu_delete">Delete Book</string>
   <string name="view_book_menu_share">Share Book</string>
   <string name="view_book_get_error">Book Not Allowed</string>
+  <string name="view_book_type_soft">Soft</string>
+  <string name="view_book_type_solid">Solid</string>
 
   // settings
   <string name="settings_title">SETTINGS</string>

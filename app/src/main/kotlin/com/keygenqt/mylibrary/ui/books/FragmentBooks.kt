@@ -19,17 +19,13 @@ package com.keygenqt.mylibrary.ui.books
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListAdapter
-import com.keygenqt.mylibrary.base.ListAdapterSearch
-import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
@@ -37,67 +33,27 @@ import org.koin.android.ext.android.inject
 @ActionBarEnable
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
-    private var changeSearch = false
     private val viewModel: ViewBooks by inject()
-    private val sharedPreferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterBooks(R.layout.item_book_list, viewModel) { key, link ->
-                changeSearch = true
-                when (key) {
-                    AdapterBooks.SEARCH_SELF -> {
-                        viewModel.link.postValue(null)
-                    }
-                    AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> {
-                        viewModel.link.postValue(link.linkWithParams(hashMapOf("userId" to sharedPreferences.userId!!)))
-                    }
-                    AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> {
-                        viewModel.link.postValue(link.linkWithParams(hashMapOf("sale" to "true")))
-                    }
-                }
+            recyclerView.adapter = AdapterBooks(R.layout.item_book_list) { linkNext ->
+                viewModel.link.postValue(linkNext)
             }
+
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                if (viewModel.link.value?.isSearch() == true) {
-                    viewModel.link.postValue(viewModel.link.value!!.linkClearPageable)
-                } else {
-                    viewModel.link.postValue(null)
-                }
+                viewModel.updateList()
             }
         }
     }
 
-    @CallOnCreate fun observeLoading() {
+    @CallOnCreate fun observeListItems() {
         initView {
-            viewModel.loading.observe(viewLifecycleOwner, { status ->
-                if (!changeSearch) {
-                    refresh.isRefreshing = status
-                } else {
-                    changeSearch = false
-                }
-            })
-        }
-    }
-
-    @CallOnCreate fun observeSearchModel() {
-        initView {
-            viewModel.search.observe(viewLifecycleOwner, { searchModel ->
-                (recyclerView.adapter as ListAdapterSearch<*>).setSearchModel(searchModel)
-            })
-        }
-    }
-
-    @CallOnCreate fun observeListData() {
-        initView {
-            viewModel.listData.observe(viewLifecycleOwner) { listData ->
-                (recyclerView.adapter as ListAdapter<*>).setListData(listData) { type ->
-                    if (type == ListAdapter.LIST_DATA_TYPE_SET) {
-                        notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
-                        recyclerView.smoothScrollToPosition(0)
-                    }
-                }
+            viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
+                refresh.isRefreshing = false
+                (recyclerView.adapter as ListAdapter<*>).updateItems(listData.items, listData.linkNext)
             }
         }
     }

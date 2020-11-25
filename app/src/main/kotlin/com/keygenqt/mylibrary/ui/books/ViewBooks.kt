@@ -16,7 +16,10 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
@@ -24,35 +27,29 @@ import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.BookService
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.interfaces.ViewModelPage
 import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewBooks(
     private val db: RoomDatabase,
     private val service: BookService,
     private val preferences: BaseSharedPreferences
-) : ViewModel(), ViewModelPage {
+) : ViewModel() {
 
-    override val link: MutableLiveData<Link?> = MutableLiveData()
-    override val loading: MutableLiveData<Boolean> = MutableLiveData()
+    val link: MutableLiveData<Link> = MutableLiveData()
 
-    init {
-        link.postValue(null)
-    }
-
-    val listData = link.switchMap {
+    val switchMap = link.switchMap {
         liveData(getExceptionHandler()) {
-            loading.postValue(link.value?.isFirstPage() == true)
-            service.getList(link.value?.link ?: db.getDao<ModelRootDao>()!!.getModel(API_VERSION).getLink(ModelBook.API_KEY).link) { listData ->
-                loading.postValue(false)
-                emit(listData)
+            service.getList(link.value) { response ->
+                emit(response)
             }
         }
     }
 
-    val search: LiveData<SearchModelBooks> = liveData(getExceptionHandler()) {
-        service.getSearch { links ->
-            emit(links)
-        }
+    init {
+        updateList()
+    }
+
+    fun updateList() {
+        link.postValue(db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY))
     }
 }

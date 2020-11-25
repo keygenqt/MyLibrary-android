@@ -9,6 +9,9 @@ import com.keygenqt.mylibrary.data.models.ModelBook
 @Dao
 interface ModelBookDao {
 
+    @Query("SELECT * FROM ModelBook")
+    fun getAll(): List<ModelBook>
+
     @Query("SELECT * FROM ModelBook WHERE id=:id")
     fun getModel(id: String): ModelBook?
 

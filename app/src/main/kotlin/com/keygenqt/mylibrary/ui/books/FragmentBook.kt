@@ -87,13 +87,18 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                     bookISBNBlock.visibility = if (model.isbn.isEmpty()) View.GONE else View.VISIBLE
                     bookYearBlock.visibility = if (model.year == "0") View.GONE else View.VISIBLE
                     bookPagesBlock.visibility = if (model.numberOfPages == "0") View.GONE else View.VISIBLE
-                    bookCoverBlock.visibility = if (model.coverType.isEmpty()) View.GONE else View.VISIBLE
 
                     bookPublisher.text = model.publisher
                     bookISBN.text = model.isbn
                     bookYear.text = model.year
                     bookPages.text = model.numberOfPages
-                    bookCover.text = model.coverType
+
+                    model.getCoverType(context)?.let {
+                        bookCover.text = it
+                        bookCoverBlock.visibility = View.VISIBLE
+                    } ?: run {
+                        bookCoverBlock.visibility = View.GONE
+                    }
 
                     bookSynopsis.text = model.description
                     bookGenre.text = "Christian Self Help | Military History"

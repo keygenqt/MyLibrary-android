@@ -16,7 +16,7 @@
 
 package com.keygenqt.mylibrary.hal
 
-import com.google.gson.annotations.*
+import com.google.gson.annotations.SerializedName
 
 data class ListData<T>(
     @SerializedName("_embedded")
@@ -29,10 +29,13 @@ data class ListData<T>(
     var page: Page? = null
 ) {
 
-    val items: List<T>
+    var items: List<T>
         get() {
             embedded.forEach { return it.value }
             return emptyList()
+        }
+        set(value) {
+            embedded[embedded.keys.first()] = value
         }
 
     val linkFirst: Link?
