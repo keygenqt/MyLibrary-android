@@ -16,16 +16,16 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
+import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.services.BookService
+import com.keygenqt.mylibrary.extensions.toListData
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.utils.API_VERSION
 
@@ -35,13 +35,24 @@ class ViewBooks(
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
 
+    private val self = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
+
     val link: MutableLiveData<Link> = MutableLiveData()
 
     val switchMap = link.switchMap {
         liveData(getExceptionHandler()) {
+            if (link.value == self) {
+                emit(db.getDao<ModelBookDao>().getAll(20).toListData(ModelBook.API_KEY, self))
+            }
             service.getList(link.value) { response ->
                 emit(response)
             }
+        }
+    }
+
+    val search: LiveData<ModelSearch> = liveData(getExceptionHandler()) {
+        service.getSearch { search ->
+            emit(search)
         }
     }
 

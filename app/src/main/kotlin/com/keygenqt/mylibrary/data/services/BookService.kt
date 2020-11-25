@@ -20,11 +20,12 @@ import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.response.CheckResponse.Companion.checkResponse
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
+import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ListData
-import com.keygenqt.mylibrary.ui.books.SearchModelBooks
 
 class BookService(
     private val api: BookApi,
@@ -38,7 +39,7 @@ class BookService(
                     if (it.isFirstPage()) {
                         dao.deleteAll()
                     }
-                    dao.insert(*(data.items).toTypedArray())
+                    data.items.forEach { model -> dao.insert(model) }
                     data.items = dao.getAll()
                     response.invoke(data)
                 }
@@ -53,7 +54,11 @@ class BookService(
         }
     }
 
-    suspend fun getSearch(response: suspend (SearchModelBooks) -> Unit) {
-        api.getSearch(API_KEY_MODEL_BOOK).checkResponse(response)
+    suspend fun getSearch(id: String = API_KEY_MODEL_BOOK, response: suspend (ModelSearch) -> Unit = {}) {
+        api.getSearch(id).checkResponse { model ->
+            model.id = id
+            db.getDao<ModelSearchDao>().insert(model)
+            response.invoke(model)
+        }
     }
 }

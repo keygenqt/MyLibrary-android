@@ -28,6 +28,13 @@ data class Link(
             return href.substringBefore("{")
         }
 
+    val linkClear: Link
+        get() {
+            val uri = Uri.parse(link)
+            val uriClear = uri.buildUpon().clearQuery()
+            return Link(uriClear.toString())
+        }
+
     val linkClearPageable: Link
         get() {
             val uri = Uri.parse(link)

@@ -7,16 +7,19 @@ import com.keygenqt.mylibrary.data.converters.ListConverter
 import com.keygenqt.mylibrary.data.converters.MapConverter
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
+import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelRoot
+import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.models.ModelUser
 
 @Database(entities = [
     ModelRoot::class,
     ModelUser::class,
     ModelBook::class,
-], version = 8, exportSchema = false)
+    ModelSearch::class,
+], version = 9, exportSchema = false)
 @TypeConverters(value = [
     ListConverter::class,
     MapConverter::class,
@@ -25,4 +28,5 @@ abstract class RoomConf : RoomDatabase() {
     abstract fun modelRootDao(): ModelRootDao
     abstract fun modelUserDao(): ModelUserDao
     abstract fun modelBookDao(): ModelBookDao
+    abstract fun modelSearchDao(): ModelSearchDao
 }

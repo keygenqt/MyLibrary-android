@@ -39,24 +39,19 @@ class AdapterHolderLoading(
 ) : ViewHolder(view)
 
 @Suppress("UNCHECKED_CAST")
-abstract class ListAdapter<T>(
-    @LayoutRes val id: Int,
-    private var nextPage: ((Link) -> Unit)? = null
-) :
-    RecyclerView.Adapter<ViewHolder>() {
+abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> Unit)? = null)
+    : RecyclerView.Adapter<ViewHolder>() {
 
+    var linkSelf: Link? = null
     private var linkNext: Link? = null
-
     private var timer = Timer()
+    internal var items = mutableListOf<Any>()
 
-    private var items = mutableListOf<Any>()
-
-    abstract fun onBindViewHolder(holder: View, model: T)
-    open fun onBindViewHolderFilter(holder: View, model: BaseSearchModel) {}
+    abstract fun onBindViewHolder(holder: View, model: Any)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is AdapterHolder -> onBindViewHolder(holder.view, items[position] as T)
+            is AdapterHolder -> onBindViewHolder(holder.view, items[position])
         }
     }
 
@@ -99,14 +94,17 @@ abstract class ListAdapter<T>(
         return items.size + (if (nextPage != null && linkNext != null) 1 else 0)
     }
 
-    fun updateItems(items: List<Any>, linkNext: Link? = null) {
-        if (items.size == this.items.size || items.size < this.items.size) {
-            this.items.clear()
-            this.items.addAll(items)
-        } else {
-            this.items.addAll(items.subList(this.items.size, items.size))
-        }
+    open fun updateItems(items: List<Any>, linkSelf: Link?, linkNext: Link?) {
+        this.items.clear()
+        this.items.addAll(items)
         this.linkNext = linkNext
+        this.linkSelf = linkSelf
         notifyDataSetChanged()
+    }
+
+    fun updateList() {
+        linkSelf?.let { link ->
+            nextPage?.invoke(link.linkClearPageable)
+        }
     }
 }
