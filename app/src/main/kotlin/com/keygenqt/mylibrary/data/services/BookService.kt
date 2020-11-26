@@ -24,7 +24,7 @@ import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_BOOK
-import com.keygenqt.mylibrary.hal.Link
+import com.keygenqt.mylibrary.hal.LinkSearch
 import com.keygenqt.mylibrary.hal.ListData
 
 class BookService(
@@ -32,23 +32,30 @@ class BookService(
     private val db: RoomDatabase,
     private val preferences: BaseSharedPreferences
 ) {
-    suspend fun getList(link: Link?, response: suspend (ListData<ModelBook>) -> Unit) {
-        link?.let {
-            api.getList(it.link).checkResponse { data ->
-                db.getDao<ModelBookDao>().let { dao ->
-                    if (it.isFirstPage()) {
-                        dao.deleteAll()
-                    }
-                    data.items.forEach { model -> dao.insert(model) }
-                    data.items = dao.getAll()
-                    response.invoke(data)
+    suspend fun getList(linkSearch: LinkSearch, response: suspend (ListData<ModelBook>) -> Unit) {
+        api.getList(linkSearch.getLink()).checkResponse { listData ->
+
+            // save db
+            db.getDao<ModelBookDao>().let { dao ->
+                if (linkSearch.isFirstPage()) {
+                    dao.deleteAll(linkSearch.key)
                 }
+                dao.insert(listData.items.map { it.type = linkSearch.key; it }.toList())
             }
+
+            // clear item if first
+            if (linkSearch.isFirstPage()) {
+                linkSearch.clear()
+            }
+
+            // send response + items
+            response.invoke(listData.mergeItems(linkSearch))
         }
     }
 
     suspend fun getView(link: String, response: suspend (ModelBook) -> Unit) {
         api.getView(link).checkResponse { model ->
+            model.type = "view"
             db.getDao<ModelBookDao>().insert(model)
             response.invoke(model)
         }

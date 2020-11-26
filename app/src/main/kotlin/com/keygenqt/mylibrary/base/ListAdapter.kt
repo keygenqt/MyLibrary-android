@@ -102,7 +102,7 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> U
         notifyDataSetChanged()
     }
 
-    fun updateList() {
+    open fun updateList() {
         linkSelf?.let { link ->
             nextPage?.invoke(link.linkClearPageable)
         }

@@ -43,7 +43,7 @@ class ViewEditProfile(
 
     val userMe: LiveData<ModelUser> = liveData(BaseExceptionHandler.getExceptionHandler()) {
         emit(db.getDao<ModelUserDao>()!!.getModel())
-        service.getUserMe(linkModel.link) { model ->
+        service.getUserMe(linkModel.value) { model ->
             emit(model)
         }
     }
@@ -51,7 +51,7 @@ class ViewEditProfile(
     val updateUser = params.switchMap {
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
             user?.let {
-                service.updateUser(it.links.getValue(API_KEY_SELF).link, it) {
+                service.updateUser(it.links.getValue(API_KEY_SELF).value, it) {
                     emit(true)
                 }
             }

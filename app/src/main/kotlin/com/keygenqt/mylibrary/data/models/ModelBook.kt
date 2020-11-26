@@ -27,6 +27,8 @@ import com.keygenqt.mylibrary.base.BaseModel
 data class ModelBook(
 
     @PrimaryKey
+    var key: String = "",
+
     @SerializedName("id")
     var id: String = "",
 
@@ -61,6 +63,13 @@ data class ModelBook(
     var image: String = ""
 
 ) : BaseModel() {
+
+    var type: String = ""
+        set(value) {
+            key = "$id-$value"
+            field = value
+        }
+
     companion object {
         const val API_KEY = "books"
 

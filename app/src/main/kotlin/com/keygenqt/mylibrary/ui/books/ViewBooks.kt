@@ -19,6 +19,7 @@ package com.keygenqt.mylibrary.ui.books
 import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
@@ -27,6 +28,7 @@ import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.services.BookService
 import com.keygenqt.mylibrary.extensions.toListData
 import com.keygenqt.mylibrary.hal.Link
+import com.keygenqt.mylibrary.hal.LinkSearch
 import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewBooks(
@@ -35,16 +37,14 @@ class ViewBooks(
     private val preferences: BaseSharedPreferences
 ) : ViewModel() {
 
-    private val self = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
+    private val linkSearch: MutableLiveData<LinkSearch> = MutableLiveData()
 
-    val link: MutableLiveData<Link> = MutableLiveData()
-
-    val switchMap = link.switchMap {
+    val switchMap = linkSearch.switchMap {
         liveData(getExceptionHandler()) {
-            if (link.value == self) {
-                emit(db.getDao<ModelBookDao>().getAll(20).toListData(ModelBook.API_KEY, self))
+            if (it.isFirstPage()) {
+                emit(db.getDao<ModelBookDao>().getAll(it.key).toListData(ModelBook.API_KEY, it.getLinkModel()))
             }
-            service.getList(link.value) { response ->
+            service.getList(it) { response ->
                 emit(response)
             }
         }
@@ -57,10 +57,28 @@ class ViewBooks(
     }
 
     init {
-        updateList()
+        updateList(ListSearchAdapter.SEARCH_SELF)
     }
 
-    fun updateList() {
-        link.postValue(db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY))
+    fun updateList(key: String, link: Link? = null) {
+        if (key == ListSearchAdapter.SEARCH_SELF) {
+            linkSearch.postValue(LinkSearch(
+                key = key,
+                link = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY),
+                items = mutableListOf()
+            ))
+        } else {
+            linkSearch.postValue(LinkSearch(
+                key = key,
+                items = linkSearch.value?.items ?: mutableListOf(),
+                link = link!!.linkWithParams(
+                    when (key) {
+                        AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> hashMapOf("userId" to preferences.userId)
+                        AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> hashMapOf("sale" to "true")
+                        else -> hashMapOf()
+                    }
+                )
+            ))
+        }
     }
 }

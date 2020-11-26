@@ -36,7 +36,7 @@ class ViewSplash(
     lateinit var modelRoot: ModelRoot
 
     val userMe: LiveData<ModelUser> = liveData(getExceptionHandler()) {
-        service.getUserMe(modelRoot.links[API_KEY_MODEL_USERS]?.link!!) { user ->
+        service.getUserMe(modelRoot.links[API_KEY_MODEL_USERS]?.value!!) { user ->
             emit(user)
         }
     }

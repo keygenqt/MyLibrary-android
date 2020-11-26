@@ -18,26 +18,27 @@ package com.keygenqt.mylibrary.hal
 
 import android.net.Uri
 import com.google.gson.annotations.SerializedName
+import java.util.HashMap
 
 data class Link(
     @SerializedName("href")
     var href: String = ""
 ) {
-    val link: String
+    val value: String
         get() {
             return href.substringBefore("{")
         }
 
     val linkClear: Link
         get() {
-            val uri = Uri.parse(link)
+            val uri = Uri.parse(value)
             val uriClear = uri.buildUpon().clearQuery()
             return Link(uriClear.toString())
         }
 
     val linkClearPageable: Link
         get() {
-            val uri = Uri.parse(link)
+            val uri = Uri.parse(value)
             val uriClear = uri.buildUpon().clearQuery()
             uri.queryParameterNames.forEach {
                 if (it != "page" && it != "size") {
@@ -52,8 +53,8 @@ data class Link(
             return href.substringAfter("{").replace("}", "").replace("?", "").split(",")
         }
 
-    fun linkWithParams(params: HashMap<String, String>): Link {
-        val uri = Uri.parse(link).buildUpon()
+    fun linkWithParams(params: HashMap<String, out String?>): Link {
+        val uri = Uri.parse(value).buildUpon()
         this.params.forEach {
             if (params.containsKey(it)) {
                 uri.appendQueryParameter(it, params[it])

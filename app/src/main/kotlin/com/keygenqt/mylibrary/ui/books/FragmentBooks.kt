@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
@@ -39,35 +38,16 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
 
-    private val sharedPreferences: BaseSharedPreferences by inject()
-
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterBooks(R.layout.item_book_list) { key, linkNext ->
-
                 refresh.isRefreshing = ListSearchAdapter.SEARCH_PAGE != key
-
-                when (key) {
-                    AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> {
-                        sharedPreferences.userId?.let { userId ->
-                            viewModel.link.postValue(linkNext.linkWithParams(hashMapOf("userId" to userId)))
-                        }
-                    }
-                    AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> {
-                        viewModel.link.postValue(linkNext.linkWithParams(hashMapOf("sale" to "true")))
-                    }
-                    ListSearchAdapter.SEARCH_SELF -> {
-                        viewModel.updateList()
-                    }
-                    ListSearchAdapter.SEARCH_PAGE -> {
-                        viewModel.link.postValue(linkNext)
-                    }
-                }
+                viewModel.updateList(key, linkNext)
             }
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                (recyclerView.adapter as ListAdapter<*>).updateList()
+                (recyclerView.adapter as ListSearchAdapter<*>).updateList()
             }
         }
     }
@@ -76,7 +56,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
                 refresh.isRefreshing = false
-                (recyclerView.adapter as ListAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
+                (recyclerView.adapter as ListSearchAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
                 notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
             }
             viewModel.search.observe(viewLifecycleOwner) { search ->

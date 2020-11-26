@@ -29,6 +29,17 @@ data class ListData<T>(
     var page: Page? = null
 ) {
 
+    var itemsAny: List<Any>
+        get() {
+            embedded.forEach { return it.value.map { m -> m as Any } }
+            return emptyList()
+        }
+        set(value) {
+            if (value.isNotEmpty()) {
+                embedded[embedded.keys.first()] = value.map { m -> m as T }
+            }
+        }
+
     var items: List<T>
         get() {
             embedded.forEach { return it.value }
@@ -77,4 +88,10 @@ data class ListData<T>(
             }
             return null
         }
+
+    fun mergeItems(linkSearch: LinkSearch): ListData<T> {
+        linkSearch.items.addAll(itemsAny)
+        itemsAny = linkSearch.items
+        return this
+    }
 }

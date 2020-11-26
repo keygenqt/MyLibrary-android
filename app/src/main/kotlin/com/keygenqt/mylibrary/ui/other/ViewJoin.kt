@@ -44,7 +44,7 @@ class ViewJoin(
                 preferences.token = model.token
 
                 service.getRootLinks { links ->
-                    service.getUserMe(links.links[API_KEY_MODEL_USERS]?.link!!) {
+                    service.getUserMe(links.links[API_KEY_MODEL_USERS]?.value!!) {
                         emit(model)
                     }
                 }

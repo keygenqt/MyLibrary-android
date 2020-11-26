@@ -41,7 +41,7 @@ class ViewBook(
             db.getDao<ModelBookDao>().getModel(id)?.let { model ->
                 emit(model)
                 loading.postValue(true)
-                service.getView(model.getLink(API_KEY_SELF).link) { data ->
+                service.getView(model.getLink(API_KEY_SELF).value) { data ->
                     loading.postValue(false)
                     emit(data)
                 }

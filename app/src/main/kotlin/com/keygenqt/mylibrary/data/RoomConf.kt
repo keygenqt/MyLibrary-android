@@ -19,7 +19,7 @@ import com.keygenqt.mylibrary.data.models.ModelUser
     ModelUser::class,
     ModelBook::class,
     ModelSearch::class,
-], version = 9, exportSchema = false)
+], version = 19, exportSchema = false)
 @TypeConverters(value = [
     ListConverter::class,
     MapConverter::class,

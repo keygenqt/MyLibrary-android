@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView.*
 import com.google.android.material.chip.Chip
 import com.keygenqt.mylibrary.R.*
@@ -42,10 +43,13 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
         const val SEARCH_SELF = "self"
     }
 
+    var view: View? = null
+
     abstract fun getStrings(): LinkedHashMap<String, Int>
 
     private fun bindView(view: View, model: ModelSearch) {
         view.apply {
+            this@ListSearchAdapter.view = this
             chipGroup.setOnCheckedChangeListener(null)
             chipGroup.removeAllViews()
             getStrings().forEach { string ->
@@ -91,6 +95,18 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
         }
     }
 
+    override fun updateList() {
+        view?.apply {
+            chipGroup.children.forEach { chip ->
+                if (chip is Chip && chip.isChecked) {
+                    linkSelf?.let { link ->
+                        nextPageSearch?.invoke(chip.tag as String, link.linkClearPageable)
+                    }
+                }
+            }
+        }
+    }
+
     fun addSearchModel(search: ModelSearch) {
         this.items.add(0, search)
         notifyDataSetChanged()
@@ -106,8 +122,8 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
                     it.text = title
                     chipGroup.addView(it)
                     linkSelf?.let { linkSelf ->
-                        if (linkSelf.link.contains("search/")) {
-                            it.isChecked = linkSelf.linkClear.link == link.linkClear.link
+                        if (linkSelf.value.contains("search/")) {
+                            it.isChecked = linkSelf.linkClear.value == link.linkClear.value
                         } else {
                             it.isChecked = key == SEARCH_SELF
                         }
