@@ -8,6 +8,7 @@
     <item name="colorTextItemLite">#222222</item>
     <item name="colorTextLabel">#757575</item>
     <item name="colorBackgroundPage">#ffffff</item>
+    <item name="colorBackgroundLoading">#FFFFFF</item>
     <item name="colorBackgroundList">#DEDEDE</item>
     <item name="colorBackgroundListItem">#FFFFFF</item>
     <item name="colorDividingLine">#818181</item>

@@ -30,7 +30,7 @@ import org.koin.java.KoinJavaComponent.inject
 
 class AdapterBooks(@LayoutRes layout: Int, nextPage: (String, Link) -> Unit) : ListSearchAdapter<ModelBook>(layout, nextPage) {
 
-    private val sharedPreferences by inject(BaseSharedPreferences::class.java)
+    private val preferences by inject(BaseSharedPreferences::class.java)
 
     companion object {
         const val SEARCH_FIND_ALL_BY_USER_ID = "findAllByUserId"
@@ -54,8 +54,8 @@ class AdapterBooks(@LayoutRes layout: Int, nextPage: (String, Link) -> Unit) : L
 
                 Glide.with(this)
                     .load(model.image)
-                    .placeholder(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
-                    .error(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
+                    .placeholder(preferences.resDefaultBook)
+                    .error(preferences.resDefaultBook)
                     .into(imageBook)
 
                 itemBlock.setOnClickListener {

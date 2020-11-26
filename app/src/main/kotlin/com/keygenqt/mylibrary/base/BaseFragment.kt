@@ -30,13 +30,19 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.appBarLayout
+import kotlinx.android.synthetic.main.activity_main.ivMoon
+import kotlinx.android.synthetic.main.activity_main.loading
+import kotlinx.android.synthetic.main.activity_main.lottieAnimationView
 import kotlinx.android.synthetic.main.activity_main.view.progressBar
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
     annotation class CallOnCreate
+
+    private val preferences: BaseSharedPreferences by inject()
 
     private var _view: View? = null
 
@@ -95,5 +101,15 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
     fun statusProgress(status: Boolean) {
         requireActivity().appBarLayout.progressBar.visibility = if (status) View.VISIBLE else View.GONE
+    }
+
+    fun statusProgressPage(status: Boolean) {
+        requireActivity().loading.visibility = if (status) View.VISIBLE else View.GONE
+        requireActivity().ivMoon.visibility = if (status && (preferences.grayTheme || preferences.darkTheme)) View.VISIBLE else View.GONE
+        if (status) {
+            requireActivity().lottieAnimationView.playAnimation()
+        } else {
+            requireActivity().lottieAnimationView.resumeAnimation()
+        }
     }
 }

@@ -17,6 +17,7 @@
 package com.keygenqt.mylibrary.base
 
 import android.content.SharedPreferences
+import com.keygenqt.mylibrary.R
 import java.util.UUID
 
 class BaseSharedPreferences(private val preferences: SharedPreferences) {
@@ -80,6 +81,11 @@ class BaseSharedPreferences(private val preferences: SharedPreferences) {
                 preferences.edit().putString("uid", UUID.randomUUID().toString()).apply()
             }
             return preferences.getString("uid", null) ?: ""
+        }
+
+    val resDefaultBook: Int
+        get() {
+            return if (darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book
         }
 
 }

@@ -22,7 +22,6 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import androidx.core.text.HtmlCompat
-import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
@@ -45,8 +44,10 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                 // add freevector
                 put(JSONObject().apply {
                     put("libraryName", "FreeVector.com")
-                    put("license",
-                        "This file is distributed under the <a href='https://www.freevector.com/standard-license'>Our Standard License</a> license")
+                    put(
+                        "license",
+                        "This file is distributed under the <a href='https://www.freevector.com/standard-license'>Our Standard License</a> license"
+                    )
                     put("url", "https://www.freevector.com")
                     put("urlName", "www.freevector.com")
                     put("licenseUrl", "https://www.freevector.com/cute-cartoon-faces-19020")
@@ -54,8 +55,7 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                 })
             })
 
-            val body = JSONObject(context.resources.openRawResource(R.raw.licenses)
-                .bufferedReader().use { it.readText() })
+            val body = JSONObject(context.resources.assets.open("licenses.json").bufferedReader().use { it.readText() })
 
             loadJsonArray(body.getJSONArray("libraries"))
         }
@@ -71,22 +71,34 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                             if (item.has("url")) {
                                 containerLicenses.addView(view.apply {
                                     licenceTitle.text = item.getString("libraryName")
-                                    licenceDesc.text = Html.fromHtml(getString(R.string.licenses_desc_website,
-                                        item.getString("license"),
-                                        item.getString("url"),
-                                        if (item.has("urlName")) item.getString("urlName") else item.getString("url"),
-                                        item.getString("licenseUrl"),
-                                        if (item.has("licenseUrlName")) item.getString("licenseUrlName") else item.getString("licenseUrl")),
-                                        HtmlCompat.FROM_HTML_MODE_LEGACY)
+                                    licenceDesc.text = Html.fromHtml(
+                                        getString(
+                                            R.string.licenses_desc_website,
+                                            item.getString("license"),
+                                            item.getString("url"),
+                                            if (item.has("urlName")) item.getString("urlName") else item.getString(
+                                                "url"
+                                            ),
+                                            item.getString("licenseUrl"),
+                                            if (item.has("licenseUrlName")) item.getString("licenseUrlName") else item.getString(
+                                                "licenseUrl"
+                                            )
+                                        ),
+                                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                                    )
                                     licenceDesc.movementMethod = LinkMovementMethod.getInstance()
                                 })
                             } else {
                                 containerLicenses.addView(view.apply {
-                                    licenceDesc.text = Html.fromHtml(getString(R.string.licenses_desc,
-                                        item.getString("license"),
-                                        item.getString("licenseUrl"),
-                                        item.getString("licenseUrl")),
-                                        HtmlCompat.FROM_HTML_MODE_LEGACY)
+                                    licenceDesc.text = Html.fromHtml(
+                                        getString(
+                                            R.string.licenses_desc,
+                                            item.getString("license"),
+                                            item.getString("licenseUrl"),
+                                            item.getString("licenseUrl")
+                                        ),
+                                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                                    )
                                     licenceDesc.movementMethod = LinkMovementMethod.getInstance()
                                 })
                             }

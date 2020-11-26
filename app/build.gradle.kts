@@ -18,10 +18,6 @@ tasks.dokkaHtml.configure {
     }
 }
 
-licenseTools {
-    outputJson = "../res/assets/raw/licenses.json"
-}
-
 android {
     compileSdkVersion(30)
     buildToolsVersion = "30.0.2"
@@ -61,6 +57,10 @@ android {
             }
         }
     }
+}
+
+dependencies {
+    implementation("com.airbnb.android:lottie:3.5.0")
 }
 
 // Glide

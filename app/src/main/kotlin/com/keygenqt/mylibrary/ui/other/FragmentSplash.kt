@@ -29,13 +29,13 @@ import java.util.Locale
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
 
     private val viewModel: ViewSplash by inject()
-    private val sharedPreferences: BaseSharedPreferences by inject()
+    private val preferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
         statusProgress(true)
 
-        sharedPreferences.locale?.let {
-            if (sharedPreferences.locale != Locale.getDefault().toLanguageTag()) {
+        preferences.locale?.let {
+            if (preferences.locale != Locale.getDefault().toLanguageTag()) {
                 Toast.makeText(activity, getString(R.string.language_app_update), Toast.LENGTH_SHORT).show()
             }
         }
@@ -51,7 +51,7 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
         }
 
         when {
-            sharedPreferences.locale != Locale.getDefault().toLanguageTag() -> defaultInit.invoke()
+            preferences.locale != Locale.getDefault().toLanguageTag() -> defaultInit.invoke()
             requireActivity().intent.hasExtra("code") -> {
 
             }
@@ -65,6 +65,6 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
             else -> defaultInit.invoke()
         }
 
-        sharedPreferences.locale = Locale.getDefault().toLanguageTag()
+        preferences.locale = Locale.getDefault().toLanguageTag()
     }
 }

@@ -8,6 +8,7 @@
     <item name="colorTextLabel">#757575</item>
     <item name="colorTextLink">#2287AF</item>
     <item name="colorBackgroundPage">#353535</item>
+    <item name="colorBackgroundLoading">#010405</item>
     <item name="colorBackgroundList">#353535</item>
     <item name="colorBackgroundListItem">#ECECEC</item>
     <item name="colorDividingLine">#A8A8A8</item>

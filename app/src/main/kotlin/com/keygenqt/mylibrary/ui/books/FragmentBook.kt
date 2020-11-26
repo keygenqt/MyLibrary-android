@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -38,12 +40,17 @@ import org.koin.android.ext.android.inject
 @ActionBarEnable
 class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
-    private val sharedPreferences: BaseSharedPreferences by inject()
+    private val preferences: BaseSharedPreferences by inject()
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewBook by inject()
 
     override fun onCreateView() {
         initView {
+
+            statusProgressPage(true)
+            Handler(Looper.getMainLooper()).postDelayed({
+                statusProgressPage(false)
+            }, 1200)
 
             viewModel.userId.postValue(args.modelId)
 
@@ -76,8 +83,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 model?.let {
                     Glide.with(this)
                         .load(model.image)
-                        .placeholder(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
-                        .error(if (sharedPreferences.darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book)
+                        .placeholder(preferences.resDefaultBook)
+                        .error(preferences.resDefaultBook)
                         .into(bookImage)
 
                     bookTitle.text = model.title

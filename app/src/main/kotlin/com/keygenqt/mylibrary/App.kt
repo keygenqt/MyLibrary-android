@@ -17,6 +17,8 @@
 package com.keygenqt.mylibrary
 
 import android.app.Application
+import com.airbnb.lottie.Lottie
+import com.airbnb.lottie.LottieConfig
 import com.facebook.stetho.Stetho
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.di.moduleOther
@@ -44,5 +46,7 @@ class App : Application() {
             )
         }
         registerActivityLifecycleCallbacks(exceptionHandler)
+
+        Lottie.initialize(LottieConfig.Builder().setEnableSystraceMarkers(true).build())
     }
 }
