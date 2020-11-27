@@ -21,32 +21,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.dao.ModelBookDao
-import com.keygenqt.mylibrary.data.services.BookService
-import com.keygenqt.mylibrary.hal.API_KEY_SELF
+import com.keygenqt.mylibrary.data.services.ServiceBooks
+import kotlinx.coroutines.delay
 
-class ViewBook(
-    private val db: RoomDatabase,
-    private val service: BookService,
-    private val preferences: BaseSharedPreferences
-) : ViewModel() {
+class ViewBook(private val service: ServiceBooks) : ViewModel() {
 
-    val userId: MutableLiveData<String> = MutableLiveData()
+    val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    val data = userId.switchMap { id ->
+    val data = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler()) {
-            db.getDao<ModelBookDao>().getModel(id)?.let { model ->
-                emit(model)
-                loading.postValue(true)
-                service.getView(model.getLink(API_KEY_SELF).value) { data ->
+            service.getView(link) { model ->
+                model?.let {
+                    emit(model)
+                    delay(1200)
                     loading.postValue(false)
-                    emit(data)
+                } ?: run {
+                    loading.postValue(true)
                 }
-            } ?: run {
-                emit(null)
             }
         }
     }

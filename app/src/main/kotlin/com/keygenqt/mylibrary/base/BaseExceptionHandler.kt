@@ -59,6 +59,12 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
         error.observe(activity as LifecycleOwner, { throwable ->
             when (throwable) {
                 is HttpException -> {
+                    if (throwable.status == 400) {
+                        Toast.makeText(activity, "Not found", Toast.LENGTH_SHORT).show()
+                    }
+                    if (throwable.status == 404) {
+                        Toast.makeText(activity, "Not found", Toast.LENGTH_SHORT).show()
+                    }
                     if (throwable.status == 405) {
                         Toast.makeText(activity, "Method Not Allowed", Toast.LENGTH_SHORT).show()
                     }
@@ -81,7 +87,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                     }
                 }
             }
-            Log.e("TAG", throwable.stackTraceToString())
+            Log.e("BaseExceptionHandler", throwable.stackTraceToString())
         })
     }
 

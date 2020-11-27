@@ -21,14 +21,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.data.services.ServiceOther
 
 class ViewPassword(
-    private val db: RoomDatabase,
-    private val service: OtherService,
-    private val preferences: BaseSharedPreferences
+    private val service: ServiceOther
 ) : ViewModel() {
 
     val params: MutableLiveData<FragmentPassword.RequestPassword> = MutableLiveData()
@@ -36,7 +32,7 @@ class ViewPassword(
 
     val password = params.switchMap {
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            service.password(it) { model ->
+            service.password(it.password, it.rpassword) { model ->
                 emit(model)
             }
         }

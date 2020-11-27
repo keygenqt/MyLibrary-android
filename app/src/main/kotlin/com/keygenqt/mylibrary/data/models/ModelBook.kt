@@ -17,17 +17,16 @@
 package com.keygenqt.mylibrary.data.models
 
 import android.content.Context
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseModel
+import com.keygenqt.mylibrary.hal.API_KEY_SELF
 
 @Entity(tableName = "ModelBook")
 data class ModelBook(
-
-    @PrimaryKey
-    var key: String = "",
 
     @SerializedName("id")
     var id: String = "",
@@ -60,11 +59,34 @@ data class ModelBook(
     var coverType: String = "",
 
     @SerializedName("image")
-    var image: String = ""
+    var image: String = "",
+
+    @Embedded(prefix = "genre_")
+    var genre: ModelBookGenre = ModelBookGenre(),
+
+    @Embedded(prefix = "user_")
+    var user: ModelBookUser = ModelBookUser()
 
 ) : BaseModel() {
 
-    var type: String = ""
+    @PrimaryKey
+    var key: String = ""
+        get() {
+            if (field.isEmpty()) {
+                return "$id-$type"
+            }
+            return field
+        }
+
+    var selfLink: String = ""
+        get() {
+            if (field.isEmpty() && links.containsKey(API_KEY_SELF)) {
+                return links.getValue(API_KEY_SELF).value
+            }
+            return field
+        }
+
+    var type: String = VIEW_KEY
         set(value) {
             key = "$id-$value"
             field = value
@@ -72,6 +94,7 @@ data class ModelBook(
 
     companion object {
         const val API_KEY = "books"
+        const val VIEW_KEY = "view"
 
         const val COVER_TYPE_SOFT = "soft"
         const val COVER_TYPE_SOLID = "solid"

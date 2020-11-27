@@ -74,10 +74,11 @@
         android:label="{title}"
         tools:layout="@layout/fragment_book">
       <argument
-          android:name="modelId"
+          android:name="selfLink"
           app:argType="string" />
       <argument
           android:name="title"
+          android:defaultValue=""
           app:argType="string" />
     </fragment>
 

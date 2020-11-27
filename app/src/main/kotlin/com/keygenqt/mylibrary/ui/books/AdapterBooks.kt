@@ -59,7 +59,7 @@ class AdapterBooks(@LayoutRes layout: Int, nextPage: (String, Link) -> Unit) : L
                     .into(imageBook)
 
                 itemBlock.setOnClickListener {
-                    findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBook(model.id, model.title))
+                    findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBook(model.selfLink))
                 }
             }
         }

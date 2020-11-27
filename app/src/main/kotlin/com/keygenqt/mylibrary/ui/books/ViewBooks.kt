@@ -18,34 +18,23 @@ package com.keygenqt.mylibrary.ui.books
 
 import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListSearchAdapter
-import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
-import com.keygenqt.mylibrary.data.services.BookService
-import com.keygenqt.mylibrary.extensions.toListData
+import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.LinkSearch
 import com.keygenqt.mylibrary.utils.API_VERSION
 
-class ViewBooks(
-    private val db: RoomDatabase,
-    private val service: BookService,
-    private val preferences: BaseSharedPreferences
-) : ViewModel() {
+class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
     private val linkSearch: MutableLiveData<LinkSearch> = MutableLiveData()
 
-    val switchMap = linkSearch.switchMap {
+    val switchMap = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
-            if (it.isFirstPage()) {
-                emit(db.getDao<ModelBookDao>().getAll(it.key).toListData(ModelBook.API_KEY, it.getLinkModel()))
-            }
-            service.getList(it) { response ->
-                emit(response)
+            service.getListSearch(link) { models ->
+                emit(models)
             }
         }
     }
@@ -64,7 +53,7 @@ class ViewBooks(
         if (key == ListSearchAdapter.SEARCH_SELF) {
             linkSearch.postValue(LinkSearch(
                 key = key,
-                link = db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY),
+                link = service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY),
                 items = mutableListOf()
             ))
         } else {
@@ -73,7 +62,7 @@ class ViewBooks(
                 items = linkSearch.value?.items ?: mutableListOf(),
                 link = link!!.linkWithParams(
                     when (key) {
-                        AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> hashMapOf("userId" to preferences.userId)
+                        AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> hashMapOf("userId" to service.preferences.userId)
                         AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> hashMapOf("sale" to "true")
                         else -> hashMapOf()
                     }

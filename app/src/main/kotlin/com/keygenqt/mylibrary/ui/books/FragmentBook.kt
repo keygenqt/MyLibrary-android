@@ -16,8 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -31,6 +29,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
@@ -38,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_book.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
+@SpawnAnimation
 class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
     private val preferences: BaseSharedPreferences by inject()
@@ -47,16 +47,11 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     override fun onCreateView() {
         initView {
 
-            statusProgressPage(true)
-            Handler(Looper.getMainLooper()).postDelayed({
-                statusProgressPage(false)
-            }, 1200)
-
-            viewModel.userId.postValue(args.modelId)
+            viewModel.selfLink.postValue(args.selfLink)
 
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                viewModel.userId.postValue(args.modelId)
+                viewModel.selfLink.postValue(args.selfLink)
             }
             appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { _, verticalOffset ->
                 refresh.isEnabled = verticalOffset == 0
@@ -72,7 +67,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     @CallOnCreate fun observeLoading() {
         initView {
             viewModel.loading.observe(viewLifecycleOwner, { status ->
-                refresh.isRefreshing = status
+                statusProgressPage(status)
+                refresh.isRefreshing = false
             })
         }
     }

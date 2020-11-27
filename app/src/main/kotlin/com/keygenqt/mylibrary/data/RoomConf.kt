@@ -9,17 +9,14 @@ import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.data.models.ModelRoot
-import com.keygenqt.mylibrary.data.models.ModelSearch
-import com.keygenqt.mylibrary.data.models.ModelUser
+import com.keygenqt.mylibrary.data.models.*
 
 @Database(entities = [
     ModelRoot::class,
     ModelUser::class,
     ModelBook::class,
     ModelSearch::class,
-], version = 19, exportSchema = false)
+], version = 22, exportSchema = false)
 @TypeConverters(value = [
     ListConverter::class,
     MapConverter::class,

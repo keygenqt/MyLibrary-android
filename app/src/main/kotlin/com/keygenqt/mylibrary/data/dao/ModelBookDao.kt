@@ -15,6 +15,9 @@ interface ModelBookDao {
     @Query("SELECT * FROM ModelBook WHERE id=:id")
     fun getModel(id: String): ModelBook?
 
+    @Query("SELECT * FROM ModelBook WHERE selfLink=:selfLink AND type = :type")
+    fun getModel(selfLink: String, type: String): ModelBook?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(model: List<ModelBook>)
 

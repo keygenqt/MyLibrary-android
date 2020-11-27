@@ -16,10 +16,12 @@
 
 package com.keygenqt.mylibrary.base
 
+import android.graphics.Color.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -28,12 +30,11 @@ import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
+import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.extensions.hideKeyboard
-import kotlinx.android.synthetic.main.activity_main.appBarLayout
-import kotlinx.android.synthetic.main.activity_main.ivMoon
-import kotlinx.android.synthetic.main.activity_main.loading
-import kotlinx.android.synthetic.main.activity_main.lottieAnimationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.progressBar
+import kotlinx.coroutines.NonCancellable.start
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
@@ -67,6 +68,21 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        this::class.java.kotlin.findAnnotation<SpawnAnimation>()?.let {
+            (requireActivity() as AppCompatActivity).spawnAnimation.apply {
+                visibility = View.VISIBLE
+                alpha = 1f
+                animate().apply {
+                    interpolator = LinearInterpolator()
+                    duration = 100
+                    alpha(0f)
+                    startDelay = 150
+                    start()
+                }
+            }
+        } ?: run {
+            (requireActivity() as AppCompatActivity).spawnAnimation.visibility = View.GONE
+        }
         this::class.java.kotlin.findAnnotation<ActionBarEnable>()?.let {
             (requireActivity() as AppCompatActivity).supportActionBar?.show()
         } ?: run {
@@ -84,6 +100,7 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
         _view = inflater.inflate(layoutId, container, false)
 
+        statusProgressPage(false)
         setHasOptionsMenu(true)
         statusProgress(false)
         onCreateView()

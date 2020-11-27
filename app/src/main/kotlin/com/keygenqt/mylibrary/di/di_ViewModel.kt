@@ -26,11 +26,11 @@ import com.keygenqt.mylibrary.ui.settings.ViewPassword
 import org.koin.dsl.module
 
 val moduleViewModel = module {
-    factory { ViewBooks(get(), get(), get()) }
-    factory { ViewSplash(get(), get(), get()) }
-    factory { ViewLogin(get(), get(), get()) }
-    factory { ViewJoin(get(), get(), get()) }
-    factory { ViewEditProfile(get(), get(), get()) }
-    factory { ViewPassword(get(), get(), get()) }
-    factory { ViewBook(get(), get(), get()) }
+    factory { ViewSplash(get()) }
+    factory { ViewLogin(get()) }
+    factory { ViewJoin(get()) }
+    factory { ViewEditProfile(get()) }
+    factory { ViewPassword(get()) }
+    factory { ViewBook(get()) }
+    factory { ViewBooks(get()) }
 }

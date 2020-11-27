@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.data.models
 
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.data.models.ModelSearch
-import com.keygenqt.mylibrary.hal.ListData
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Url
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.base.BaseModel
 
-interface BookApi {
-    @GET
-    suspend fun getList(@Url link: String): Response<ListData<ModelBook>>
+data class ModelBookGenre(
 
-    @GET
-    suspend fun getView(@Url link: String): Response<ModelBook>
+    @PrimaryKey
+    @SerializedName("id")
+    var id: String = "",
 
-    @GET("/{path}/search")
-    suspend fun getSearch(@Path("path") path: String): Response<ModelSearch>
+    @SerializedName("title")
+    var title: String = "",
+
+    @SerializedName("description")
+    var description: String = ""
+
+) : BaseModel() {
+    companion object {
+        const val API_KEY = "genre"
+    }
 }

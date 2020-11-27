@@ -108,7 +108,11 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
     }
 
     fun addSearchModel(search: ModelSearch) {
-        this.items.add(0, search)
+        if (this.items.firstOrNull() !is ModelSearch) {
+            this.items.add(0, search)
+        } else {
+            this.items[0] = search
+        }
         notifyDataSetChanged()
     }
 

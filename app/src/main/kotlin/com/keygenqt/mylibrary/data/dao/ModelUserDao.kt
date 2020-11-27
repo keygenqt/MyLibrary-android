@@ -9,8 +9,8 @@ import com.keygenqt.mylibrary.data.models.ModelUser
 @Dao
 interface ModelUserDao {
 
-    @Query("SELECT * FROM ModelUser LIMIT 1")
-    fun getModel(): ModelUser
+    @Query("SELECT * FROM ModelUser WHERE id =:id")
+    fun getModel(id: String): ModelUser
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg model: ModelUser)

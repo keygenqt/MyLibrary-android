@@ -19,10 +19,7 @@ package com.keygenqt.mylibrary.di
 import android.util.Log
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.services.BookApi
-import com.keygenqt.mylibrary.data.services.BookService
-import com.keygenqt.mylibrary.data.services.OtherApi
-import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.data.services.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -33,8 +30,9 @@ import java.util.concurrent.TimeUnit
 
 val moduleRetrofit = module {
     factory { provideRetrofit(get()) }
-    single { provideBookService(provideBookApi(get()), get(), get()) }
-    single { provideOtherService(provideOtherApi(get()), get(), get()) }
+    single { provideService(provideApi(get())) }
+    single { provideServiceBooks(get(), get(), get()) }
+    single { provideServiceOther(get(), get(), get()) }
 }
 
 fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
@@ -62,12 +60,12 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
 
 }
 
-fun provideBookApi(retrofit: Retrofit): BookApi = retrofit.create(BookApi::class.java)
+fun provideApi(retrofit: Retrofit): CommonApi = retrofit.create(CommonApi::class.java)
 
-fun provideBookService(api: BookApi, db: RoomDatabase, preferences: BaseSharedPreferences): BookService =
-    BookService(api, db, preferences)
+fun provideService(api: CommonApi): CommonQuery = CommonQuery(api)
 
-fun provideOtherApi(retrofit: Retrofit): OtherApi = retrofit.create(OtherApi::class.java)
+fun provideServiceBooks(db: RoomDatabase, query: CommonQuery, preferences: BaseSharedPreferences): ServiceBooks =
+    ServiceBooks(db, preferences, query)
 
-fun provideOtherService(api: OtherApi, db: RoomDatabase, preferences: BaseSharedPreferences):
-    OtherService = OtherService(api, db, preferences)
+fun provideServiceOther(db: RoomDatabase, query: CommonQuery, preferences: BaseSharedPreferences): ServiceOther =
+    ServiceOther(db, preferences, query)

@@ -20,18 +20,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
-import com.keygenqt.mylibrary.data.services.OtherService
+import com.keygenqt.mylibrary.data.services.ServiceOther
 import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 
-class ViewSplash(
-    private val db: RoomDatabase,
-    private val service: OtherService,
-    private val preferences: BaseSharedPreferences
-) : ViewModel() {
+class ViewSplash(private val service: ServiceOther) : ViewModel() {
 
     lateinit var modelRoot: ModelRoot
 
