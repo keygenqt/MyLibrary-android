@@ -40,8 +40,8 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
                     emit(model)
                     if (loading.value == true) {
                         delay(1200)
-                        loading.postValue(false)
                     }
+                    loading.postValue(false)
                 } ?: run {
                     loading.postValue(true)
                 }

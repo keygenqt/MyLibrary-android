@@ -49,7 +49,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewBook by inject()
 
-    private lateinit var menu: Menu
+    private var menu: Menu? = null
     private lateinit var book: ModelBook
 
     override fun onCreateView() {
@@ -143,7 +143,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 userName.text = model.user.nickname
                 userBio.text = model.user.bio
 
-                menu.iterator().forEach {
+                menu?.iterator()?.forEach {
                     when (it.itemId) {
                         R.id.book_menu_edit -> it.isVisible = preferences.userId == model.user.id
                         R.id.book_menu_delete -> it.isVisible = preferences.userId == model.user.id
