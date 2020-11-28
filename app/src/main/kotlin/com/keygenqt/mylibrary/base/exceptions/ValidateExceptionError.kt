@@ -1,4 +1,4 @@
-package com.keygenqt.mylibrary.base.response
+package com.keygenqt.mylibrary.base.exceptions
 
 class ValidateExceptionError(
     val codes: List<String>,

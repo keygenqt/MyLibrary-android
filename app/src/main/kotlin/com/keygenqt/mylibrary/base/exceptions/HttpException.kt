@@ -1,6 +1,6 @@
-package com.keygenqt.mylibrary.base.response
+package com.keygenqt.mylibrary.base.exceptions
 
-class HttpException(
+data class HttpException(
     val datetime: String,
     val status: Int,
     val error: String,

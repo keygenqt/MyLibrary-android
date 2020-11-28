@@ -63,6 +63,7 @@ class ServiceBooks(
             withContext(Dispatchers.IO) {
                 query.getAsync<ListDataModelBook>(this, linkSearch.getLink()).await().let { listData ->
                     // insert
+                    dao.deleteAll(linkSearch.key)
                     dao.insert(listData.items.map { it.type = linkSearch.key; it }.toList())
                     response.invoke(listData.mergeItems(linkSearch) as ListDataModelBook)
                 }

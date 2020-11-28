@@ -23,14 +23,13 @@ import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHa
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceOther
-import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 
 class ViewSplash(private val service: ServiceOther) : ViewModel() {
 
     lateinit var modelRoot: ModelRoot
 
     val userMe: LiveData<ModelUser> = liveData(getExceptionHandler()) {
-        service.getUserMe(modelRoot.links[API_KEY_MODEL_USERS]?.value!!) { user ->
+        service.getUserMe(modelRoot.links[ModelUser.API_KEY]?.value!!) { user ->
             emit(user)
         }
     }

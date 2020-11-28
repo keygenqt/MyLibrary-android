@@ -24,6 +24,9 @@ interface ModelBookDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(model: ModelBook)
 
+    @Query("DELETE FROM ModelBook WHERE id = :id")
+    suspend fun deleteAllById(id: String)
+
     @Query("DELETE FROM ModelBook WHERE type = :type")
     suspend fun deleteAll(type: String)
 }

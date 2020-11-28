@@ -21,8 +21,7 @@ import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.response.ValidateException
-import com.keygenqt.mylibrary.extensions.hideKeyboard
+import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.ui.other.FragmentLogin.PARAMS.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.koin.android.ext.android.inject

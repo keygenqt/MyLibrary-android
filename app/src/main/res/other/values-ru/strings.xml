@@ -52,6 +52,22 @@
   <string name="search_books_findAllByUserId">Мои книги</string>
   <string name="search_books_findAllBySale">Барахолка</string>
 
+  // view book
+  <string name="view_book_synopsis">Синопсис</string>
+  <string name="view_book_genre">Жанр %s</string>
+  <string name="view_book_btn_connect">Написать</string>
+  <string name="view_book_publisher">Издатель</string>
+  <string name="view_book_ISBN">ISBN</string>
+  <string name="view_book_year">Год</string>
+  <string name="view_book_pages">Страницы</string>
+  <string name="view_book_cover">Обложка</string>
+  <string name="view_book_menu_edit">Редактировать</string>
+  <string name="view_book_menu_delete">Удалить</string>
+  <string name="view_book_menu_share">Поделится</string>
+  <string name="view_book_get_error">Книга не доступна</string>
+  <string name="view_book_type_soft">Мягкая</string>
+  <string name="view_book_type_solid">Твердая</string>
+
   // settings
   <string name="settings_title">Настройки</string>
   <string name="settings_menu_appearance">Внешний вид</string>

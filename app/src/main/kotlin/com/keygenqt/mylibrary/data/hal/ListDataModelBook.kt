@@ -16,9 +16,7 @@
 
 package com.keygenqt.mylibrary.data.hal
 
-import com.google.gson.annotations.SerializedName
 import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ListData
 
 class ListDataModelBook() : ListData<ModelBook>()

@@ -1,6 +1,8 @@
 <resources>
 
   <style name="Light.AppThemeColors" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <item name="gradientStart">#1ca2fb</item>
+    <item name="gradientEnd">#1ad6c3</item>
     <item name="colorText">#222222</item>
     <item name="colorTextLite">#444444</item>
     <item name="colorTextLink">#0892CA</item>

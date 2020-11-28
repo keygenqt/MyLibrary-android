@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <attr name="gradientStart" format="color" />
+  <attr name="gradientEnd" format="color" />
   <attr name="colorText" format="color" />
   <attr name="colorTextLite" format="color" />
   <attr name="colorTextItem" format="color" />

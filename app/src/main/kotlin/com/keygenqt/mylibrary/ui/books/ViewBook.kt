@@ -21,21 +21,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
+import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.services.ServiceBooks
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ViewBook(private val service: ServiceBooks) : ViewModel() {
 
     val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
+    val throwable: MutableLiveData<Throwable> = MutableLiveData()
 
     val data = selfLink.switchMap { link ->
-        liveData(BaseExceptionHandler.getExceptionHandler()) {
+        liveData(BaseExceptionHandler.getExceptionHandler(throwable)) {
             service.getView(link) { model ->
                 model?.let {
                     emit(model)
-                    delay(1200)
-                    loading.postValue(false)
+                    if (loading.value == true) {
+                        delay(1200)
+                        loading.postValue(false)
+                    }
                 } ?: run {
                     loading.postValue(true)
                 }

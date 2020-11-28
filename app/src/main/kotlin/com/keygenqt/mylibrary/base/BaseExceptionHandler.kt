@@ -25,7 +25,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.base.response.HttpException
+import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.ui.other.FragmentSplash
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.net.ConnectException
@@ -59,12 +59,6 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
         error.observe(activity as LifecycleOwner, { throwable ->
             when (throwable) {
                 is HttpException -> {
-                    if (throwable.status == 400) {
-                        Toast.makeText(activity, "Not found", Toast.LENGTH_SHORT).show()
-                    }
-                    if (throwable.status == 404) {
-                        Toast.makeText(activity, "Not found", Toast.LENGTH_SHORT).show()
-                    }
                     if (throwable.status == 405) {
                         Toast.makeText(activity, "Method Not Allowed", Toast.LENGTH_SHORT).show()
                     }
@@ -74,6 +68,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                         activity.findNavController(R.id.nav_host_fragment)
                             .createDeepLink().setDestination(R.id.FragmentLogin).createPendingIntent().send()
                     }
+                    Log.e("HttpException", throwable.toString())
                 }
                 is ConnectException -> {
                     val fragment = (activity as BaseActivity).getCurrentFragment()
@@ -85,9 +80,12 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                         fragment.statusProgress(false)
                         Toast.makeText(activity, "Failed to connect API", Toast.LENGTH_SHORT).show()
                     }
+                    Log.e("ConnectException", throwable.stackTraceToString())
+                }
+                else -> {
+                    Log.e("BaseExceptionHandler", throwable.stackTraceToString())
                 }
             }
-            Log.e("BaseExceptionHandler", throwable.stackTraceToString())
         })
     }
 

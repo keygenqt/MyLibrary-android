@@ -1,6 +1,8 @@
 <resources>
 
   <style name="DayNight.AppThemeColors" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="gradientStart">#361C88</item>
+    <item name="gradientEnd">#3687DD</item>
     <item name="colorText">#FFFFFF</item>
     <item name="colorTextLite">#EDEDED</item>
     <item name="colorTextLink">#0892CA</item>

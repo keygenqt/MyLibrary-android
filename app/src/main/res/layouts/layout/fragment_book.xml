@@ -349,7 +349,7 @@
               android:id="@+id/userAvatar"
               android:layout_width="40dp"
               android:layout_height="50dp"
-              android:src="@drawable/avatar_2"
+              android:src="@drawable/img_default_user"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"
               app:riv_corner_radius="5dp"
@@ -372,13 +372,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dp"
-                tools:text="Nickname"
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                tools:text="Nickname"
                 />
 
             <TextView
@@ -389,12 +389,12 @@
                 android:ellipsize="end"
                 android:maxLines="4"
                 android:paddingBottom="3dp"
-                tools:text="Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userName"
+                tools:text="Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin Alexis Schaitkin"
                 />
 
           </androidx.constraintlayout.widget.ConstraintLayout>
@@ -433,6 +433,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/common_background_action_bar"
             android:orientation="vertical"
             >
@@ -446,11 +447,12 @@
               >
 
             <TextView
+                android:id="@+id/bookSynopsisTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/view_book_synopsis"
                 android:textColor="?attr/colorText"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -462,7 +464,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textColor="?attr/colorTextItemLite"
+                android:textColor="?attr/colorTextLite"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -481,11 +483,12 @@
               >
 
             <TextView
+                android:id="@+id/bookGenre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/view_book_genre"
                 android:textColor="?attr/colorText"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -493,12 +496,11 @@
                 />
 
             <TextView
-                android:id="@+id/bookGenre"
+                android:id="@+id/bookGenreDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:textColor="?attr/colorTextItemLite"
+                android:textColor="?attr/colorTextLite"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

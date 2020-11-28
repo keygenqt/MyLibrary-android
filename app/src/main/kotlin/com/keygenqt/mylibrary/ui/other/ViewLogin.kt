@@ -21,8 +21,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceOther
-import com.keygenqt.mylibrary.hal.API_KEY_MODEL_USERS
 import com.keygenqt.mylibrary.ui.other.FragmentLogin.*
 
 class ViewLogin(
@@ -39,7 +39,7 @@ class ViewLogin(
                 service.preferences.token = model.token
 
                 service.getRootLinks { links ->
-                    service.getUserMe(links.links[API_KEY_MODEL_USERS]?.value!!) { user ->
+                    service.getUserMe(links.links[ModelUser.API_KEY]?.value!!) { user ->
                         emit(model)
                     }
                 }

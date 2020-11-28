@@ -16,9 +16,9 @@
 
 package com.keygenqt.mylibrary.data.models
 
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseModel
 
 data class ModelBookUser(
@@ -33,23 +33,62 @@ data class ModelBookUser(
     @SerializedName("nickname")
     var nickname: String = "",
 
+    @SerializedName("website")
+    var website: String? = null,
+
+    @SerializedName("location")
+    var location: String? = null,
+
+    @SerializedName("bio")
+    var bio: String? = null,
+
     @SerializedName("image")
     var image: String = "",
 
-    @SerializedName("website")
-    var website: String = "",
-
-    @SerializedName("location")
-    var location: String = "",
-
-    @SerializedName("bio")
-    var bio: String = "",
-
     @SerializedName("avatar")
-    var avatar: String = "",
+    var avatar: String = ""
 
-    ) : BaseModel() {
+) : BaseModel() {
+
+    val avatarRes: Int
+        get() {
+            when (avatar) {
+                AVATAR_HAPPY -> return R.drawable.avatar_0
+                AVATAR_SURPRISED -> return R.drawable.avatar_1
+                AVATAR_TIRED -> return R.drawable.avatar_2
+                AVATAR_UPSET -> return R.drawable.avatar_3
+                AVATAR_OVERWHELMED -> return R.drawable.avatar_4
+                AVATAR_DEER -> return R.drawable.avatar_5
+                AVATAR_ENAMORED -> return R.drawable.avatar_6
+                AVATAR_BIRDIE -> return R.drawable.avatar_7
+                AVATAR_WHAT -> return R.drawable.avatar_8
+                AVATAR_SHOCKED -> return R.drawable.avatar_9
+                AVATAR_TOUCHED -> return R.drawable.avatar_10
+                AVATAR_ANGRY -> return R.drawable.avatar_11
+                AVATAR_ZOMBIE -> return R.drawable.avatar_12
+                AVATAR_PLAYFUL -> return R.drawable.avatar_13
+                AVATAR_SLEEPY -> return R.drawable.avatar_14
+            }
+            return 0
+        }
+
     companion object {
         const val API_KEY = "user"
+
+        const val AVATAR_HAPPY = "avatar_0"
+        const val AVATAR_SURPRISED = "avatar_1"
+        const val AVATAR_TIRED = "avatar_2"
+        const val AVATAR_UPSET = "avatar_3"
+        const val AVATAR_OVERWHELMED = "avatar_4"
+        const val AVATAR_DEER = "avatar_5"
+        const val AVATAR_ENAMORED = "avatar_6"
+        const val AVATAR_BIRDIE = "avatar_7"
+        const val AVATAR_WHAT = "avatar_8"
+        const val AVATAR_SHOCKED = "avatar_9"
+        const val AVATAR_TOUCHED = "avatar_10"
+        const val AVATAR_ANGRY = "avatar_11"
+        const val AVATAR_ZOMBIE = "avatar_12"
+        const val AVATAR_PLAYFUL = "avatar_13"
+        const val AVATAR_SLEEPY = "avatar_14"
     }
 }

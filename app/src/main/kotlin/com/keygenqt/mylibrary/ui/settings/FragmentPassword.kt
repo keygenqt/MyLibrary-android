@@ -17,11 +17,10 @@
 package com.keygenqt.mylibrary.ui.settings
 
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.response.ValidateException
+import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_password.view.*
 import kotlinx.android.synthetic.main.fragment_password.view.buttonSubmit

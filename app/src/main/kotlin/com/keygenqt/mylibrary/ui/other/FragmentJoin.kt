@@ -21,7 +21,7 @@ import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.response.ValidateException
+import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer

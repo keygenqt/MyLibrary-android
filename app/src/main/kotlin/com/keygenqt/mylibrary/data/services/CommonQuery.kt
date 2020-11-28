@@ -19,8 +19,8 @@ package com.keygenqt.mylibrary.data.services
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.keygenqt.mylibrary.base.response.HttpException
-import com.keygenqt.mylibrary.base.response.ValidateException
+import com.keygenqt.mylibrary.base.exceptions.HttpException
+import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -28,6 +28,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.awaitResponse
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CommonQuery(val api: CommonApi) {
 
@@ -61,24 +64,23 @@ class CommonQuery(val api: CommonApi) {
             }
         } else {
             this.errorBody()?.let {
-                val string = it.string()
-                val jsonObject = try {
-                    JSONObject(string)
-                } catch (ex: JSONException) {
-                    Log.e("checkResponse", string)
-                    JSONObject()
-                }
-                if (jsonObject.has("status")) {
-                    if (jsonObject.getInt("status") == 422) {
-                        throw Gson().fromJson(
-                            jsonObject.toString(),
-                            ValidateException::class.java
-                        )
-                    } else {
-                        throw Gson().fromJson(jsonObject.toString(), HttpException::class.java)
+                try {
+                    val jsonObject = JSONObject(it.string())
+                    if (jsonObject.has("status")) {
+                        if (jsonObject.getInt("status") == 422) {
+                            throw Gson().fromJson(jsonObject.toString(), ValidateException::class.java)
+                        } else {
+                            throw Gson().fromJson(jsonObject.toString(), HttpException::class.java)
+                        }
                     }
+                } catch (ex: JSONException) {
+                    throw HttpException(
+                        datetime = SimpleDateFormat("d MMM yyyy", Locale.US).format(Date()),
+                        status = this@checkResponse.code(),
+                        error = this@checkResponse.message(),
+                        message = this@checkResponse.message(),
+                    )
                 }
-
             }
         }
         throw RuntimeException("Response api has error")
