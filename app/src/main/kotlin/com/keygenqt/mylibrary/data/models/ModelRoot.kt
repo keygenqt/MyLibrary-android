@@ -28,5 +28,14 @@ data class ModelRoot(
     var version: String = "",
 
     @SerializedName("description")
-    var description: String = ""
-) : BaseModel()
+    var description: String = "",
+
+    @SerializedName("role")
+    var role: String = ""
+) : BaseModel() {
+    companion object {
+        const val API_ROLE_ADMIN = "ADMIN"
+        const val API_ROLE_USER = "USER"
+        const val API_ROLE_ANONYMOUS = "ANONYMOUS"
+    }
+}

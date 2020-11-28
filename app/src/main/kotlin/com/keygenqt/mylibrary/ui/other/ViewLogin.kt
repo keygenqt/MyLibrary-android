@@ -39,7 +39,7 @@ class ViewLogin(
                 service.preferences.token = model.token
 
                 service.getRootLinks { links ->
-                    service.getUserMe(links.links[ModelUser.API_KEY]?.value!!) { user ->
+                    service.getUserMe(links.links[ModelUser.API_KEY]?.value!!) {
                         emit(model)
                     }
                 }

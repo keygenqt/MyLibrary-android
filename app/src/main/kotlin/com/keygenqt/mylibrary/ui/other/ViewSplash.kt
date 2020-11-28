@@ -20,9 +20,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceOther
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ViewSplash(private val service: ServiceOther) : ViewModel() {
 
@@ -37,6 +41,14 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
     val links: LiveData<ModelRoot> = liveData(getExceptionHandler()) {
         service.getRootLinks { links ->
             modelRoot = links
+            if (links.role == ModelRoot.API_ROLE_ANONYMOUS) {
+                throw HttpException(
+                    datetime = SimpleDateFormat("d MMM yyyy", Locale.US).format(Date()),
+                    status = 403,
+                    error = "Access is denied",
+                    message = "Access is denied",
+                )
+            }
             emit(links)
         }
     }

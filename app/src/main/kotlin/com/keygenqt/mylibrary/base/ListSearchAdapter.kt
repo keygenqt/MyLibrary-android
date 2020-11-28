@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView.*
 import com.google.android.material.chip.Chip
 import com.keygenqt.mylibrary.R.*
 import com.keygenqt.mylibrary.data.models.ModelSearch
+import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import com.keygenqt.mylibrary.hal.Link
 import kotlinx.android.synthetic.main.item_search.view.chipGroup
 
@@ -126,7 +127,7 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
                     it.text = title
                     chipGroup.addView(it)
                     linkSelf?.let { linkSelf ->
-                        if (linkSelf.value.contains("search/")) {
+                        if (linkSelf.value.contains("$API_KEY_SEARCH/")) {
                             it.isChecked = linkSelf.linkClear.value == link.linkClear.value
                         } else {
                             it.isChecked = key == SEARCH_SELF
