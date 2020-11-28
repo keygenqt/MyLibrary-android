@@ -28,9 +28,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ViewBook(private val service: ServiceBooks) : ViewModel() {
+class ViewEditBook(private val service: ServiceBooks) : ViewModel() {
 
-    var book: ModelBook? = null
+    private var book: ModelBook? = null
 
     val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<Boolean> = MutableLiveData()

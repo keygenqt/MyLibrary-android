@@ -18,6 +18,7 @@ package com.keygenqt.mylibrary.di
 
 import com.keygenqt.mylibrary.ui.books.ViewBook
 import com.keygenqt.mylibrary.ui.books.ViewBooks
+import com.keygenqt.mylibrary.ui.books.ViewEditBook
 import com.keygenqt.mylibrary.ui.other.ViewJoin
 import com.keygenqt.mylibrary.ui.other.ViewLogin
 import com.keygenqt.mylibrary.ui.other.ViewSplash
@@ -32,5 +33,6 @@ val moduleViewModel = module {
     factory { ViewEditProfile(get()) }
     factory { ViewPassword(get()) }
     factory { ViewBook(get()) }
+    factory { ViewEditBook(get()) }
     factory { ViewBooks(get()) }
 }

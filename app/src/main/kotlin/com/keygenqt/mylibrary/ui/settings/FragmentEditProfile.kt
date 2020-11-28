@@ -78,7 +78,6 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         initView {
             viewModel.userMe.observe(viewLifecycleOwner, { model ->
                 statusProgress(viewModel.user == null)
-                viewModel.user = model
                 viewPager.currentItem = model.avatar.replace("avatar_", "").toInt()
                 textInputEditTextNickname.setText(model.nickname)
                 textInputEditTextWebsite.setText(model.website)

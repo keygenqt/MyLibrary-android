@@ -35,7 +35,6 @@ import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.exceptions.HttpException
-import com.keygenqt.mylibrary.data.models.ModelBook
 import kotlinx.android.synthetic.main.activity_main.view.toolbar
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import kotlinx.android.synthetic.main.fragment_book.view.*
@@ -50,7 +49,6 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     private val viewModel: ViewBook by inject()
 
     private var menu: Menu? = null
-    private lateinit var book: ModelBook
 
     override fun onCreateView() {
         initView {
@@ -66,12 +64,14 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 refresh.isRefreshing = false
             })
             buttonMessage.setOnClickListener {
-                val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto:${book.user.email}")
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_feedback_subject))
-                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                viewModel.book?.let {
+                    val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("mailto:${it.user.email}")
+                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_feedback_subject))
+                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    }
+                    startActivity(Intent.createChooser(emailIntent, "Send from MyLibrary"))
                 }
-                startActivity(Intent.createChooser(emailIntent, "Send from MyLibrary"))
             }
         }
     }
@@ -94,7 +94,6 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
             }
         })
         viewModel.data.observe(viewLifecycleOwner) { model ->
-            book = model!!
             initToolbar {
                 toolbar.title = model.title
             }
@@ -162,7 +161,9 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.book_menu_edit -> {
-                Toast.makeText(activity, R.string.page_coming_soon, Toast.LENGTH_SHORT).show()
+                viewModel.book?.let {
+                    findNavController().navigate(FragmentBookDirections.actionFragmentBookToFragmentEditBook(it.selfLink))
+                }
                 return true
             }
             R.id.book_menu_delete -> {

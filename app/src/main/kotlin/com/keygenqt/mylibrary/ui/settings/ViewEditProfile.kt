@@ -37,6 +37,7 @@ class ViewEditProfile(
 
     val userMe: LiveData<ModelUser> = liveData(BaseExceptionHandler.getExceptionHandler()) {
         service.getUserMe(linkModel.value) { model ->
+            user = model
             emit(model)
         }
     }

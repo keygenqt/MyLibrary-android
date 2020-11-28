@@ -5,6 +5,7 @@
   // fragment titles
   <string name="fragment_books_title">MyLibrary</string>
   <string name="fragment_chat_title">MyLibrary</string>
+  <string name="fragment_edit_book_title">Edit Book</string>
   <string name="fragment_join_title">Join Us</string>
   <string name="fragment_login_title">Login</string>
   <string name="fragment_about_title">About</string>
@@ -67,6 +68,15 @@
   <string name="view_book_get_error">Book not available</string>
   <string name="view_book_type_soft">Soft</string>
   <string name="view_book_type_solid">Solid</string>
+
+  // edit book
+  <string name="edit_book_title">Title</string>
+  <string name="edit_book_author">Author</string>
+  <string name="edit_book_description">Description</string>
+  <string name="edit_book_publisher">Publisher</string>
+  <string name="edit_book_year">Year</string>
+  <string name="edit_book_ISBN">ISBN</string>
+  <string name="edit_book_numberOfPages">Number Of Pages</string>
 
   // settings
   <string name="settings_title">SETTINGS</string>
