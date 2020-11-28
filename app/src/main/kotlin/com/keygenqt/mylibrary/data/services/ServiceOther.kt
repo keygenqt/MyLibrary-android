@@ -24,6 +24,10 @@ import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
+import com.keygenqt.mylibrary.hal.API_KEY_JOIN
+import com.keygenqt.mylibrary.hal.API_KEY_LOGIN
+import com.keygenqt.mylibrary.hal.API_KEY_PASSWORD
+import com.keygenqt.mylibrary.utils.API_VERSION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -64,11 +68,13 @@ class ServiceOther(
         response: suspend (ModelUser) -> Unit
     ) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, "/login", JsonObject().apply {
-                addProperty("email", email)
-                addProperty("password", password)
-                addProperty("uid", preferences.uid)
-            }).await().let { model ->
+            query.postAsync<ModelUser>(this, db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(API_KEY_LOGIN).value,
+                JsonObject().apply {
+                    addProperty("email", email)
+                    addProperty("password", password)
+                    addProperty("uid", preferences.uid)
+                }
+            ).await().let { model ->
                 db.getDao<ModelUserDao>().insert(model)
                 response.invoke(model)
             }
@@ -83,13 +89,15 @@ class ServiceOther(
         response: suspend (ModelUser) -> Unit
     ) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, "/join", JsonObject().apply {
-                addProperty("avatar", avatar)
-                addProperty("nickname", nickname)
-                addProperty("email", email)
-                addProperty("password", password)
-                addProperty("uid", preferences.uid)
-            }).await().let { model ->
+            query.postAsync<ModelUser>(this, db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(API_KEY_JOIN).value,
+                JsonObject().apply {
+                    addProperty("avatar", avatar)
+                    addProperty("nickname", nickname)
+                    addProperty("email", email)
+                    addProperty("password", password)
+                    addProperty("uid", preferences.uid)
+                }
+            ).await().let { model ->
                 db.getDao<ModelUserDao>().insert(model)
                 response.invoke(model)
             }
@@ -102,10 +110,12 @@ class ServiceOther(
         response: suspend (Boolean) -> Unit
     ) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, "/password", JsonObject().apply {
-                addProperty("password", password)
-                addProperty("rpassword", rpassword)
-            }).await().let {
+            query.postAsync<ModelUser>(this, db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(API_KEY_PASSWORD).value,
+                JsonObject().apply {
+                    addProperty("password", password)
+                    addProperty("rpassword", rpassword)
+                }
+            ).await().let {
                 response.invoke(true)
             }
         }

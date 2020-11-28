@@ -16,6 +16,9 @@
 
 package com.keygenqt.mylibrary.hal
 
+const val API_KEY_LOGIN = "login"
+const val API_KEY_JOIN = "join"
+const val API_KEY_PASSWORD = "password"
 const val API_KEY_PROFILE = "profile"
 const val API_KEY_SEARCH = "search"
 const val API_KEY_SELF = "self"
