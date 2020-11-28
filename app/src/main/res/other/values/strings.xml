@@ -77,6 +77,7 @@
   <string name="edit_book_year">Year</string>
   <string name="edit_book_ISBN">ISBN</string>
   <string name="edit_book_numberOfPages">Number Of Pages</string>
+  <string name="edit_book_updated_successfully">Book updated successfully</string>
 
   // settings
   <string name="settings_title">SETTINGS</string>

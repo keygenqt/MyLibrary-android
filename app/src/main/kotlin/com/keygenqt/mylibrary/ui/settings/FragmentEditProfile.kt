@@ -62,7 +62,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         }
     }
 
-    @CallOnCreate fun observeLoading() {
+    @CallOnCreate fun observeUpdate() {
         initView {
             viewModel.updateUser.observe(viewLifecycleOwner) {
                 statusProgress(false)

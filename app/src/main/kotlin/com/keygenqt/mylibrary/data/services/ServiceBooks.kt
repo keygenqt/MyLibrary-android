@@ -16,15 +16,14 @@
 
 package com.keygenqt.mylibrary.data.services
 
+import com.google.gson.Gson
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelSearchDao
+import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
-import com.keygenqt.mylibrary.data.models.ModelBookUser
-import com.keygenqt.mylibrary.data.models.ModelSearch
+import com.keygenqt.mylibrary.data.models.*
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.hal.LinkSearch
 import kotlinx.coroutines.Dispatchers
@@ -89,6 +88,18 @@ class ServiceBooks(
                     dao.insert(model)
                     response.invoke(model)
                 }
+            }
+        }
+    }
+
+    suspend fun updateBook(
+        link: String,
+        model: ModelBook,
+        response: suspend () -> Unit
+    ) {
+        withContext(Dispatchers.IO) {
+            query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
+                response.invoke()
             }
         }
     }

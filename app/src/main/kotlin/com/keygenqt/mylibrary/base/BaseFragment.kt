@@ -34,7 +34,6 @@ import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.progressBar
-import kotlinx.coroutines.NonCancellable.start
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
@@ -62,13 +61,17 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
             }
         }
 
+    open fun isSpawnAnimation(): Boolean {
+        return this::class.java.kotlin.findAnnotation<SpawnAnimation>() != null
+    }
+
     abstract fun onCreateView()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this::class.java.kotlin.findAnnotation<SpawnAnimation>()?.let {
+        if (isSpawnAnimation()) {
             (requireActivity() as AppCompatActivity).spawnAnimation.apply {
                 visibility = View.VISIBLE
                 alpha = 1f
@@ -80,7 +83,7 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
                     start()
                 }
             }
-        } ?: run {
+        } else {
             (requireActivity() as AppCompatActivity).spawnAnimation.visibility = View.GONE
         }
         this::class.java.kotlin.findAnnotation<ActionBarEnable>()?.let {

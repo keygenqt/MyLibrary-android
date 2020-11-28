@@ -23,21 +23,24 @@ import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceBooks
+import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ViewEditBook(private val service: ServiceBooks) : ViewModel() {
 
-    private var book: ModelBook? = null
+    var book: ModelBook? = null
 
     val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
-    val throwable: MutableLiveData<Throwable> = MutableLiveData()
+    val params: MutableLiveData<ModelBook> = MutableLiveData()
+    val error: MutableLiveData<Throwable> = MutableLiveData()
 
     val data = selfLink.switchMap { link ->
-        liveData(BaseExceptionHandler.getExceptionHandler(throwable)) {
+        liveData(BaseExceptionHandler.getExceptionHandler(error)) {
             service.getView(link) { model ->
                 book = model
                 model?.let {
@@ -48,6 +51,16 @@ class ViewEditBook(private val service: ServiceBooks) : ViewModel() {
                     loading.postValue(false)
                 } ?: run {
                     loading.postValue(true)
+                }
+            }
+        }
+    }
+
+    val updateBook = params.switchMap {
+        liveData(BaseExceptionHandler.getExceptionHandler(error)) {
+            book?.let {
+                service.updateBook(it.links.getValue(API_KEY_SELF).value, it) {
+                    emit(true)
                 }
             }
         }

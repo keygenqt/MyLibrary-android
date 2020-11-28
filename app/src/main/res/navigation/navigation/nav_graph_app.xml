@@ -80,6 +80,10 @@
           android:name="title"
           android:defaultValue=""
           app:argType="string" />
+      <argument
+          android:name="back"
+          app:argType="boolean"
+          android:defaultValue="false" />
       <action
           android:id="@+id/action_FragmentBook_to_FragmentEditBook"
           app:destination="@id/FragmentEditBook" />

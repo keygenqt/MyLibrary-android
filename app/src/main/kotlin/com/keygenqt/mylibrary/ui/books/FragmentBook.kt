@@ -50,6 +50,10 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
     private var menu: Menu? = null
 
+    override fun isSpawnAnimation(): Boolean {
+        return viewModel.book == null
+    }
+
     override fun onCreateView() {
         initView {
 
