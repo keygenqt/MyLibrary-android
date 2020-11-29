@@ -39,7 +39,6 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
                     emit(LiveDataEvent(models))
                 }
             }
-
         }
     }
 

@@ -115,7 +115,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     @InitObserve fun observeUpdateBook() {
         initView {
             observeUpdateBook.change.observe(viewLifecycleOwner) { event ->
-                event?.peekContent()?.let { model ->
+                event?.peekContentHandled()?.let { model ->
                     updateView(model)
                 }
             }
@@ -137,9 +137,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         initView {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContent()?.let { model ->
-                    if (observeUpdateBook.change.value == null) {
-                        updateView(model)
-                    }
+                    updateView(model)
                 }
             }
         }

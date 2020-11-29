@@ -25,7 +25,8 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
+import com.keygenqt.mylibrary.extensions.findIndex
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
@@ -36,7 +37,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
 
-    private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
+    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
 
     // menu
     override fun onCreateOptionsMenu(): Int {
@@ -68,9 +69,13 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     @InitObserve fun observeUpdateBook() {
         initView {
-            observeUpdateBook.change.observe(viewLifecycleOwner) { event ->
+            observeUpdateBooks.change.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
-                    (recyclerView.adapter as AdapterBooks).updateItem(model)
+                    viewModel.linkSearchSwitch.value?.peekContent()?.let {
+                        val index = it.itemsAny.findIndex(model)
+                        it.updateItem(index, model)
+                        (recyclerView.adapter as AdapterBooks).updateItem(index, model)
+                    }
                 }
             }
         }

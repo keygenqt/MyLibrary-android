@@ -107,4 +107,11 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> U
             nextPage?.invoke(link.linkClearPageable)
         }
     }
+
+    fun updateItem(index: Int, item: Any) {
+        if (index < items.size) {
+            items[index] = item
+            notifyItemChanged(index)
+        }
+    }
 }

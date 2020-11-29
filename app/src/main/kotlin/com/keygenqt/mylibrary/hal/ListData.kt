@@ -84,4 +84,10 @@ open class ListData<T>(
         itemsAny = linkSearch.items
         return this
     }
+
+    fun updateItem(index: Int, item: T) {
+        val list = ArrayList(items)
+        list[index] = item
+        items = list
+    }
 }

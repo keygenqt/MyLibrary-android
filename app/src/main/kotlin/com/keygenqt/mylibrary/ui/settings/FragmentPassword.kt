@@ -24,7 +24,6 @@ import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_password.view.*
-import kotlinx.android.synthetic.main.fragment_password.view.buttonSubmit
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -50,7 +49,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
         initView {
             viewModel.password.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
-                    viewModel.error.postValue(null)
+                    clearError()
                     this.hideKeyboard()
                     body.requestFocus()
                     textInputEditTextPassword.setText("")
@@ -67,8 +66,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
                 event?.peekContentHandled()?.let { throwable ->
                     statusProgress(false)
 
-                    textInputLayoutPassword.isErrorEnabled = false
-                    textInputLayoutRPassword.isErrorEnabled = false
+                    clearError()
 
                     if (throwable is ValidateException) {
                         throwable.errors.forEach {
@@ -86,6 +84,13 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
                     }
                 }
             })
+        }
+    }
+
+    private fun clearError() {
+        initView {
+            textInputLayoutPassword.isErrorEnabled = false
+            textInputLayoutRPassword.isErrorEnabled = false
         }
     }
 }

@@ -29,6 +29,7 @@ import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
 import kotlinx.android.synthetic.main.fragment_edit_book.view.*
 import org.koin.android.ext.android.inject
 
@@ -39,6 +40,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
     private val viewModel: ViewEditBook by inject()
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
+    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
     private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
 
     private var selectGenreId: String? = null
@@ -105,7 +107,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
             viewModel.updateBook.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(false)
-                    viewModel.error.postValue(null)
+                    clearError()
                     scrollView.fullScroll(ScrollView.FOCUS_UP)
                     this.hideKeyboard()
                     body.requestFocus()
@@ -113,6 +115,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
 
                     // call change
                     observeUpdateBook.change(viewModel.book)
+                    observeUpdateBooks.change(viewModel.book)
                 }
             }
         }
@@ -153,13 +156,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
 
                     statusProgress(false)
 
-                    textInputLayoutTitle.isErrorEnabled = false
-                    textInputLayoutAuthor.isErrorEnabled = false
-                    textInputLayoutPublisher.isErrorEnabled = false
-                    textInputLayoutYear.isErrorEnabled = false
-                    textInputLayoutISBN.isErrorEnabled = false
-                    textInputLayoutNumberOfPages.isErrorEnabled = false
-                    textInputLayoutDescription.isErrorEnabled = false
+                    clearError()
 
                     if (throwable is ValidateException) {
 
@@ -200,6 +197,18 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
                     }
                 }
             })
+        }
+    }
+
+    private fun clearError() {
+        initView {
+            textInputLayoutTitle.isErrorEnabled = false
+            textInputLayoutAuthor.isErrorEnabled = false
+            textInputLayoutPublisher.isErrorEnabled = false
+            textInputLayoutYear.isErrorEnabled = false
+            textInputLayoutISBN.isErrorEnabled = false
+            textInputLayoutNumberOfPages.isErrorEnabled = false
+            textInputLayoutDescription.isErrorEnabled = false
         }
     }
 }

@@ -64,14 +64,4 @@ class AdapterBooks(@LayoutRes layout: Int, nextPage: (String, Link) -> Unit) : L
             }
         }
     }
-
-    fun updateItem(item: ModelBook) {
-        items.forEachIndexed { index, any ->
-            if (any is ModelBook && item.id == any.id) {
-                items[index] = item
-                notifyDataSetChanged()
-                return
-            }
-        }
-    }
 }

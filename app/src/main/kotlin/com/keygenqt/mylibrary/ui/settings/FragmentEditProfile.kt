@@ -68,7 +68,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
             viewModel.updateUser.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(false)
-                    viewModel.error.postValue(null)
+                    clearError()
                     this.hideKeyboard()
                     body.requestFocus()
                     Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
@@ -99,10 +99,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
 
                     statusProgress(false)
 
-                    textInputLayoutNickname.isErrorEnabled = false
-                    textInputLayoutWebsite.isErrorEnabled = false
-                    textInputLayoutLocation.isErrorEnabled = false
-                    textInputLayoutBio.isErrorEnabled = false
+                    clearError()
 
                     if (throwable is ValidateException) {
                         throwable.errors.forEach {
@@ -128,6 +125,15 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
                     }
                 }
             })
+        }
+    }
+
+    private fun clearError() {
+        initView {
+            textInputLayoutNickname.isErrorEnabled = false
+            textInputLayoutWebsite.isErrorEnabled = false
+            textInputLayoutLocation.isErrorEnabled = false
+            textInputLayoutBio.isErrorEnabled = false
         }
     }
 }

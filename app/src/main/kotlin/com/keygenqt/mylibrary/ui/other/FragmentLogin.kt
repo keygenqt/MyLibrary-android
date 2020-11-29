@@ -61,6 +61,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
         initView {
             viewModel.login.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
+                    clearError()
                     viewModel.error.postValue(null)
                     findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToUserApp())
                 }
@@ -74,8 +75,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
                 event?.peekContentHandled()?.let { throwable ->
                     statusProgress(false)
 
-                    textInputLayoutEmail.isErrorEnabled = false
-                    textInputLayoutPassw.isErrorEnabled = false
+                    clearError()
 
                     if (throwable is ValidateException) {
                         throwable.errors.forEach {
@@ -93,6 +93,13 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
                     }
                 }
             })
+        }
+    }
+
+    private fun clearError() {
+        initView {
+            textInputLayoutEmail.isErrorEnabled = false
+            textInputLayoutPassw.isErrorEnabled = false
         }
     }
 }

@@ -79,6 +79,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
         initView {
             viewModel.join.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
+                    clearError()
                     findNavController().navigate(FragmentJoinDirections.actionFragmentJoinToUserApp())
                 }
             }
@@ -91,9 +92,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
                 event?.peekContentHandled()?.let { throwable ->
                     statusProgress(false)
 
-                    textInputLayoutNickname.isErrorEnabled = false
-                    textInputLayoutEmail.isErrorEnabled = false
-                    textInputLayoutPassw.isErrorEnabled = false
+                    clearError()
 
                     if (throwable is ValidateException) {
                         throwable.errors.forEach {
@@ -115,6 +114,14 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
                     }
                 }
             })
+        }
+    }
+
+    private fun clearError() {
+        initView {
+            textInputLayoutNickname.isErrorEnabled = false
+            textInputLayoutEmail.isErrorEnabled = false
+            textInputLayoutPassw.isErrorEnabled = false
         }
     }
 }
