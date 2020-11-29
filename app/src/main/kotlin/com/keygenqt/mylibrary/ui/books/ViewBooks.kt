@@ -19,6 +19,7 @@ package com.keygenqt.mylibrary.ui.books
 import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.ListSearchAdapter
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
@@ -29,19 +30,22 @@ import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkSearch: MutableLiveData<LinkListSearch> = MutableLiveData()
+    private val linkSearch: MutableLiveData<LiveDataEvent<LinkListSearch>> = MutableLiveData()
 
-    val switchMap = linkSearch.switchMap { link ->
+    val linkSearchSwitch = linkSearch.switchMap { event ->
         liveData(getExceptionHandler()) {
-            service.getListSearch(link) { models ->
-                emit(models)
+            event?.peekContent()?.let { link ->
+                service.getListSearch(link) { models ->
+                    emit(LiveDataEvent(models))
+                }
             }
+
         }
     }
 
-    val search: LiveData<ModelSearch> = liveData(getExceptionHandler()) {
+    val search: LiveData<LiveDataEvent<ModelSearch>> = liveData(getExceptionHandler()) {
         service.getSearch { search ->
-            emit(search)
+            emit(LiveDataEvent(search))
         }
     }
 
@@ -51,15 +55,15 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
     fun updateList(key: String, link: Link? = null) {
         if (key == ListSearchAdapter.SEARCH_SELF) {
-            linkSearch.postValue(LinkListSearch(
+            linkSearch.postValue(LiveDataEvent(LinkListSearch(
                 key = key,
                 link = service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY),
                 items = mutableListOf()
-            ))
+            )))
         } else {
-            linkSearch.postValue(LinkListSearch(
+            linkSearch.postValue(LiveDataEvent(LinkListSearch(
                 key = key,
-                items = linkSearch.value?.items ?: mutableListOf(),
+                items = linkSearch.value?.peekContent()?.items ?: mutableListOf(),
                 link = link!!.linkWithParams(
                     when (key) {
                         AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> hashMapOf("userId" to service.preferences.userId)
@@ -67,7 +71,7 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
                         else -> hashMapOf()
                     }
                 )
-            ))
+            )))
         }
     }
 }

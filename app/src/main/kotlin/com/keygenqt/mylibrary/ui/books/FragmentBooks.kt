@@ -16,17 +16,16 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
@@ -37,6 +36,22 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
 
+    private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
+
+    // menu
+    override fun onCreateOptionsMenu(): Int {
+        return R.menu.menu_main_page
+    }
+
+    override fun onOptionsItemSelected(id: Int) {
+        when (id) {
+            R.id.action_settings -> {
+                findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
+            }
+        }
+    }
+
+    // bind view
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
@@ -51,31 +66,36 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
-    @CallOnCreate fun observeListItems() {
+    @InitObserve fun observeUpdateBook() {
         initView {
-            viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
-                refresh.isRefreshing = false
-                (recyclerView.adapter as ListSearchAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
-                notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
-            }
-            viewModel.search.observe(viewLifecycleOwner) { search ->
-                (recyclerView.adapter as ListSearchAdapter<*>).addSearchModel(search)
+            observeUpdateBook.change.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let { model ->
+                    (recyclerView.adapter as AdapterBooks).updateItem(model)
+                }
             }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main_page, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    @InitObserve fun linkSearchSwitch() {
+        initView {
+            viewModel.linkSearchSwitch.observe(viewLifecycleOwner) { event ->
+                event?.peekContent()?.let { listData ->
+                    refresh.isRefreshing = false
+                    (recyclerView.adapter as ListSearchAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
+                    notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
+                }
+
+            }
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
-                return true
+    @InitObserve fun search() {
+        initView {
+            viewModel.search.observe(viewLifecycleOwner) { event ->
+                event?.peekContent()?.let { search ->
+                    (recyclerView.adapter as ListSearchAdapter<*>).addSearchModel(search)
+                }
             }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 }

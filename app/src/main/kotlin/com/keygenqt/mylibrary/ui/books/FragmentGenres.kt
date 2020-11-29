@@ -27,6 +27,7 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
@@ -38,7 +39,7 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
 
     private val args: FragmentGenresArgs by navArgs()
     private val viewModel: ViewGenres by inject()
-    private val model: ViewEditBookGenres by activityViewModels()
+    private val activityViewEditBook: ObserveSelectGenre by activityViewModels()
 
     override fun onCreateView() {
         initView {
@@ -54,13 +55,13 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
                 commonFab.showWithPadding(recyclerView)
             }
             commonFab.setOnClickListener {
-                model.select((recyclerView.adapter as AdapterGenres).getSelectItem())
+                activityViewEditBook.select((recyclerView.adapter as AdapterGenres).getSelectItem())
                 findNavController().navigateUp()
             }
         }
     }
 
-    @CallOnCreate fun observeListItems() {
+    @InitObserve fun observeListItems() {
         initView {
             viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
                 refresh.isRefreshing = false

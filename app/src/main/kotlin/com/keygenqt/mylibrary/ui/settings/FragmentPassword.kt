@@ -20,6 +20,7 @@ import android.widget.Toast
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_password.view.*
@@ -37,47 +38,50 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
         initView {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-                viewModel.params.postValue(RequestPassword(
+                viewModel.params.postValue(LiveDataEvent(RequestPassword(
                     textInputEditTextPassword.text.toString(),
                     textInputEditTextRPassword.text.toString()
-                ))
+                )))
             }
         }
     }
 
-    @CallOnCreate fun observeLoading() {
+    @InitObserve fun afterSubmit() {
         initView {
-            viewModel.password.observe(viewLifecycleOwner) {
-                viewModel.error.postValue(null)
-                this.hideKeyboard()
-                body.requestFocus()
-                textInputEditTextPassword.setText("")
-                textInputEditTextRPassword.setText("")
-                Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
+            viewModel.password.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let {
+                    viewModel.error.postValue(null)
+                    this.hideKeyboard()
+                    body.requestFocus()
+                    textInputEditTextPassword.setText("")
+                    textInputEditTextRPassword.setText("")
+                    Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    @CallOnCreate fun observeError() {
+    @InitObserve fun error() {
         initView {
-            viewModel.error.observe(viewLifecycleOwner, { throwable ->
+            viewModel.error.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let { throwable ->
+                    statusProgress(false)
 
-                statusProgress(false)
+                    textInputLayoutPassword.isErrorEnabled = false
+                    textInputLayoutRPassword.isErrorEnabled = false
 
-                textInputLayoutPassword.isErrorEnabled = false
-                textInputLayoutRPassword.isErrorEnabled = false
-
-                if (throwable is ValidateException) {
-                    throwable.errors.forEach {
-                        when (it.field) {
-                            "password" ->
-                                if (textInputLayoutPassword.error.isNullOrEmpty()) {
-                                    textInputLayoutPassword.error = it.defaultMessage
-                                }
-                            "rpassword" ->
-                                if (textInputLayoutRPassword.error.isNullOrEmpty()) {
-                                    textInputLayoutRPassword.error = it.defaultMessage
-                                }
+                    if (throwable is ValidateException) {
+                        throwable.errors.forEach {
+                            when (it.field) {
+                                "password" ->
+                                    if (textInputLayoutPassword.error.isNullOrEmpty()) {
+                                        textInputLayoutPassword.error = it.defaultMessage
+                                    }
+                                "rpassword" ->
+                                    if (textInputLayoutRPassword.error.isNullOrEmpty()) {
+                                        textInputLayoutRPassword.error = it.defaultMessage
+                                    }
+                            }
                         }
                     }
                 }

@@ -21,6 +21,7 @@ import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.ui.other.FragmentLogin.PARAMS.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -45,10 +46,10 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
             }
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-                viewModel.params.postValue(hashMapOf(
+                viewModel.params.postValue(LiveDataEvent(hashMapOf(
                     EMAIL to textInputEditTextEmail.text.toString(),
                     PASSWORD to textInputEditTextPassw.text.toString()
-                ))
+                )))
             }
             buttonJoin.setOnClickListener {
                 findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToFragmentJoin())
@@ -56,35 +57,38 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    @CallOnCreate fun observeLoading() {
+    @InitObserve fun afterSubmit() {
         initView {
-            viewModel.login.observe(viewLifecycleOwner) {
-                viewModel.error.postValue(null)
-                findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToUserApp())
+            viewModel.login.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let {
+                    viewModel.error.postValue(null)
+                    findNavController().navigate(FragmentLoginDirections.actionFragmentLoginToUserApp())
+                }
             }
         }
     }
 
-    @CallOnCreate fun observeError() {
+    @InitObserve fun observeError() {
         initView {
-            viewModel.error.observe(viewLifecycleOwner, { throwable ->
+            viewModel.error.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let { throwable ->
+                    statusProgress(false)
 
-                statusProgress(false)
+                    textInputLayoutEmail.isErrorEnabled = false
+                    textInputLayoutPassw.isErrorEnabled = false
 
-                textInputLayoutEmail.isErrorEnabled = false
-                textInputLayoutPassw.isErrorEnabled = false
-
-                if (throwable is ValidateException) {
-                    throwable.errors.forEach {
-                        when (it.field) {
-                            EMAIL.name.toLowerCase(Locale.ROOT) ->
-                                if (textInputLayoutEmail.error.isNullOrEmpty()) {
-                                    textInputLayoutEmail.error = it.defaultMessage
-                                }
-                            PASSWORD.name.toLowerCase(Locale.ROOT) ->
-                                if (textInputLayoutPassw.error.isNullOrEmpty()) {
-                                    textInputLayoutPassw.error = it.defaultMessage
-                                }
+                    if (throwable is ValidateException) {
+                        throwable.errors.forEach {
+                            when (it.field) {
+                                EMAIL.name.toLowerCase(Locale.ROOT) ->
+                                    if (textInputLayoutEmail.error.isNullOrEmpty()) {
+                                        textInputLayoutEmail.error = it.defaultMessage
+                                    }
+                                PASSWORD.name.toLowerCase(Locale.ROOT) ->
+                                    if (textInputLayoutPassw.error.isNullOrEmpty()) {
+                                        textInputLayoutPassw.error = it.defaultMessage
+                                    }
+                            }
                         }
                     }
                 }

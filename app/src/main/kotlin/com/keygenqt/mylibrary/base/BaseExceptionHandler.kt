@@ -34,16 +34,16 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
 
     companion object {
 
-        private var error: MutableLiveData<Throwable> = MutableLiveData()
+        private var error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
-        fun getExceptionHandler(delegate: (Throwable) -> Unit): CoroutineExceptionHandler {
+        fun getExceptionHandler(delegate: (LiveDataEvent<Throwable>) -> Unit): CoroutineExceptionHandler {
             return CoroutineExceptionHandler { _, throwable ->
-                error.postValue(throwable)
-                delegate.invoke(throwable)
+                error.postValue(LiveDataEvent(throwable))
+                delegate.invoke(LiveDataEvent(throwable))
             }
         }
 
-        fun getExceptionHandler(error: MutableLiveData<Throwable>): CoroutineExceptionHandler {
+        fun getExceptionHandler(error: MutableLiveData<LiveDataEvent<Throwable>>): CoroutineExceptionHandler {
             return getExceptionHandler {
                 error.postValue(it)
             }
@@ -56,34 +56,36 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
 
     private fun init(activity: Activity) {
         error = MutableLiveData()
-        error.observe(activity as LifecycleOwner, { throwable ->
-            when (throwable) {
-                is HttpException -> {
-                    if (throwable.status == 405) {
-                        Toast.makeText(activity, "Method Not Allowed", Toast.LENGTH_SHORT).show()
+        error.observe(activity as LifecycleOwner, { event ->
+            event?.peekContentHandled()?.let { throwable ->
+                when (throwable) {
+                    is HttpException -> {
+                        if (throwable.status == 405) {
+                            Toast.makeText(activity, "Method Not Allowed", Toast.LENGTH_SHORT).show()
+                        }
+                        if (throwable.status == 403) {
+                            sharedPreferences.token = null
+                            error.removeObservers(activity as LifecycleOwner)
+                            activity.findNavController(R.id.nav_host_fragment)
+                                .createDeepLink().setDestination(R.id.FragmentLogin).createPendingIntent().send()
+                        }
+                        Log.e("HttpException", throwable.toString())
                     }
-                    if (throwable.status == 403) {
-                        sharedPreferences.token = null
-                        error.removeObservers(activity as LifecycleOwner)
-                        activity.findNavController(R.id.nav_host_fragment)
-                            .createDeepLink().setDestination(R.id.FragmentLogin).createPendingIntent().send()
+                    is ConnectException -> {
+                        val fragment = (activity as BaseActivity).getCurrentFragment()
+                        if (fragment !is FragmentSplash) {
+                            error.removeObservers(activity as LifecycleOwner)
+                            activity.findNavController(R.id.nav_host_fragment)
+                                .createDeepLink().setDestination(R.id.FragmentSplash).createPendingIntent().send()
+                        } else {
+                            fragment.statusProgress(false)
+                            Toast.makeText(activity, "Failed to connect API", Toast.LENGTH_SHORT).show()
+                        }
+                        Log.e("ConnectException", throwable.stackTraceToString())
                     }
-                    Log.e("HttpException", throwable.toString())
-                }
-                is ConnectException -> {
-                    val fragment = (activity as BaseActivity).getCurrentFragment()
-                    if (fragment !is FragmentSplash) {
-                        error.removeObservers(activity as LifecycleOwner)
-                        activity.findNavController(R.id.nav_host_fragment)
-                            .createDeepLink().setDestination(R.id.FragmentSplash).createPendingIntent().send()
-                    } else {
-                        fragment.statusProgress(false)
-                        Toast.makeText(activity, "Failed to connect API", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        Log.e("BaseExceptionHandler", throwable.stackTraceToString())
                     }
-                    Log.e("ConnectException", throwable.stackTraceToString())
-                }
-                else -> {
-                    Log.e("BaseExceptionHandler", throwable.stackTraceToString())
                 }
             }
         })

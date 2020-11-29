@@ -18,9 +18,7 @@ package com.keygenqt.mylibrary.base
 
 import android.graphics.Color.*
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +38,7 @@ import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
-    annotation class CallOnCreate
+    annotation class InitObserve
 
     private val preferences: BaseSharedPreferences by inject()
 
@@ -113,7 +111,7 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
     private fun callOnCreate() {
         this::class.java.declaredMethods.forEach { method ->
-            method.getAnnotation(CallOnCreate::class.java) ?: return@forEach
+            method.getAnnotation(InitObserve::class.java) ?: return@forEach
             method.isAccessible = true
             method.invoke(this)
         }
@@ -131,5 +129,23 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
         } else {
             requireActivity().lottieAnimationView.resumeAnimation()
         }
+    }
+
+    open fun onCreateOptionsMenu(): Int? {
+        return null
+    }
+
+    open fun onOptionsItemSelected(id: Int) {}
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        onCreateOptionsMenu()?.let { id ->
+            inflater.inflate(id, menu)
+            super.onCreateOptionsMenu(menu, inflater)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onOptionsItemSelected(item.itemId)
+        return true
     }
 }

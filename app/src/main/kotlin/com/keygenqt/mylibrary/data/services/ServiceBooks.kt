@@ -25,6 +25,7 @@ import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.*
+import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.hal.LinkList
 import com.keygenqt.mylibrary.hal.LinkListSearch
@@ -43,7 +44,7 @@ class ServiceBooks(
                 response.invoke(model)
             }
             withContext(Dispatchers.IO) {
-                query.getAsync<ModelSearch>(this, "$key/search").await().let { model ->
+                query.getAsync<ModelSearch>(this, "$key/$API_KEY_SEARCH").await().let { model ->
                     model.id = key
                     dao.insert(model)
                     response.invoke(model)
@@ -99,9 +100,22 @@ class ServiceBooks(
         model: ModelBook,
         response: suspend () -> Unit
     ) {
-        withContext(Dispatchers.IO) {
-            query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
-                response.invoke()
+        db.getDao<ModelBookDao>().let { dao ->
+            withContext(Dispatchers.IO) {
+                query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
+
+                    // update genre
+                    model.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                        model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
+                    }
+
+                    dao.getAllById(model.id).forEach {
+                        model.key = it.key
+                        model.type = it.type
+                        dao.update(model)
+                    }
+                    response.invoke()
+                }
             }
         }
     }

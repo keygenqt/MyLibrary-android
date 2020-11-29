@@ -21,6 +21,7 @@ import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
@@ -52,71 +53,77 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
             })
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-                viewModel.params.postValue(viewModel.user?.apply {
+                viewModel.params.postValue(LiveDataEvent(viewModel.user?.apply {
                     nickname = textInputEditTextNickname.text.toString()
                     website = textInputEditTextWebsite.text.toString()
                     location = textInputEditTextLocation.text.toString()
                     bio = textInputEditTextBio.text.toString()
-                })
+                }))
             }
         }
     }
 
-    @CallOnCreate fun observeUpdate() {
+    @InitObserve fun observeUpdate() {
         initView {
-            viewModel.updateUser.observe(viewLifecycleOwner) {
-                statusProgress(false)
-                viewModel.error.postValue(null)
-                this.hideKeyboard()
-                body.requestFocus()
-                Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
+            viewModel.updateUser.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let {
+                    statusProgress(false)
+                    viewModel.error.postValue(null)
+                    this.hideKeyboard()
+                    body.requestFocus()
+                    Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    @CallOnCreate fun observeUserMe() {
+    @InitObserve fun observeUserMe() {
         initView {
-            viewModel.userMe.observe(viewLifecycleOwner, { model ->
-                statusProgress(viewModel.user == null)
-                viewPager.currentItem = model.avatar.replace("avatar_", "").toInt()
-                textInputEditTextNickname.setText(model.nickname)
-                textInputEditTextWebsite.setText(model.website)
-                textInputEditTextLocation.setText(model.location)
-                textInputEditTextBio.setText(model.bio)
+            viewModel.userMe.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let { model ->
+                    statusProgress(viewModel.user == null)
+                    viewPager.currentItem = model.avatar.replace("avatar_", "").toInt()
+                    textInputEditTextNickname.setText(model.nickname)
+                    textInputEditTextWebsite.setText(model.website)
+                    textInputEditTextLocation.setText(model.location)
+                    textInputEditTextBio.setText(model.bio)
+                }
             })
         }
     }
 
-    @CallOnCreate fun observeError() {
+    @InitObserve fun observeError() {
         initView {
-            viewModel.error.observe(viewLifecycleOwner, { throwable ->
+            viewModel.error.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let { throwable ->
 
-                statusProgress(false)
+                    statusProgress(false)
 
-                textInputLayoutNickname.isErrorEnabled = false
-                textInputLayoutWebsite.isErrorEnabled = false
-                textInputLayoutLocation.isErrorEnabled = false
-                textInputLayoutBio.isErrorEnabled = false
+                    textInputLayoutNickname.isErrorEnabled = false
+                    textInputLayoutWebsite.isErrorEnabled = false
+                    textInputLayoutLocation.isErrorEnabled = false
+                    textInputLayoutBio.isErrorEnabled = false
 
-                if (throwable is ValidateException) {
-                    throwable.errors.forEach {
-                        when (it.field) {
-                            "nickname" ->
-                                if (textInputLayoutNickname.error.isNullOrEmpty()) {
-                                    textInputLayoutNickname.error = it.defaultMessage
-                                }
-                            "website" ->
-                                if (textInputLayoutWebsite.error.isNullOrEmpty()) {
-                                    textInputLayoutWebsite.error = it.defaultMessage
-                                }
-                            "location" ->
-                                if (textInputLayoutLocation.error.isNullOrEmpty()) {
-                                    textInputLayoutLocation.error = it.defaultMessage
-                                }
-                            "bio" ->
-                                if (textInputLayoutBio.error.isNullOrEmpty()) {
-                                    textInputLayoutBio.error = it.defaultMessage
-                                }
+                    if (throwable is ValidateException) {
+                        throwable.errors.forEach {
+                            when (it.field) {
+                                "nickname" ->
+                                    if (textInputLayoutNickname.error.isNullOrEmpty()) {
+                                        textInputLayoutNickname.error = it.defaultMessage
+                                    }
+                                "website" ->
+                                    if (textInputLayoutWebsite.error.isNullOrEmpty()) {
+                                        textInputLayoutWebsite.error = it.defaultMessage
+                                    }
+                                "location" ->
+                                    if (textInputLayoutLocation.error.isNullOrEmpty()) {
+                                        textInputLayoutLocation.error = it.defaultMessage
+                                    }
+                                "bio" ->
+                                    if (textInputLayoutBio.error.isNullOrEmpty()) {
+                                        textInputLayoutBio.error = it.defaultMessage
+                                    }
+                            }
                         }
                     }
                 }

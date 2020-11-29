@@ -16,37 +16,39 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceOther
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.utils.API_VERSION
 
-class ViewEditProfile(
-    private val service: ServiceOther
-) : ViewModel() {
+class ViewEditProfile(private val service: ServiceOther) : ViewModel() {
 
     var user: ModelUser? = null
 
     private val linkModel = service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelUser.API_KEY)
 
-    val params: MutableLiveData<ModelUser> = MutableLiveData()
-    val error: MutableLiveData<Throwable> = MutableLiveData()
+    val params: MutableLiveData<LiveDataEvent<ModelUser?>> = MutableLiveData()
+    val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
-    val userMe: LiveData<ModelUser> = liveData(BaseExceptionHandler.getExceptionHandler()) {
+    val userMe = liveData(BaseExceptionHandler.getExceptionHandler()) {
         service.getUserMe(linkModel.value) { model ->
             user = model
-            emit(model)
+            emit(LiveDataEvent(model))
         }
     }
 
-    val updateUser = params.switchMap {
+    val updateUser = params.switchMap { event ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            user?.let {
-                service.updateUser(it.links.getValue(API_KEY_SELF).value, it) {
-                    emit(true)
+            event?.peekContentHandled()?.let { model ->
+                service.updateUser(model.links.getValue(API_KEY_SELF).value, model) {
+                    emit(LiveDataEvent(true))
                 }
             }
         }

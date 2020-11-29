@@ -21,6 +21,7 @@ import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
@@ -64,49 +65,52 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
 
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-                viewModel.params.postValue(hashMapOf(
+                viewModel.params.postValue(LiveDataEvent(hashMapOf(
                     AVATAR to keyAvatar,
                     NICKNAME to textInputEditTextNickname.text.toString(),
                     EMAIL to textInputEditTextEmail.text.toString(),
                     PASSWORD to textInputEditTextPassw.text.toString()
-                ))
+                )))
             }
         }
     }
 
-    @CallOnCreate fun observeLoading() {
+    @InitObserve fun afterSubmit() {
         initView {
-            viewModel.join.observe(viewLifecycleOwner) {
-                findNavController().navigate(FragmentJoinDirections.actionFragmentJoinToUserApp())
+            viewModel.join.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let {
+                    findNavController().navigate(FragmentJoinDirections.actionFragmentJoinToUserApp())
+                }
             }
         }
     }
 
-    @CallOnCreate fun observeError() {
+    @InitObserve fun validate() {
         initView {
-            viewModel.error.observe(viewLifecycleOwner, { throwable ->
+            viewModel.error.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let { throwable ->
+                    statusProgress(false)
 
-                statusProgress(false)
+                    textInputLayoutNickname.isErrorEnabled = false
+                    textInputLayoutEmail.isErrorEnabled = false
+                    textInputLayoutPassw.isErrorEnabled = false
 
-                textInputLayoutNickname.isErrorEnabled = false
-                textInputLayoutEmail.isErrorEnabled = false
-                textInputLayoutPassw.isErrorEnabled = false
-
-                if (throwable is ValidateException) {
-                    throwable.errors.forEach {
-                        when (it.field) {
-                            NICKNAME.name.toLowerCase(Locale.ROOT) ->
-                                if (textInputLayoutNickname.error.isNullOrEmpty()) {
-                                    textInputLayoutNickname.error = it.defaultMessage
-                                }
-                            EMAIL.name.toLowerCase(Locale.ROOT) ->
-                                if (textInputLayoutEmail.error.isNullOrEmpty()) {
-                                    textInputLayoutEmail.error = it.defaultMessage
-                                }
-                            PASSWORD.name.toLowerCase(Locale.ROOT) ->
-                                if (textInputLayoutPassw.error.isNullOrEmpty()) {
-                                    textInputLayoutPassw.error = it.defaultMessage
-                                }
+                    if (throwable is ValidateException) {
+                        throwable.errors.forEach {
+                            when (it.field) {
+                                NICKNAME.name.toLowerCase(Locale.ROOT) ->
+                                    if (textInputLayoutNickname.error.isNullOrEmpty()) {
+                                        textInputLayoutNickname.error = it.defaultMessage
+                                    }
+                                EMAIL.name.toLowerCase(Locale.ROOT) ->
+                                    if (textInputLayoutEmail.error.isNullOrEmpty()) {
+                                        textInputLayoutEmail.error = it.defaultMessage
+                                    }
+                                PASSWORD.name.toLowerCase(Locale.ROOT) ->
+                                    if (textInputLayoutPassw.error.isNullOrEmpty()) {
+                                        textInputLayoutPassw.error = it.defaultMessage
+                                    }
+                            }
                         }
                     }
                 }

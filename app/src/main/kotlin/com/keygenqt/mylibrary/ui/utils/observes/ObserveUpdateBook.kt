@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.books
+package com.keygenqt.mylibrary.ui.utils.observes
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.base.LiveDataEvent
+import com.keygenqt.mylibrary.data.models.ModelBook
 
-class ViewEditBookGenres : ViewModel() {
-    val selected = MutableLiveData<ModelBookGenre?>()
+class ObserveUpdateBook : ViewModel() {
+    val change = MutableLiveData<LiveDataEvent<ModelBook?>>()
 
-    fun select(item: ModelBookGenre?) {
-        selected.value = item
+    fun change(item: ModelBook?) {
+        item?.let {
+            change.value = LiveDataEvent(item)
+        }
     }
 }

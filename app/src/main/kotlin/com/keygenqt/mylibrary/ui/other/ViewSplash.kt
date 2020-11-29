@@ -16,10 +16,10 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
@@ -32,13 +32,13 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
 
     lateinit var modelRoot: ModelRoot
 
-    val userMe: LiveData<ModelUser> = liveData(getExceptionHandler()) {
+    val userMe = liveData(getExceptionHandler()) {
         service.getUserMe(modelRoot.links[ModelUser.API_KEY]?.value!!) { user ->
-            emit(user)
+            emit(LiveDataEvent(user))
         }
     }
 
-    val links: LiveData<ModelRoot> = liveData(getExceptionHandler()) {
+    val links = liveData(getExceptionHandler()) {
         service.getRootLinks { links ->
             modelRoot = links
             if (links.role == ModelRoot.API_ROLE_ANONYMOUS) {
@@ -49,7 +49,7 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
                     message = "Access is denied",
                 )
             }
-            emit(links)
+            emit(LiveDataEvent(links))
         }
     }
 }

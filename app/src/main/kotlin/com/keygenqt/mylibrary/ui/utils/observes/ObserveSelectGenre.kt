@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.hal
+package com.keygenqt.mylibrary.ui.utils.observes
 
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.hal.ListData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.keygenqt.mylibrary.base.LiveDataEvent
+import com.keygenqt.mylibrary.data.models.ModelBookGenre
 
-class ListDataModelBook : ListData<ModelBook>()
+class ObserveSelectGenre : ViewModel() {
+    val selected = MutableLiveData<LiveDataEvent<ModelBookGenre?>>()
+
+    fun select(item: ModelBookGenre?) {
+        selected.value = LiveDataEvent(item)
+    }
+}

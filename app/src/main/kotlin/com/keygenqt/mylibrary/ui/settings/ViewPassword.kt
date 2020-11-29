@@ -21,19 +21,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.services.ServiceOther
+import com.keygenqt.mylibrary.ui.settings.FragmentPassword.*
 
-class ViewPassword(
-    private val service: ServiceOther
-) : ViewModel() {
+class ViewPassword(private val service: ServiceOther) : ViewModel() {
 
-    val params: MutableLiveData<FragmentPassword.RequestPassword> = MutableLiveData()
-    val error: MutableLiveData<Throwable> = MutableLiveData()
+    val params: MutableLiveData<LiveDataEvent<RequestPassword>> = MutableLiveData()
+    val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
-    val password = params.switchMap {
+    val password = params.switchMap { event ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            service.password(it.password, it.rpassword) { model ->
-                emit(model)
+            event?.peekContentHandled()?.let {
+                service.password(it.password, it.rpassword) { model ->
+                    emit(LiveDataEvent(model))
+                }
             }
         }
     }

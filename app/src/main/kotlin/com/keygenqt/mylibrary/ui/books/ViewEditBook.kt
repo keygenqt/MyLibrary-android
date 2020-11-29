@@ -21,46 +21,45 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
-import com.keygenqt.mylibrary.data.dao.ModelBookDao
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class ViewEditBook(private val service: ServiceBooks) : ViewModel() {
 
     var book: ModelBook? = null
 
-    val selfLink: MutableLiveData<String> = MutableLiveData()
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
-    val params: MutableLiveData<ModelBook> = MutableLiveData()
-    val error: MutableLiveData<Throwable> = MutableLiveData()
+    val selfLink: MutableLiveData<LiveDataEvent<String>> = MutableLiveData()
+    val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
+    val params: MutableLiveData<LiveDataEvent<ModelBook?>> = MutableLiveData()
+    val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
-    val data = selfLink.switchMap { link ->
+    val data = selfLink.switchMap { event ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            service.getView(link) { model ->
-                book = model
-                model?.let {
-                    emit(model)
-                    if (loading.value == true) {
-                        delay(1200)
+            event.peekContent()?.let { link ->
+                service.getView(link) { model ->
+                    book = model
+                    model?.let {
+                        emit(LiveDataEvent(model))
+                        if (loading.value?.peekContent() == true) {
+                            delay(1200)
+                        }
+                        loading.postValue(LiveDataEvent(false))
+                    } ?: run {
+                        loading.postValue(LiveDataEvent(true))
                     }
-                    loading.postValue(false)
-                } ?: run {
-                    loading.postValue(true)
                 }
             }
         }
     }
 
-    val updateBook = params.switchMap {
+    val updateBook = params.switchMap { event ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            book?.let {
-                service.updateBook(it.links.getValue(API_KEY_SELF).value, it) {
-                    emit(true)
+            event?.peekContentHandled()?.let { book ->
+                service.updateBook(book.links.getValue(API_KEY_SELF).value, book) {
+                    emit(LiveDataEvent(true))
                 }
             }
         }
