@@ -127,6 +127,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
             viewModel.loading.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let {
                     statusProgressPage(it)
+                    refresh.isRefreshing = false
                 }
             })
         }
