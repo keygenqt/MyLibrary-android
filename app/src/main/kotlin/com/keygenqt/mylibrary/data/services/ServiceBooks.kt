@@ -20,12 +20,14 @@ import com.google.gson.Gson
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
+import com.keygenqt.mylibrary.data.dao.ModelBookGenreDao
 import com.keygenqt.mylibrary.data.dao.ModelSearchDao
-import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
+import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.*
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
-import com.keygenqt.mylibrary.hal.LinkSearch
+import com.keygenqt.mylibrary.hal.LinkList
+import com.keygenqt.mylibrary.hal.LinkListSearch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -50,7 +52,7 @@ class ServiceBooks(
         }
     }
 
-    suspend fun getListSearch(linkSearch: LinkSearch, response: suspend (ListDataModelBook) -> Unit) {
+    suspend fun getListSearch(linkSearch: LinkListSearch, response: suspend (ListDataModelBook) -> Unit) {
         db.getDao<ModelBookDao>().let { dao ->
             if (linkSearch.isFirstPage()) {
                 linkSearch.clear()
@@ -79,10 +81,10 @@ class ServiceBooks(
             }
             withContext(Dispatchers.IO) {
                 query.getAsync<ModelBook>(this, link).await().let { model ->
-                    model.links[ModelBookGenre.API_KEY]?.let { link ->
+                    model.links[ModelBook.API_KEY_GENRE]?.let { link ->
                         model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
                     }
-                    model.links[ModelBookUser.API_KEY]?.let { link ->
+                    model.links[ModelBook.API_KEY_USER]?.let { link ->
                         model.user = query.getAsync<ModelBookUser>(this, link.value).await()
                     }
                     dao.insert(model)
@@ -100,6 +102,27 @@ class ServiceBooks(
         withContext(Dispatchers.IO) {
             query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
                 response.invoke()
+            }
+        }
+    }
+
+    suspend fun getGenresList(linkList: LinkList, response: suspend (ListDataModelBookGenre) -> Unit) {
+        db.getDao<ModelBookGenreDao>().let { dao ->
+            if (linkList.isFirstPage()) {
+                linkList.clear()
+                response.invoke(ListDataModelBookGenre().apply {
+                    embedded = hashMapOf(ModelBookGenre.API_KEY to dao.getAll())
+                    links = hashMapOf(API_KEY_SELF to linkList.getLinkModel())
+                })
+            }
+            withContext(Dispatchers.IO) {
+                query.getAsync<ListDataModelBookGenre>(this, linkList.getLink()).await().let { listData ->
+                    if (linkList.isFirstPage()) {
+                        dao.deleteAll()
+                    }
+                    dao.insert(listData.items)
+                    response.invoke(listData.mergeItems(linkList) as ListDataModelBookGenre)
+                }
             }
         }
     }

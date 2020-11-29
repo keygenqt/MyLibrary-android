@@ -24,12 +24,12 @@ import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.hal.LinkSearch
+import com.keygenqt.mylibrary.hal.LinkListSearch
 import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkSearch: MutableLiveData<LinkSearch> = MutableLiveData()
+    private val linkSearch: MutableLiveData<LinkListSearch> = MutableLiveData()
 
     val switchMap = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
@@ -51,13 +51,13 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
     fun updateList(key: String, link: Link? = null) {
         if (key == ListSearchAdapter.SEARCH_SELF) {
-            linkSearch.postValue(LinkSearch(
+            linkSearch.postValue(LinkListSearch(
                 key = key,
                 link = service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY),
                 items = mutableListOf()
             ))
         } else {
-            linkSearch.postValue(LinkSearch(
+            linkSearch.postValue(LinkListSearch(
                 key = key,
                 items = linkSearch.value?.items ?: mutableListOf(),
                 link = link!!.linkWithParams(

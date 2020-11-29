@@ -19,6 +19,7 @@ package com.keygenqt.mylibrary.data.models
 import android.content.Context
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.keygenqt.mylibrary.R
@@ -65,7 +66,10 @@ data class ModelBook(
     var genre: ModelBookGenre = ModelBookGenre(),
 
     @Embedded(prefix = "user_")
-    var user: ModelBookUser = ModelBookUser()
+    var user: ModelBookUser = ModelBookUser(),
+
+    @Ignore
+    var genreId: String? = null
 
 ) : BaseModel() {
 
@@ -94,6 +98,9 @@ data class ModelBook(
 
     companion object {
         const val API_KEY = "books"
+        const val API_KEY_GENRE = "genre"
+        const val API_KEY_USER = "user"
+
         const val VIEW_KEY = "view"
 
         const val COVER_TYPE_SOFT = "soft"

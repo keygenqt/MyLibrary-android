@@ -73,7 +73,13 @@ open class ListData<T>(
             return null
         }
 
-    fun mergeItems(linkSearch: LinkSearch): ListData<T> {
+    fun mergeItems(linkSearch: LinkListSearch): ListData<T> {
+        linkSearch.items.addAll(itemsAny)
+        itemsAny = linkSearch.items
+        return this
+    }
+
+    fun mergeItems(linkSearch: LinkList): ListData<T> {
         linkSearch.items.addAll(itemsAny)
         itemsAny = linkSearch.items
         return this

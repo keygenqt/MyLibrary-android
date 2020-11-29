@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_book_edit"
+    app:startDestination="@+id/FragmentEditBook">
+
+  <fragment
+      android:id="@+id/FragmentEditBook"
+      android:name="com.keygenqt.mylibrary.ui.books.FragmentEditBook"
+      android:label="@string/fragment_edit_book_title"
+      tools:layout="@layout/fragment_edit_book">
+    <argument
+        android:name="selfLink"
+        app:argType="string" />
+    <action
+        android:id="@+id/action_FragmentEditBook_to_FragmentGenres"
+        app:destination="@id/FragmentGenres" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentGenres"
+      android:name="com.keygenqt.mylibrary.ui.books.FragmentGenres"
+      android:label="@string/fragment_genres_select_title"
+      tools:layout="@layout/common_fragment_list">
+    <argument
+        android:name="selectGenreId"
+        app:argType="string"
+        app:nullable="true" />
+  </fragment>
+
+</navigation>

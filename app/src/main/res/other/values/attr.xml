@@ -12,8 +12,10 @@
   <attr name="colorBackgroundPage" format="color" />
   <attr name="colorBackgroundList" format="color" />
   <attr name="colorBackgroundListItem" format="color" />
+  <attr name="colorBackgroundListItemSelect" format="color" />
   <attr name="colorDividingLine" format="color" />
   <attr name="colorChipEnable" format="color" />
   <attr name="colorChipDisable" format="color" />
   <attr name="colorChipText" format="color" />
+  <attr name="colorActionMenu" format="color" />
 </resources>

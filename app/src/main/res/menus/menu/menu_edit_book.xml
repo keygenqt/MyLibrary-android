@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/edit_book_take_photo"
+        android:icon="@drawable/ic_baseline_camera_alt"
+        android:id="@+id/action_take_photo"
+        app:showAsAction="ifRoom" />
+</menu>

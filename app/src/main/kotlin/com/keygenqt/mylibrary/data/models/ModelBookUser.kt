@@ -73,8 +73,6 @@ data class ModelBookUser(
         }
 
     companion object {
-        const val API_KEY = "user"
-
         const val AVATAR_HAPPY = "avatar_0"
         const val AVATAR_SURPRISED = "avatar_1"
         const val AVATAR_TIRED = "avatar_2"

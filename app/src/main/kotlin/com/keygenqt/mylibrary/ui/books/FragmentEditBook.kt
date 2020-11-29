@@ -16,8 +16,13 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
@@ -25,9 +30,6 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_edit_book.view.*
-import kotlinx.android.synthetic.main.fragment_edit_book.view.body
-import kotlinx.android.synthetic.main.fragment_edit_book.view.buttonSubmit
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -35,6 +37,9 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
 
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewEditBook by inject()
+    private val model: ViewEditBookGenres by activityViewModels()
+
+    private var selectGenreId: String? = null
 
     override fun onCreateView() {
         initView {
@@ -42,6 +47,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
                 viewModel.params.postValue(viewModel.book?.apply {
+                    genreId = selectGenreId
                     title = textInputEditTextTitle.text.toString()
                     author = textInputEditTextAuthor.text.toString()
                     publisher = textInputEditTextPublisher.text.toString()
@@ -51,6 +57,23 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
                     description = textInputEditTextDescription.text.toString()
                 })
             }
+            selectGenre.setOnClickListener {
+                findNavController().navigate(FragmentEditBookDirections.actionFragmentEditBookToFragmentGenres(selectGenreId))
+            }
+        }
+    }
+
+    @CallOnCreate fun selectGenre() {
+        initView {
+            model.selected.observe(viewLifecycleOwner) { model ->
+                model?.let {
+                    textInputEditTextGenre.setText(model.title)
+                    selectGenreId = model.id
+                } ?: run {
+                    textInputEditTextGenre.setText("")
+                    selectGenreId = null
+                }
+            }
         }
     }
 
@@ -59,6 +82,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
             viewModel.updateBook.observe(viewLifecycleOwner) {
                 statusProgress(false)
                 viewModel.error.postValue(null)
+                scrollView.fullScroll(ScrollView.FOCUS_UP)
                 this.hideKeyboard()
                 body.requestFocus()
                 Toast.makeText(activity, getString(R.string.edit_book_updated_successfully), Toast.LENGTH_SHORT).show()
@@ -79,6 +103,10 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
                 textInputEditTextISBN.setText(model.isbn)
                 textInputEditTextNumberOfPages.setText(model.numberOfPages)
                 textInputEditTextDescription.setText(model.description)
+                if (selectGenreId == null) {
+                    textInputEditTextGenre.setText(model.genre.title)
+                    selectGenreId = model.genre.id
+                }
             }
         }
     }
@@ -135,6 +163,21 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
                     }
                 }
             })
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_edit_book, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_take_photo -> {
+                Toast.makeText(activity, R.string.page_coming_soon, Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

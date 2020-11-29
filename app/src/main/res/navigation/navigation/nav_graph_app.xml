@@ -80,26 +80,18 @@
           android:name="title"
           android:defaultValue=""
           app:argType="string" />
-      <argument
-          android:name="back"
-          app:argType="boolean"
-          android:defaultValue="false" />
       <action
           android:id="@+id/action_FragmentBook_to_FragmentEditBook"
-          app:destination="@id/FragmentEditBook" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/FragmentEditBook"
-        android:name="com.keygenqt.mylibrary.ui.books.FragmentEditBook"
-        android:label="@string/fragment_edit_book_title"
-        tools:layout="@layout/fragment_edit_book">
-      <argument
-          android:name="selfLink"
-          app:argType="string" />
+          app:destination="@id/nav_graph_book_edit" >
+        <argument
+            android:name="selfLink"
+            app:argType="string" />
+      </action>
     </fragment>
 
     <include app:graph="@navigation/nav_graph_settings" />
+
+    <include app:graph="@navigation/nav_graph_book_edit" />
 
   </navigation>
 

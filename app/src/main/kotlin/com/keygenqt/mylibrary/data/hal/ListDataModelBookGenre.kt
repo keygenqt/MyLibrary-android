@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.hal
+package com.keygenqt.mylibrary.data.hal
 
-data class LinkSearch(
-    val key: String,
-    private val link: Link,
-    val items: MutableList<Any> = mutableListOf()
-) {
-    fun clear() {
-        items.clear()
-    }
+import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.hal.ListData
 
-    fun isFirstPage(): Boolean {
-        return link.isFirstPage()
-    }
-
-    fun getLink(): String {
-        return link.value
-    }
-
-    fun getLinkModel(): Link {
-        return link
-    }
-}
+class ListDataModelBookGenre() : ListData<ModelBookGenre>()

@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.models
+package com.keygenqt.mylibrary.hal
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import com.keygenqt.mylibrary.base.BaseModel
+data class LinkList(
+    private val link: Link,
+    val items: MutableList<Any> = mutableListOf()
+) {
+    fun clear() {
+        items.clear()
+    }
 
-@Entity(tableName = "ModelBookGenre")
-data class ModelBookGenre(
+    fun isFirstPage(): Boolean {
+        return link.isFirstPage()
+    }
 
-    @PrimaryKey
-    @SerializedName("id")
-    var id: String = "",
+    fun getLink(): String {
+        return link.value
+    }
 
-    @SerializedName("title")
-    var title: String = "",
-
-    @SerializedName("description")
-    var description: String = ""
-
-) : BaseModel() {
-    companion object {
-        const val API_KEY = "genres"
+    fun getLinkModel(): Link {
+        return link
     }
 }

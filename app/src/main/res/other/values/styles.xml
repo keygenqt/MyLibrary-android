@@ -7,7 +7,6 @@
     <item name="android:windowBackground">?attr/colorBackgroundPage</item>
     <item name="android:windowIsTranslucent">true</item>
     <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
-    <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
   </style>
 
   <style name="DarkTheme" parent="@style/DayNight.AppThemeColors">
@@ -17,7 +16,6 @@
     <item name="android:windowBackground">?attr/colorBackgroundPage</item>
     <item name="android:windowIsTranslucent">true</item>
     <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
-    <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
     <item name="android:navigationBarColor">?attr/colorBackgroundPage</item>
   </style>
 
@@ -28,7 +26,6 @@
     <item name="android:windowBackground">?attr/colorBackgroundPage</item>
     <item name="android:windowIsTranslucent">true</item>
     <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
-    <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
     <item name="android:navigationBarColor">?attr/colorBackgroundPage</item>
   </style>
 
@@ -36,10 +33,7 @@
     <item name="color">@android:color/white</item>
   </style>
 
-  <style name="AppTheme.OverFlow">
-    <item name="android:src">@drawable/ic_baseline_more</item>
-    <item name="android:background">?android:selectableItemBackgroundBorderless</item>
-  </style>
+
 
   <style name="AppTheme.NoActionBar">
     <item name="windowActionBar">false</item>

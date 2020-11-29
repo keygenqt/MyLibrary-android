@@ -5,18 +5,16 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.keygenqt.mylibrary.data.converters.ListConverter
 import com.keygenqt.mylibrary.data.converters.MapConverter
-import com.keygenqt.mylibrary.data.dao.ModelBookDao
-import com.keygenqt.mylibrary.data.dao.ModelRootDao
-import com.keygenqt.mylibrary.data.dao.ModelSearchDao
-import com.keygenqt.mylibrary.data.dao.ModelUserDao
+import com.keygenqt.mylibrary.data.dao.*
 import com.keygenqt.mylibrary.data.models.*
 
 @Database(entities = [
     ModelRoot::class,
     ModelUser::class,
     ModelBook::class,
+    ModelBookGenre::class,
     ModelSearch::class,
-], version = 25, exportSchema = false)
+], version = 26, exportSchema = false)
 @TypeConverters(value = [
     ListConverter::class,
     MapConverter::class,
@@ -26,4 +24,5 @@ abstract class RoomConf : RoomDatabase() {
     abstract fun modelUserDao(): ModelUserDao
     abstract fun modelBookDao(): ModelBookDao
     abstract fun modelSearchDao(): ModelSearchDao
+    abstract fun modelBookGenreDao(): ModelBookGenreDao
 }

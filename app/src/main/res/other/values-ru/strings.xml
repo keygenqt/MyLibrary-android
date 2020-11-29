@@ -6,6 +6,7 @@
   <string name="fragment_books_title">MyLibrary</string>
   <string name="fragment_chat_title">MyLibrary</string>
   <string name="fragment_edit_book_title">Редактировать книгу</string>
+  <string name="fragment_genres_select_title">Выберите жанр</string>
   <string name="fragment_join_title">Присоединится</string>
   <string name="fragment_login_title">Вход</string>
   <string name="fragment_about_title">О приложении</string>

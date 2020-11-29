@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.models
+package com.keygenqt.mylibrary.ui.books
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import com.keygenqt.mylibrary.base.BaseModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.keygenqt.mylibrary.data.models.ModelBookGenre
 
-@Entity(tableName = "ModelBookGenre")
-data class ModelBookGenre(
+class ViewEditBookGenres : ViewModel() {
+    val selected = MutableLiveData<ModelBookGenre?>()
 
-    @PrimaryKey
-    @SerializedName("id")
-    var id: String = "",
-
-    @SerializedName("title")
-    var title: String = "",
-
-    @SerializedName("description")
-    var description: String = ""
-
-) : BaseModel() {
-    companion object {
-        const val API_KEY = "genres"
+    fun select(item: ModelBookGenre?) {
+        selected.value = item
     }
 }
