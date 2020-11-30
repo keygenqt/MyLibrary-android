@@ -41,16 +41,23 @@ class CommonQuery(val api: CommonApi) {
         }
     }
 
-    inline fun <reified T> postAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject): Deferred<T> {
+    inline fun <reified T> postAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject = JsonObject()): Deferred<T> {
         return coroutineScope.async<T> {
             val body = api.post(link, params).awaitResponse().checkResponse()
             Gson().fromJson(body, T::class.java)
         }
     }
 
-    inline fun <reified T> putAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject): Deferred<T> {
+    inline fun <reified T> putAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject = JsonObject()): Deferred<T> {
         return coroutineScope.async<T> {
             val body = api.put(link, params).awaitResponse().checkResponse()
+            Gson().fromJson(body, T::class.java)
+        }
+    }
+
+    inline fun <reified T> deleteAsync(coroutineScope: CoroutineScope, link: String): Deferred<T> {
+        return coroutineScope.async<T> {
+            val body = api.delete(link).awaitResponse().checkResponse()
             Gson().fromJson(body, T::class.java)
         }
     }

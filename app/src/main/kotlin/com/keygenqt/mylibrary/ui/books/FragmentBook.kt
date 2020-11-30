@@ -38,6 +38,7 @@ import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
 import kotlinx.android.synthetic.main.activity_main.view.toolbar
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import kotlinx.android.synthetic.main.fragment_book.view.*
@@ -52,6 +53,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     private val viewModel: ViewBook by inject()
 
     private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
+    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
 
     private var menu: Menu? = null
 
@@ -74,7 +76,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 }
             }
             R.id.book_menu_delete -> {
-                Toast.makeText(activity, R.string.page_coming_soon, Toast.LENGTH_SHORT).show()
+                viewModel.delete()
             }
             R.id.book_menu_share -> {
                 Toast.makeText(activity, R.string.page_coming_soon, Toast.LENGTH_SHORT).show()
@@ -153,6 +155,18 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                             findNavController().navigateUp()
                         }
                     }
+                }
+            }
+        })
+    }
+
+    @InitObserve fun delete() {
+        viewModel.delete.observe(viewLifecycleOwner, { event ->
+            event?.peekContentHandled()?.let { result ->
+                if (result.status == 200) {
+                    observeUpdateBooks.change(viewModel.book)
+                    Toast.makeText(activity, result.message, Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
                 }
             }
         })

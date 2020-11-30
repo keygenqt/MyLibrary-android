@@ -73,8 +73,21 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                 event?.peekContentHandled()?.let { model ->
                     viewModel.linkSearchSwitch.value?.peekContent()?.let {
                         val index = it.itemsAny.findIndex(model)
-                        it.updateItem(index, model)
-                        (recyclerView.adapter as AdapterBooks).updateItem(index, model)
+                        if (model.enabled) {
+                            // update linkSearchSwitch
+                            it.updateItem(index, model)
+                            // update adapter
+                            (recyclerView.adapter as AdapterBooks).updateItem(index, model)
+                            // update search
+                            viewModel.linkSearch.value?.peekContent()?.updateItem(index, model)
+                        } else {
+                            // update linkSearchSwitch
+                            it.removeItem(index)
+                            // update adapter
+                            (recyclerView.adapter as AdapterBooks).removeItem(index)
+                            // update search
+                            viewModel.linkSearch.value?.peekContent()?.removeItem(index)
+                        }
                     }
                 }
             }

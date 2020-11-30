@@ -6,11 +6,14 @@ import com.keygenqt.mylibrary.data.models.ModelBook
 @Dao
 interface ModelBookDao {
 
-    @Query("SELECT * FROM ModelBook  WHERE type = :type LIMIT :limit")
+    @Query("SELECT * FROM ModelBook  WHERE type = :type AND enabled=1 LIMIT :limit")
     fun getAll(type: String, limit: Int = 10000): List<ModelBook>
 
     @Query("SELECT * FROM ModelBook WHERE id=:id")
     fun getAllById(id: String): List<ModelBook>
+
+    @Query("SELECT * FROM ModelBook WHERE selfLink=:selfLink")
+    fun getAllByLink(selfLink: String): List<ModelBook>
 
     @Query("SELECT * FROM ModelBook WHERE selfLink=:selfLink AND type = :type")
     fun getModel(selfLink: String, type: String): ModelBook?

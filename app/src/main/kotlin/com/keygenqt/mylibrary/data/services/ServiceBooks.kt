@@ -25,10 +25,7 @@ import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.*
-import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
-import com.keygenqt.mylibrary.hal.API_KEY_SELF
-import com.keygenqt.mylibrary.hal.LinkList
-import com.keygenqt.mylibrary.hal.LinkListSearch
+import com.keygenqt.mylibrary.hal.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -136,6 +133,25 @@ class ServiceBooks(
                     }
                     dao.insert(listData.items)
                     response.invoke(listData.mergeItems(linkList) as ListDataModelBookGenre)
+                }
+            }
+        }
+    }
+
+    suspend fun deleteBook(
+        link: Link?,
+        response: suspend (ResponseSuccessful) -> Unit
+    ) {
+        link?.let {
+            db.getDao<ModelBookDao>().let { dao ->
+                withContext(Dispatchers.IO) {
+                    query.deleteAsync<ResponseSuccessful>(this, link.value).await().let {
+                        dao.getAllByLink(link.value).forEach { model ->
+                            model.enabled = false
+                            dao.update(model)
+                        }
+                        response.invoke(it)
+                    }
                 }
             }
         }

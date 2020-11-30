@@ -22,9 +22,10 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.LiveDataEvent
-import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
+import com.keygenqt.mylibrary.hal.API_KEY_SELF
+import com.keygenqt.mylibrary.hal.ResponseSuccessful
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
     val selfLink: MutableLiveData<LiveDataEvent<String>> = MutableLiveData()
     val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
+    val delete: MutableLiveData<LiveDataEvent<ResponseSuccessful>> = MutableLiveData()
 
     val data = selfLink.switchMap { event ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
@@ -51,6 +53,17 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
                     } ?: run {
                         loading.postValue(LiveDataEvent(true))
                     }
+                }
+            }
+        }
+    }
+
+    fun delete() {
+        GlobalScope.launch(BaseExceptionHandler.getExceptionHandler()) {
+            book?.let { book ->
+                book.enabled = false
+                service.deleteBook(book.links[API_KEY_SELF]) { result ->
+                    delete.postValue(LiveDataEvent(result))
                 }
             }
         }

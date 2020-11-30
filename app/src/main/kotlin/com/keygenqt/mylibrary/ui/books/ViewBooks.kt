@@ -30,7 +30,7 @@ import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkSearch: MutableLiveData<LiveDataEvent<LinkListSearch>> = MutableLiveData()
+    val linkSearch: MutableLiveData<LiveDataEvent<LinkListSearch>> = MutableLiveData()
 
     val linkSearchSwitch = linkSearch.switchMap { event ->
         liveData(getExceptionHandler()) {

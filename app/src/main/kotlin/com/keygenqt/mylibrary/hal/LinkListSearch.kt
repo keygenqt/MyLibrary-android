@@ -36,4 +36,16 @@ data class LinkListSearch(
     fun getLinkModel(): Link {
         return link
     }
+
+    fun updateItem(index: Int, item: Any) {
+        if (index < items.size && items.isNotEmpty()) {
+            items[index] = item
+        }
+    }
+
+    fun removeItem(index: Int) {
+        if (index < items.size && items.isNotEmpty()) {
+            items.removeAt(index)
+        }
+    }
 }

@@ -34,7 +34,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
 
     companion object {
 
-        private var error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
+        private val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
         fun getExceptionHandler(delegate: (LiveDataEvent<Throwable>) -> Unit): CoroutineExceptionHandler {
             return CoroutineExceptionHandler { _, throwable ->
@@ -55,7 +55,6 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
     }
 
     private fun init(activity: Activity) {
-        error = MutableLiveData()
         error.observe(activity as LifecycleOwner, { event ->
             event?.peekContentHandled()?.let { throwable ->
                 when (throwable) {

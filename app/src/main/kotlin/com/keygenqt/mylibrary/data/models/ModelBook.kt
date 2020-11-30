@@ -62,6 +62,9 @@ data class ModelBook(
     @SerializedName("image")
     var image: String = "",
 
+    @SerializedName("enabled")
+    var enabled: Boolean = true,
+
     @Embedded(prefix = "genre_")
     var genre: ModelBookGenre = ModelBookGenre(),
 
@@ -92,7 +95,9 @@ data class ModelBook(
 
     var type: String = VIEW_KEY
         set(value) {
-            key = "$id-$value"
+            if (key.isEmpty()) {
+                key = "$id-$value"
+            }
             field = value
         }
 

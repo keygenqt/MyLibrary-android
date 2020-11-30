@@ -86,8 +86,18 @@ open class ListData<T>(
     }
 
     fun updateItem(index: Int, item: T) {
-        val list = ArrayList(items)
-        list[index] = item
-        items = list
+        if (index < items.size && items.isNotEmpty()) {
+            val list = ArrayList(items)
+            list[index] = item
+            items = list
+        }
+    }
+
+    fun removeItem(index: Int) {
+        if (index < items.size && items.isNotEmpty()) {
+            val list = ArrayList(items)
+            list.removeAt(index)
+            items = list
+        }
     }
 }

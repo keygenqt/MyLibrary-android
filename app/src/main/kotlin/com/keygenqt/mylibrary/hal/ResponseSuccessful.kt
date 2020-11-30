@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.hal
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import retrofit2.Call
-import retrofit2.http.*
+import com.google.gson.annotations.SerializedName
 
-interface CommonApi {
-    @GET
-    fun get(@Url link: String): Call<JsonElement>
+data class ResponseSuccessful(
+    @SerializedName("message")
+    var message: String = "",
 
-    @POST
-    fun post(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
+    @SerializedName("status")
+    var status: Int = 0,
 
-    @PUT
-    fun put(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
-
-    @DELETE
-    fun delete(@Url link: String): Call<JsonElement>
-}
+    @SerializedName("timestamp")
+    var timestamp: String = ""
+)

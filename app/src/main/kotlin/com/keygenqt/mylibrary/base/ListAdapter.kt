@@ -114,4 +114,11 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> U
             notifyItemChanged(index)
         }
     }
+
+    fun removeItem(index: Int) {
+        if (index < items.size) {
+            items.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
 }
