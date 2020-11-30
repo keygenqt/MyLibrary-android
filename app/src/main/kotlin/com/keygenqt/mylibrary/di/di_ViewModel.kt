@@ -31,7 +31,7 @@ val moduleViewModel = module {
     factory { ViewEditProfile(get()) }
     factory { ViewPassword(get()) }
     factory { ViewBook(get()) }
-    factory { ViewEditBook(get()) }
+    factory { ViewUpdateBook(get()) }
     factory { ViewBooks(get()) }
     factory { ViewGenres(get()) }
 }

@@ -19,6 +19,7 @@ package com.keygenqt.mylibrary.ui.books
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
@@ -26,10 +27,9 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.extensions.findIndex
+import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
-import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
-import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
-import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
+import kotlinx.android.synthetic.main.common_fragment_list.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -63,6 +63,11 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
                 (recyclerView.adapter as ListSearchAdapter<*>).updateList()
+            }
+            commonFab.setImageResource(R.drawable.ic_baseline_add)
+            commonFab.showWithPadding(recyclerView)
+            commonFab.setOnClickListener {
+                findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBookAdd())
             }
         }
     }

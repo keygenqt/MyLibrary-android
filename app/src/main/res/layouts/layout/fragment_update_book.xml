@@ -52,7 +52,7 @@
               android:id="@+id/textInputLayoutGenre"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:hint="@string/edit_book_genre"
+              android:hint="@string/update_book_genre"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"
@@ -63,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
+                android:focusable="false"
                 android:paddingEnd="58dp"
                 tools:ignore="RtlSymmetry"
                 />
@@ -70,6 +71,7 @@
           </com.google.android.material.textfield.TextInputLayout>
 
           <ImageView
+              android:id="@+id/textInputIconGenre"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginEnd="@dimen/padding"
@@ -100,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_title"
+            android:hint="@string/update_book_title"
             >
 
           <com.google.android.material.textfield.TextInputEditText
@@ -117,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_author"
+            android:hint="@string/update_book_author"
             >
 
           <com.google.android.material.textfield.TextInputEditText
@@ -134,7 +136,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_publisher"
+            android:hint="@string/update_book_publisher"
             >
 
           <com.google.android.material.textfield.TextInputEditText
@@ -151,7 +153,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_year"
+            android:hint="@string/update_book_year"
             >
 
           <com.google.android.material.textfield.TextInputEditText
@@ -168,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_ISBN"
+            android:hint="@string/update_book_ISBN"
             >
 
           <com.google.android.material.textfield.TextInputEditText
@@ -185,7 +187,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_numberOfPages"
+            android:hint="@string/update_book_numberOfPages"
             >
 
           <com.google.android.material.textfield.TextInputEditText
@@ -202,7 +204,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding"
-            android:hint="@string/edit_book_description"
+            android:hint="@string/update_book_description"
             >
 
           <com.google.android.material.textfield.TextInputEditText

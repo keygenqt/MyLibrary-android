@@ -22,12 +22,14 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.LiveDataEvent
+import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
+import com.keygenqt.mylibrary.utils.API_VERSION
 import kotlinx.coroutines.delay
 
-class ViewEditBook(private val service: ServiceBooks) : ViewModel() {
+class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
 
     var book: ModelBook? = null
 
@@ -58,8 +60,16 @@ class ViewEditBook(private val service: ServiceBooks) : ViewModel() {
     val updateBook = params.switchMap { event ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
             event?.peekContentHandled()?.let { book ->
-                service.updateBook(book.links.getValue(API_KEY_SELF).value, book) {
-                    emit(LiveDataEvent(true))
+                if (book.links.containsKey(API_KEY_SELF)) {
+                    // update
+                    service.updateBook(book.links.getValue(API_KEY_SELF).value, book) {
+                        emit(LiveDataEvent(true))
+                    }
+                } else {
+                    // add
+                    service.addBook(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY).value, book) {
+                        emit(LiveDataEvent(true))
+                    }
                 }
             }
         }

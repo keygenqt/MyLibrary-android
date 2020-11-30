@@ -5,7 +5,8 @@
   // fragment titles
   <string name="fragment_books_title">MyLibrary</string>
   <string name="fragment_chat_title">MyLibrary</string>
-  <string name="fragment_edit_book_title">Редактировать книгу</string>
+  <string name="fragment_update_book_title">Редактировать книгу</string>
+  <string name="fragment_add_book_title">Добавить книку</string>
   <string name="fragment_genres_select_title">Выберите жанр</string>
   <string name="fragment_join_title">Присоединится</string>
   <string name="fragment_login_title">Вход</string>

@@ -5,7 +5,8 @@
   // fragment titles
   <string name="fragment_books_title">MyLibrary</string>
   <string name="fragment_chat_title">MyLibrary</string>
-  <string name="fragment_edit_book_title">Edit Book</string>
+  <string name="fragment_update_book_title">Update Book</string>
+  <string name="fragment_add_book_title">Add Book</string>
   <string name="fragment_genres_select_title">Select Genre</string>
   <string name="fragment_join_title">Join Us</string>
   <string name="fragment_login_title">Login</string>
@@ -70,18 +71,19 @@
   <string name="view_book_type_soft">Soft</string>
   <string name="view_book_type_solid">Solid</string>
 
-  // edit book
-  <string name="edit_book_genre">Genre</string>
-  <string name="edit_book_title">Title</string>
-  <string name="edit_book_author">Author</string>
-  <string name="edit_book_description">Description</string>
-  <string name="edit_book_publisher">Publisher</string>
-  <string name="edit_book_year">Year</string>
-  <string name="edit_book_ISBN">ISBN</string>
-  <string name="edit_book_numberOfPages">Number Of Pages</string>
-  <string name="edit_book_updated_successfully">Book updated successfully</string>
-  <string name="edit_book_select_genre_done">Done</string>
-  <string name="edit_book_take_photo">Take Photo</string>
+  // update book
+  <string name="update_book_genre">Genre</string>
+  <string name="update_book_title">Title</string>
+  <string name="update_book_author">Author</string>
+  <string name="update_book_description">Description</string>
+  <string name="update_book_publisher">Publisher</string>
+  <string name="update_book_year">Year</string>
+  <string name="update_book_ISBN">ISBN</string>
+  <string name="update_book_numberOfPages">Number Of Pages</string>
+  <string name="update_book_updated_successfully">Book updated successfully</string>
+  <string name="update_book_create_successfully">Book create successfully</string>
+  <string name="update_book_select_genre_done">Done</string>
+  <string name="update_book_take_photo">Take Photo</string>
 
   // settings
   <string name="settings_title">SETTINGS</string>

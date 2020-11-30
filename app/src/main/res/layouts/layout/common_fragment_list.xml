@@ -51,7 +51,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="end|bottom"
       android:layout_margin="13dp"
-      android:contentDescription="@string/edit_book_select_genre_done"
+      android:contentDescription="@string/update_book_select_genre_done"
       android:visibility="gone"
       android:src="@drawable/ic_baseline_check"
       app:backgroundTint="@color/colorAccent"

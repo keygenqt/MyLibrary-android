@@ -117,6 +117,20 @@ class ServiceBooks(
         }
     }
 
+    suspend fun addBook(
+        link: String,
+        model: ModelBook,
+        response: suspend () -> Unit
+    ) {
+        db.getDao<ModelBookDao>().let { dao ->
+            withContext(Dispatchers.IO) {
+                query.postAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
+                    response.invoke()
+                }
+            }
+        }
+    }
+
     suspend fun getGenresList(linkList: LinkList, response: suspend (ListDataModelBookGenre) -> Unit) {
         db.getDao<ModelBookGenreDao>().let { dao ->
             if (linkList.isFirstPage()) {

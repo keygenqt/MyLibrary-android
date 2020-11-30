@@ -2,15 +2,16 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_book_edit"
-    app:startDestination="@+id/FragmentEditBook">
+    android:id="@+id/nav_graph_book_update"
+    app:startDestination="@+id/FragmentUpdateBook">
 
   <fragment
-      android:id="@+id/FragmentEditBook"
-      android:name="com.keygenqt.mylibrary.ui.books.FragmentEditBook"
-      android:label="@string/fragment_edit_book_title"
-      tools:layout="@layout/fragment_edit_book">
+      android:id="@+id/FragmentUpdateBook"
+      android:name="com.keygenqt.mylibrary.ui.books.FragmentUpdateBook"
+      android:label="@string/fragment_update_book_title"
+      tools:layout="@layout/fragment_update_book">
     <argument
+        android:defaultValue=""
         android:name="selfLink"
         app:argType="string" />
     <action

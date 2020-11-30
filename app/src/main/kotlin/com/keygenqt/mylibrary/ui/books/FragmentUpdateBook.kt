@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -26,18 +27,19 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
+import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
-import kotlinx.android.synthetic.main.fragment_edit_book.view.*
+import kotlinx.android.synthetic.main.fragment_update_book.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
+class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     private val args: FragmentBookArgs by navArgs()
-    private val viewModel: ViewEditBook by inject()
+    private val viewModel: ViewUpdateBook by inject()
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
     private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
@@ -61,8 +63,15 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
     // bind view
     override fun onCreateView() {
 
+        if (args.selfLink.isEmpty()) {
+            initToolbar {
+                title = getString(R.string.fragment_add_book_title)
+            }
+            viewModel.book = ModelBook()
+        }
+
         // start page
-        if (viewModel.selfLink.value == null) {
+        if (viewModel.selfLink.value == null && args.selfLink.isNotEmpty()) {
             viewModel.selfLink.postValue(LiveDataEvent(args.selfLink))
         }
 
@@ -81,7 +90,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
                 }))
             }
             selectGenre.setOnClickListener {
-                findNavController().navigate(FragmentEditBookDirections.actionFragmentEditBookToFragmentGenres(selectGenreId))
+                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(selectGenreId))
             }
         }
     }
@@ -91,6 +100,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
             observeSelectGenre.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContent().let { model ->
                     model?.let {
+                        textInputLayoutGenre.isErrorEnabled = false
                         textInputEditTextGenre.setText(model.title)
                         selectGenreId = model.id
                     } ?: run {
@@ -111,7 +121,7 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
                     scrollView.fullScroll(ScrollView.FOCUS_UP)
                     this.hideKeyboard()
                     body.requestFocus()
-                    Toast.makeText(activity, getString(R.string.edit_book_updated_successfully), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, getString(R.string.update_book_updated_successfully), Toast.LENGTH_SHORT).show()
 
                     // call change
                     observeUpdateBook.change(viewModel.book)
@@ -164,6 +174,11 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
 
                         throwable.errors.forEach {
                             when (it.field) {
+                                "genreId" ->
+                                    if (textInputLayoutGenre.error.isNullOrEmpty()) {
+                                        textInputIconGenre.visibility = View.GONE
+                                        textInputLayoutGenre.error = it.defaultMessage
+                                    }
                                 "title" ->
                                     if (textInputLayoutTitle.error.isNullOrEmpty()) {
                                         textInputLayoutTitle.error = it.defaultMessage
@@ -202,6 +217,8 @@ class FragmentEditBook : BaseFragment(R.layout.fragment_edit_book) {
 
     private fun clearError() {
         initView {
+            textInputIconGenre.visibility = View.VISIBLE
+            textInputLayoutGenre.isErrorEnabled = false
             textInputLayoutTitle.isErrorEnabled = false
             textInputLayoutAuthor.isErrorEnabled = false
             textInputLayoutPublisher.isErrorEnabled = false
