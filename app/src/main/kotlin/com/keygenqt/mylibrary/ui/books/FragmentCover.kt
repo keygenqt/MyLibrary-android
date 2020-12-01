@@ -16,8 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,48 +24,42 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListAdapter
+import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_SOFT
+import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_SOLID
+import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_OTHER
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
-import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
-import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
+class FragmentCover : BaseFragment(R.layout.common_fragment_list) {
 
-    private val args: FragmentGenresArgs by navArgs()
-    private val viewModel: ViewGenres by inject()
-    private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
+    private val args: FragmentCoverArgs by navArgs()
+    private val observeSelectCover: ObserveSelectCover by activityViewModels()
 
     override fun onCreateView() {
         initView {
+
+            refresh.isEnabled = false
+
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterGenres(R.layout.item_select_list, args.selectGenreId, commonFab, recyclerView) { linkNext ->
-                viewModel.updateList(linkNext)
-            }
-            refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            refresh.setOnRefreshListener {
-                (recyclerView.adapter as ListAdapter<*>).updateList()
-            }
-            args.selectGenreId?.let {
+            recyclerView.adapter = AdapterCover(R.layout.item_select_list, args.selectCover, commonFab, recyclerView)
+
+            args.selectCover?.let {
                 commonFab.showWithPadding(recyclerView)
             }
             commonFab.setOnClickListener {
-                observeSelectGenre.select((recyclerView.adapter as AdapterGenres).getSelectItem())
+                observeSelectCover.select((recyclerView.adapter as AdapterCover).getSelectItem())
                 findNavController().navigateUp()
             }
-        }
-    }
 
-    @InitObserve fun observeListItems() {
-        initView {
-            viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
-                refresh.isRefreshing = false
-                (recyclerView.adapter as ListAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
-                notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
-            }
+            (recyclerView.adapter as ListAdapter<*>).updateItems(listOf(
+                COVER_TYPE_SOFT,
+                COVER_TYPE_SOLID,
+                COVER_TYPE_OTHER,
+            ))
         }
     }
 }

@@ -32,35 +32,35 @@ data class ModelBook(
     @SerializedName("id")
     var id: String = "",
 
+    @SerializedName("image")
+    var image: String? = null,
+
     @SerializedName("title")
-    var title: String = "",
+    var title: String? = null,
 
     @SerializedName("author")
-    var author: String = "",
-
-    @SerializedName("description")
-    var description: String = "",
+    var author: String? = null,
 
     @SerializedName("publisher")
-    var publisher: String = "",
-
-    @SerializedName("year")
-    var year: String = "",
-
-    @SerializedName("numberOfPages")
-    var numberOfPages: String = "",
+    var publisher: String? = null,
 
     @SerializedName("isbn")
-    var isbn: String = "",
+    var isbn: String? = null,
+
+    @SerializedName("year")
+    var year: String? = null,
+
+    @SerializedName("numberOfPages")
+    var numberOfPages: String? = null,
+
+    @SerializedName("description")
+    var description: String? = null,
 
     @SerializedName("sale")
     var sale: Boolean = false,
 
     @SerializedName("coverType")
     var coverType: String = "",
-
-    @SerializedName("image")
-    var image: String = "",
 
     @SerializedName("enabled")
     var enabled: Boolean = true,
@@ -108,9 +108,9 @@ data class ModelBook(
 
         const val VIEW_KEY = "view"
 
-        const val COVER_TYPE_SOFT = "soft"
-        const val COVER_TYPE_SOLID = "solid"
-        const val COVER_TYPE_UNKNOWN = "unknown"
+        const val COVER_TYPE_SOFT = "Soft"
+        const val COVER_TYPE_SOLID = "Solid"
+        const val COVER_TYPE_OTHER = "Other"
     }
 
     fun getCoverType(context: Context): String? {

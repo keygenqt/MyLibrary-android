@@ -186,8 +186,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
             bookTitle.text = model.title
             bookAuthor.text = model.author
 
-            bookPublisherBlock.visibility = if (model.publisher.isEmpty()) View.GONE else View.VISIBLE
-            bookISBNBlock.visibility = if (model.isbn.isEmpty()) View.GONE else View.VISIBLE
+            bookPublisherBlock.visibility = if (model.publisher.isNullOrEmpty()) View.GONE else View.VISIBLE
+            bookISBNBlock.visibility = if (model.isbn.isNullOrEmpty()) View.GONE else View.VISIBLE
             bookYearBlock.visibility = if (model.year == "0") View.GONE else View.VISIBLE
             bookPagesBlock.visibility = if (model.numberOfPages == "0") View.GONE else View.VISIBLE
 
@@ -203,8 +203,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 bookCoverBlock.visibility = View.GONE
             }
 
-            bookSynopsisTitle.visibility = if (model.description.isEmpty()) View.GONE else View.VISIBLE
-            bookSynopsis.visibility = if (model.description.isEmpty()) View.GONE else View.VISIBLE
+            bookSynopsisTitle.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
+            bookSynopsis.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
             bookSynopsis.text = model.description
 
             bookGenre.text = getString(R.string.view_book_genre, model.genre.title)

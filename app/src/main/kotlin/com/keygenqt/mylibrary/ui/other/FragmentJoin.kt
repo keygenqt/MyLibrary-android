@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.widget.ScrollView
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
@@ -23,15 +24,12 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
+import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
 import com.keygenqt.mylibrary.utils.AVATARS
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.dotsIndicator
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.viewPager
 import kotlinx.android.synthetic.main.fragment_join.view.*
-import kotlinx.android.synthetic.main.fragment_login.view.textInputLayoutEmail
-import kotlinx.android.synthetic.main.fragment_login.view.textInputLayoutPassw
 import org.koin.android.ext.android.inject
 import java.util.Locale
 
@@ -111,6 +109,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
                                     }
                             }
                         }
+                        textInputLayoutBlock.requestFocusTextInputLayoutError(scrollView)
                     }
                 }
             })

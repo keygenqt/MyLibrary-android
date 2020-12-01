@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -29,6 +28,8 @@ import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.extensions.hideKeyboard
+import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
@@ -42,6 +43,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
     private val viewModel: ViewUpdateBook by inject()
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
+    private val observeSelectCover: ObserveSelectCover by activityViewModels()
     private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
     private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
 
@@ -80,6 +82,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                 statusProgress(true)
                 viewModel.params.postValue(LiveDataEvent(viewModel.book?.apply {
                     genreId = selectGenreId
+                    coverType = textInputEditTextCover.text.toString()
                     title = textInputEditTextTitle.text.toString()
                     author = textInputEditTextAuthor.text.toString()
                     publisher = textInputEditTextPublisher.text.toString()
@@ -92,20 +95,39 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
             selectGenre.setOnClickListener {
                 findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(selectGenreId))
             }
+            selectCover.setOnClickListener {
+                val value = textInputEditTextCover.text?.let {
+                    if (it.isEmpty()) {
+                        return@let null
+                    }
+                    return@let it.toString()
+                }
+                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(value))
+            }
         }
     }
 
     @InitObserve fun observeSelectGenre() {
         initView {
             observeSelectGenre.selected.observe(viewLifecycleOwner) { event ->
-                event?.peekContent().let { model ->
+                event?.peekContentHandled().let { model ->
                     model?.let {
                         textInputLayoutGenre.isErrorEnabled = false
                         textInputEditTextGenre.setText(model.title)
                         selectGenreId = model.id
-                    } ?: run {
-                        textInputEditTextGenre.setText("")
-                        selectGenreId = null
+                    }
+                }
+            }
+        }
+    }
+
+    @InitObserve fun observeSelectCover() {
+        initView {
+            observeSelectCover.selected.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled().let { model ->
+                    model?.let {
+                        textInputLayoutCover.isErrorEnabled = false
+                        textInputEditTextCover.setText(model)
                     }
                 }
             }
@@ -145,6 +167,9 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         initView {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
+                    selectGenreId = model.genre.id
+                    textInputEditTextGenre.setText(model.genre.title)
+                    textInputEditTextCover.setText(model.coverType)
                     textInputEditTextTitle.setText(model.title)
                     textInputEditTextAuthor.setText(model.author)
                     textInputEditTextPublisher.setText(model.publisher)
@@ -152,8 +177,6 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                     textInputEditTextISBN.setText(model.isbn)
                     textInputEditTextNumberOfPages.setText(model.numberOfPages)
                     textInputEditTextDescription.setText(model.description)
-                    textInputEditTextGenre.setText(model.genre.title)
-                    selectGenreId = model.genre.id
                 }
             }
         }
@@ -169,15 +192,15 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                     clearError()
 
                     if (throwable is ValidateException) {
-
-                        scrollView.fullScroll(ScrollView.FOCUS_UP)
-
                         throwable.errors.forEach {
                             when (it.field) {
                                 "genreId" ->
                                     if (textInputLayoutGenre.error.isNullOrEmpty()) {
-                                        textInputIconGenre.visibility = View.GONE
                                         textInputLayoutGenre.error = it.defaultMessage
+                                    }
+                                "coverType" ->
+                                    if (textInputLayoutCover.error.isNullOrEmpty()) {
+                                        textInputLayoutCover.error = it.defaultMessage
                                     }
                                 "title" ->
                                     if (textInputLayoutTitle.error.isNullOrEmpty()) {
@@ -209,6 +232,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                                     }
                             }
                         }
+                        textInputLayoutBlock.requestFocusTextInputLayoutError(scrollView)
                     }
                 }
             })
@@ -217,8 +241,8 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     private fun clearError() {
         initView {
-            textInputIconGenre.visibility = View.VISIBLE
             textInputLayoutGenre.isErrorEnabled = false
+            textInputLayoutCover.isErrorEnabled = false
             textInputLayoutTitle.isErrorEnabled = false
             textInputLayoutAuthor.isErrorEnabled = false
             textInputLayoutPublisher.isErrorEnabled = false

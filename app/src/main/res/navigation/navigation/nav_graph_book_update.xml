@@ -17,6 +17,9 @@
     <action
         android:id="@+id/action_FragmentEditBook_to_FragmentGenres"
         app:destination="@id/FragmentGenres" />
+    <action
+        android:id="@+id/action_FragmentEditBook_to_FragmentCover"
+        app:destination="@id/FragmentCover" />
   </fragment>
 
   <fragment
@@ -26,6 +29,17 @@
       tools:layout="@layout/common_fragment_list">
     <argument
         android:name="selectGenreId"
+        app:argType="string"
+        app:nullable="true" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/FragmentCover"
+      android:name="com.keygenqt.mylibrary.ui.books.FragmentCover"
+      android:label="@string/fragment_genres_select_title"
+      tools:layout="@layout/common_fragment_list">
+    <argument
+        android:name="selectCover"
         app:argType="string"
         app:nullable="true" />
   </fragment>

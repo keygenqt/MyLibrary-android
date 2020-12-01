@@ -94,7 +94,7 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> U
         return items.size + (if (nextPage != null && linkNext != null) 1 else 0)
     }
 
-    open fun updateItems(items: List<Any>, linkSelf: Link?, linkNext: Link?) {
+    open fun updateItems(items: List<Any>, linkSelf: Link? = null, linkNext: Link? = null) {
         this.items.clear()
         this.items.addAll(items)
         this.linkNext = linkNext

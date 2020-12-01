@@ -36,6 +36,7 @@
           />
 
       <LinearLayout
+          android:id="@+id/textInputLayoutBlock"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginStart="@dimen/padding"
@@ -53,6 +54,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:hint="@string/update_book_genre"
+              app:errorIconDrawable="@null"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"
@@ -62,8 +64,8 @@
                 android:id="@+id/textInputEditTextGenre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:inputType="textPersonName"
-                android:focusable="false"
                 android:paddingEnd="58dp"
                 tools:ignore="RtlSymmetry"
                 />
@@ -74,9 +76,9 @@
               android:id="@+id/textInputIconGenre"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginEnd="@dimen/padding"
+              android:layout_marginTop="18dp"
+              android:layout_marginEnd="16dp"
               android:src="@drawable/ic_baseline_navigate_next"
-              app:layout_constraintBottom_toBottomOf="parent"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintTop_toTopOf="parent"
               tools:ignore="ContentDescription"
@@ -96,6 +98,63 @@
               />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding"
+            >
+
+          <com.google.android.material.textfield.TextInputLayout
+              android:id="@+id/textInputLayoutCover"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/update_book_cover"
+              app:errorIconDrawable="@null"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditTextCover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:inputType="textPersonName"
+                android:paddingEnd="58dp"
+                tools:ignore="RtlSymmetry"
+                />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+          <ImageView
+              android:id="@+id/textInputIconCover"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="18dp"
+              android:layout_marginEnd="16dp"
+              android:src="@drawable/ic_baseline_navigate_next"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              tools:ignore="ContentDescription"
+              />
+
+          <View
+              android:id="@+id/selectCover"
+              android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:background="?android:selectableItemBackground"
+              android:clickable="true"
+              android:focusable="true"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutTitle"

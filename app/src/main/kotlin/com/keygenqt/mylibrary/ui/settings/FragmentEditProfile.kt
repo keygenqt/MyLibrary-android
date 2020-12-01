@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
@@ -24,6 +25,7 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
+import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
 import com.keygenqt.mylibrary.utils.AVATARS
@@ -122,6 +124,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
                                     }
                             }
                         }
+                        textInputLayoutBlock.requestFocusTextInputLayoutError(scrollView)
                     }
                 }
             })

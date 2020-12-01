@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
+import android.widget.ScrollView
 import android.widget.Toast
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
@@ -23,6 +24,7 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.extensions.hideKeyboard
+import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import kotlinx.android.synthetic.main.fragment_password.view.*
 import org.koin.android.ext.android.inject
 
@@ -81,6 +83,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
                                     }
                             }
                         }
+                        textInputLayoutBlock.requestFocusTextInputLayoutError(scrollView)
                     }
                 }
             })

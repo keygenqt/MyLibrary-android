@@ -23,25 +23,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.data.models.ModelBookGenre
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import com.keygenqt.mylibrary.hal.Link
 import kotlinx.android.synthetic.main.item_select_list.view.description
 import kotlinx.android.synthetic.main.item_select_list.view.itemBlock
 import kotlinx.android.synthetic.main.item_select_list.view.radioButton
 import kotlinx.android.synthetic.main.item_select_list.view.title
 
-class AdapterGenres(
+class AdapterCover(
     @LayoutRes layout: Int,
     var selectGenreId: String?,
     private val fb: FloatingActionButton,
-    private val recyclerView: RecyclerView,
-    nextPage: (Link) -> Unit
-) : ListAdapter<ModelBookGenre>(layout, nextPage) {
+    private val recyclerView: RecyclerView
+) : ListAdapter<String>(layout) {
 
     override fun onBindViewHolder(holder: View, model: Any) {
-        if (model is ModelBookGenre) {
+        if (model is String) {
             holder.apply {
-                title.text = model.title
-                description.text = model.description
+                title.text = model
+                description.visibility = View.GONE
                 itemBlock.setOnClickListener {
                     selectGenreId?.let {
                         items.forEachIndexed { index, any ->
@@ -51,18 +49,18 @@ class AdapterGenres(
                             }
                         }
                     }
-                    selectGenreId = model.id
+                    selectGenreId = model
                     radioButton.isChecked = true
                     fb.showWithPadding(recyclerView)
                 }
-                radioButton.isChecked = model.id == selectGenreId
+                radioButton.isChecked = model == selectGenreId
             }
         }
     }
 
-    fun getSelectItem(): ModelBookGenre? {
+    fun getSelectItem(): String? {
         items.forEach {
-            if (it is ModelBookGenre && it.id == selectGenreId) {
+            if (it is String && it == selectGenreId) {
                 return it
             }
         }
