@@ -2,7 +2,7 @@ package com.keygenqt.mylibrary.data.dao
 
 import androidx.room.*
 import com.keygenqt.mylibrary.data.models.ModelSearchBook
-import com.keygenqt.mylibrary.data.relationships.RelationSearchBook
+import com.keygenqt.mylibrary.data.relations.RelationSearchBook
 
 @Dao
 interface ModelSearchBookDao {

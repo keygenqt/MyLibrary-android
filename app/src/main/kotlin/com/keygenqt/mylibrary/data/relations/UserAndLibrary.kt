@@ -1,4 +1,4 @@
-package com.keygenqt.mylibrary.data.relationships
+package com.keygenqt.mylibrary.data.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
