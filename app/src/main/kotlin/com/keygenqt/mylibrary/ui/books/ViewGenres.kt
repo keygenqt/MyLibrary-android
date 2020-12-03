@@ -20,7 +20,7 @@ import androidx.lifecycle.*
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBookGenre
-import com.keygenqt.mylibrary.data.models.ModelSearch
+import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.LinkList
@@ -38,14 +38,14 @@ class ViewGenres(private val service: ServiceBooks) : ViewModel() {
         }
     }
 
-    init {
-        updateList(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBookGenre.API_KEY))
-    }
-
-    fun updateList(link: Link? = null) {
-        linkList.postValue(LinkList(
-            link = link!!,
-            items = linkList.value?.items ?: mutableListOf(),
-        ))
-    }
+//    init {
+//        updateList(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBookGenre.API_KEY))
+//    }
+//
+//    fun updateList(link: Link? = null) {
+//        linkList.postValue(LinkList(
+//            link = link!!,
+//            items = linkList.value?.items ?: mutableListOf(),
+//        ))
+//    }
 }

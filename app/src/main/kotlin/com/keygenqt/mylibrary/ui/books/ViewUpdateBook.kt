@@ -67,9 +67,9 @@ class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
                     }
                 } else {
                     // add
-                    service.addBook(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY).value, book) {
-                        emit(LiveDataEvent(true))
-                    }
+//                    service.addBook(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY).value, book) {
+//                        emit(LiveDataEvent(true))
+//                    }
                 }
             }
         }

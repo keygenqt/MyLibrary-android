@@ -17,9 +17,9 @@
 package com.keygenqt.mylibrary.di
 
 import android.util.Log
+import com.keygenqt.mylibrary.base.BaseApi
+import com.keygenqt.mylibrary.base.BaseQuery
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.services.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -31,8 +31,6 @@ import java.util.concurrent.TimeUnit
 val moduleRetrofit = module {
     factory { provideRetrofit(get()) }
     single { provideService(provideApi(get())) }
-    single { provideServiceBooks(get(), get(), get()) }
-    single { provideServiceOther(get(), get(), get()) }
 }
 
 fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
@@ -60,12 +58,6 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
 
 }
 
-fun provideApi(retrofit: Retrofit): CommonApi = retrofit.create(CommonApi::class.java)
+fun provideApi(retrofit: Retrofit): BaseApi = retrofit.create(BaseApi::class.java)
 
-fun provideService(api: CommonApi): CommonQuery = CommonQuery(api)
-
-fun provideServiceBooks(db: RoomDatabase, query: CommonQuery, preferences: BaseSharedPreferences): ServiceBooks =
-    ServiceBooks(db, preferences, query)
-
-fun provideServiceOther(db: RoomDatabase, query: CommonQuery, preferences: BaseSharedPreferences): ServiceOther =
-    ServiceOther(db, preferences, query)
+fun provideService(api: BaseApi): BaseQuery = BaseQuery(api)

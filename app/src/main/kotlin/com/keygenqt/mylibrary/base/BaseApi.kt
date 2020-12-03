@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.models
+package com.keygenqt.mylibrary.base
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import retrofit2.Call
+import retrofit2.http.*
 
-@Entity(tableName = "ModelSearchBook")
-data class ModelSearchBook(
-    @PrimaryKey
-    var id: String = "",
-    var path: String,
-    var modelId: Long,
-    var selfLink: String
-)
+interface BaseApi {
+    @GET
+    fun get(@Url link: String): Call<JsonElement>
+
+    @POST
+    fun post(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
+
+    @PUT
+    fun put(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
+
+    @DELETE
+    fun delete(@Url link: String): Call<JsonElement>
+}

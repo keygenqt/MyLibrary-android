@@ -18,10 +18,12 @@ package com.keygenqt.mylibrary.data.services
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.base.BaseQuery
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
+import com.keygenqt.mylibrary.data.db.DbServiceBooks
+import com.keygenqt.mylibrary.data.db.DbServiceOther
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.hal.API_KEY_JOIN
@@ -32,20 +34,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class ServiceOther(
-    val db: RoomDatabase,
-    val preferences: BaseSharedPreferences,
-    private val query: CommonQuery
+    val layer: DbServiceOther,
+    private val query: BaseQuery
 ) {
 
     suspend fun getUserMe(link: String, response: suspend (ModelUser) -> Unit) {
-        db.getDao<ModelUserDao>().let { dao ->
-            preferences.userId?.let { userId ->
-                dao.getModel(userId).let { model ->
-                    response.invoke(model)
-                }
-            }
+        layer.getModelUserDao().let { dao ->
             withContext(Dispatchers.IO) {
-                query.getAsync<ModelUser>(this, "$link/${preferences.userId}").await().let { model ->
+                query.getAsync<ModelUser>(this, "$link/${layer.userId()}").await().let { model ->
                     dao.insert(model)
                     response.invoke(model)
                 }
@@ -56,7 +52,7 @@ class ServiceOther(
     suspend fun getRootLinks(response: suspend (ModelRoot) -> Unit) {
         withContext(Dispatchers.IO) {
             query.getAsync<ModelRoot>(this, "/").await().let { model ->
-                db.getDao<ModelRootDao>().insert(model)
+                layer.getModelRootDao().insert(model)
                 response.invoke(model)
             }
         }
@@ -68,14 +64,14 @@ class ServiceOther(
         response: suspend (ModelUser) -> Unit
     ) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(API_KEY_LOGIN).value,
+            query.postAsync<ModelUser>(this, layer.getUrlLogin().value,
                 JsonObject().apply {
                     addProperty("email", email)
                     addProperty("password", password)
-                    addProperty("uid", preferences.uid)
+                    addProperty("uid", layer.uid())
                 }
             ).await().let { model ->
-                db.getDao<ModelUserDao>().insert(model)
+                layer.getModelUserDao().insert(model)
                 response.invoke(model)
             }
         }
@@ -89,16 +85,16 @@ class ServiceOther(
         response: suspend (ModelUser) -> Unit
     ) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(API_KEY_JOIN).value,
+            query.postAsync<ModelUser>(this, layer.getUrlJoin().value,
                 JsonObject().apply {
                     addProperty("avatar", avatar)
                     addProperty("nickname", nickname)
                     addProperty("email", email)
                     addProperty("password", password)
-                    addProperty("uid", preferences.uid)
+                    addProperty("uid", layer.uid())
                 }
             ).await().let { model ->
-                db.getDao<ModelUserDao>().insert(model)
+                layer.getModelUserDao().insert(model)
                 response.invoke(model)
             }
         }
@@ -110,7 +106,7 @@ class ServiceOther(
         response: suspend (Boolean) -> Unit
     ) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(API_KEY_PASSWORD).value,
+            query.postAsync<ModelUser>(this, layer.getUrlPassword().value,
                 JsonObject().apply {
                     addProperty("password", password)
                     addProperty("rpassword", rpassword)
@@ -128,7 +124,7 @@ class ServiceOther(
     ) {
         withContext(Dispatchers.IO) {
             query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
-                db.getDao<ModelUserDao>().insert(model)
+                layer.getModelUserDao().insert(model)
                 response.invoke()
             }
         }

@@ -45,17 +45,21 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
     private var _view: View? = null
 
     infix fun BaseFragment.initToolbar(delegate: Toolbar.() -> Unit) =
-        viewLifecycleOwner.lifecycleScope.launch {
-            delegate.invoke(requireActivity().findViewById(R.id.toolbar))
+        activity?.let {
+            viewLifecycleOwner.lifecycleScope.launch {
+                delegate.invoke(it.findViewById(R.id.toolbar))
+            }
         }
 
     infix fun BaseFragment.initView(delegate: View.() -> Unit) =
-        viewLifecycleOwner.lifecycleScope.launch {
-            view?.let {
-                _view = null
-                delegate.invoke(it)
-            } ?: run {
-                delegate.invoke(_view!!)
+        activity?.let {
+            viewLifecycleOwner.lifecycleScope.launch {
+                view?.let {
+                    _view = null
+                    delegate.invoke(it)
+                } ?: run {
+                    delegate.invoke(_view!!)
+                }
             }
         }
 
@@ -69,43 +73,44 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (isSpawnAnimation()) {
-            (requireActivity() as AppCompatActivity).spawnAnimation.apply {
-                visibility = View.VISIBLE
-                alpha = 1f
-                animate().apply {
-                    interpolator = LinearInterpolator()
-                    duration = 100
-                    alpha(0f)
-                    startDelay = 150
-                    start()
+        activity?.let { activity ->
+            if (isSpawnAnimation()) {
+                (activity as AppCompatActivity).spawnAnimation.apply {
+                    visibility = View.VISIBLE
+                    alpha = 1f
+                    animate().apply {
+                        interpolator = LinearInterpolator()
+                        duration = 100
+                        alpha(0f)
+                        startDelay = 150
+                        start()
+                    }
                 }
+            } else {
+                (activity as AppCompatActivity).spawnAnimation.visibility = View.GONE
             }
-        } else {
-            (requireActivity() as AppCompatActivity).spawnAnimation.visibility = View.GONE
-        }
-        this::class.java.kotlin.findAnnotation<ActionBarEnable>()?.let {
-            (requireActivity() as AppCompatActivity).supportActionBar?.show()
-        } ?: run {
-            (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-        }
-        this::class.java.kotlin.findAnnotation<BottomNavigationEnable>()?.let {
-            (requireActivity() as AppCompatActivity).findViewById<View>(R.id.bottomNavigationView)?.visibility =
-                View.VISIBLE
-        } ?: run {
-            (requireActivity() as AppCompatActivity).findViewById<View>(R.id.bottomNavigationView)?.visibility =
-                View.GONE
+            this::class.java.kotlin.findAnnotation<ActionBarEnable>()?.let {
+                activity.supportActionBar?.show()
+            } ?: run {
+                activity.supportActionBar?.hide()
+            }
+            this::class.java.kotlin.findAnnotation<BottomNavigationEnable>()?.let {
+                activity.findViewById<View>(R.id.bottomNavigationView)?.visibility = View.VISIBLE
+            } ?: run {
+                activity.findViewById<View>(R.id.bottomNavigationView)?.visibility = View.GONE
+            }
+
+            activity.currentFocus?.hideKeyboard()
+
+            _view = inflater.inflate(layoutId, container, false)
+
+            statusProgressPage(false)
+            setHasOptionsMenu(true)
+            statusProgress(false)
+            onCreateView()
+            callOnCreate()
         }
 
-        requireActivity().currentFocus?.hideKeyboard()
-
-        _view = inflater.inflate(layoutId, container, false)
-
-        statusProgressPage(false)
-        setHasOptionsMenu(true)
-        statusProgress(false)
-        onCreateView()
-        callOnCreate()
         return _view
     }
 
@@ -118,17 +123,22 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
     }
 
     fun statusProgress(status: Boolean) {
-        requireActivity().appBarLayout.progressBar.visibility = if (status) View.VISIBLE else View.GONE
+        activity?.let {
+            it.appBarLayout.progressBar.visibility = if (status) View.VISIBLE else View.GONE
+        }
     }
 
     fun statusProgressPage(status: Boolean) {
-        requireActivity().loading.visibility = if (status) View.VISIBLE else View.GONE
-        requireActivity().ivMoon.visibility = if (status && (preferences.grayTheme || preferences.darkTheme)) View.VISIBLE else View.GONE
-        if (status) {
-            requireActivity().lottieAnimationView.playAnimation()
-        } else {
-            requireActivity().lottieAnimationView.resumeAnimation()
+        activity?.let {
+            it.loading.visibility = if (status) View.VISIBLE else View.GONE
+            it.ivMoon.visibility = if (status && (preferences.grayTheme || preferences.darkTheme)) View.VISIBLE else View.GONE
+            if (status) {
+                it.lottieAnimationView.playAnimation()
+            } else {
+                it.lottieAnimationView.resumeAnimation()
+            }
         }
+
     }
 
     open fun onCreateOptionsMenu(): Int? {

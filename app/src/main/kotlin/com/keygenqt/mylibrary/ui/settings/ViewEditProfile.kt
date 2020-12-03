@@ -32,7 +32,7 @@ class ViewEditProfile(private val service: ServiceOther) : ViewModel() {
 
     var user: ModelUser? = null
 
-    private val linkModel = service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelUser.API_KEY)
+    private val linkModel = service.layer.getUrlUser()
 
     val params: MutableLiveData<LiveDataEvent<ModelUser?>> = MutableLiveData()
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()

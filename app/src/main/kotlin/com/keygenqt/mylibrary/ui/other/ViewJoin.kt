@@ -36,9 +36,7 @@ class ViewJoin(private val service: ServiceOther) : ViewModel() {
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
             event?.peekContentHandled()?.let {
                 service.join(it[AVATAR]!!, it[NICKNAME]!!, it[EMAIL]!!, it[PASSWORD]!!) { model ->
-                    service.preferences.userId = model.id
-                    service.preferences.token = model.token
-
+                    service.layer.setBaseUserData(model.id, model.token)
                     service.getRootLinks { links ->
                         service.getUserMe(links.links[ModelUser.API_KEY]?.value!!) {
                             emit(LiveDataEvent(model))

@@ -73,9 +73,9 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     }
 
     @OnCreateAfter
-    fun updateAdapterCache() {
+    fun updateCache() {
         initView {
-            viewModel.changeSearch.observe(viewLifecycleOwner) { event ->
+            viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
                     (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
                         adapter.updateLinks(links).updateItems(viewModel.findItems(links.self))

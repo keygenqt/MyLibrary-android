@@ -16,14 +16,9 @@
 
 package com.keygenqt.mylibrary.data.services
 
-import android.util.Log
 import com.google.gson.Gson
-import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.dao.ModelBookDao
-import com.keygenqt.mylibrary.data.dao.ModelBookGenreDao
-import com.keygenqt.mylibrary.data.dao.ModelSearchBookDao
-import com.keygenqt.mylibrary.data.dao.ModelSearchDao
+import com.keygenqt.mylibrary.base.BaseQuery
+import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.*
@@ -32,16 +27,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class ServiceBooks(
-    val db: RoomDatabase,
-    val preferences: BaseSharedPreferences,
-    private val query: CommonQuery
+    val layer: DbServiceBooks,
+    private val query: BaseQuery
 ) {
 
     suspend fun getSearch(
         key: String = ModelBook.API_KEY,
         response: suspend (ModelSearch) -> Unit
     ) {
-        db.getDao<ModelSearchDao>().let { dao ->
+        layer.getModelSearchDao().let { dao ->
             withContext(Dispatchers.IO) {
                 query.getAsync<ModelSearch>(this, "$key/$API_KEY_SEARCH").await().let { model ->
                     model.id = key
@@ -52,21 +46,9 @@ class ServiceBooks(
         }
     }
 
-    fun findSearch(): ModelSearch? {
-        db.getDao<ModelSearchDao>().let { dao ->
-            return dao.findModels(ModelBook.API_KEY)
-        }
-    }
-
-    fun findItems(link: Link, ids: List<Long>): List<ModelBook> {
-        db.getDao<ModelSearchBookDao>().let { dao ->
-            return dao.findSearchModels(link.linkClearPageable.value, ids).map { it.search }
-        }
-    }
-
     suspend fun getListSearch(link: Link, response: suspend (Link?) -> Unit) {
-        db.getDao<ModelBookDao>().let { daoBook ->
-            db.getDao<ModelSearchBookDao>().let { daoSearch ->
+        layer.getModelBookDao().let { daoBook ->
+            layer.getModelSearchBookDao().let { daoSearch ->
                 withContext(Dispatchers.IO) {
                     query.getAsync<ListDataModelBook>(this, link.value).await().let { listData ->
                         if (link.isFirstPage()) {
@@ -77,7 +59,9 @@ class ServiceBooks(
                             ModelSearchBook(
                                 id = "${it.id}-${link.type}",
                                 path = link.linkClearPageable.value,
-                                modelId = it.id)
+                                modelId = it.id,
+                                selfLink = it.selfLink
+                            )
                         }.toTypedArray()))
                         response(listData.linkNext)
                     }
@@ -86,13 +70,8 @@ class ServiceBooks(
         }
     }
 
-    suspend fun getView(link: String, response: suspend (ModelBook?) -> Unit) {
-        db.getDao<ModelBookDao>().let { dao ->
-            //            dao.getModel(link, ModelBook.VIEW_KEY)?.let { model ->
-            //                response.invoke(model)
-            //            } ?: run {
-            //                response.invoke(null)
-            //            }
+    suspend fun getView(link: String, response: suspend (ModelBook) -> Unit) {
+        layer.getModelBookDao().let { dao ->
             withContext(Dispatchers.IO) {
                 query.getAsync<ModelBook>(this, link).await().let { model ->
                     model.links[ModelBook.API_KEY_GENRE]?.let { link ->
@@ -113,7 +92,7 @@ class ServiceBooks(
         model: ModelBook,
         response: suspend () -> Unit
     ) {
-        db.getDao<ModelBookDao>().let { dao ->
+        layer.getModelBookDao().let { dao ->
             withContext(Dispatchers.IO) {
                 query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await()
                     .let {
@@ -139,7 +118,7 @@ class ServiceBooks(
         model: ModelBook,
         response: suspend () -> Unit
     ) {
-        db.getDao<ModelBookDao>().let { dao ->
+        layer.getModelBookDao().let { dao ->
             withContext(Dispatchers.IO) {
                 query.postAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject)
                     .await().let {
@@ -153,7 +132,7 @@ class ServiceBooks(
         linkList: LinkList,
         response: suspend (ListDataModelBookGenre) -> Unit
     ) {
-        db.getDao<ModelBookGenreDao>().let { dao ->
+        layer.getModelBookGenreDao().let { dao ->
             if (linkList.isFirstPage()) {
                 linkList.clear()
                 response.invoke(ListDataModelBookGenre().apply {
@@ -179,14 +158,14 @@ class ServiceBooks(
         response: suspend (ResponseSuccessful) -> Unit
     ) {
         link?.let {
-            db.getDao<ModelBookDao>().let { dao ->
-                withContext(Dispatchers.IO) {
-                    query.deleteAsync<ResponseSuccessful>(this, link.value).await().let {
-                        dao.getAllByLink(link.value).forEach { model ->
-                            model.enabled = false
-                            dao.update(model)
+            layer.getModelBookDao().let { daoBook ->
+                layer.getModelSearchBookDao().let { daoSearch ->
+                    withContext(Dispatchers.IO) {
+                        query.deleteAsync<ResponseSuccessful>(this, link.value).await().let {
+                            daoBook.deleteByLink(link.value)
+                            daoSearch.deleteByLink(link.value)
+                            response.invoke(it)
                         }
-                        response.invoke(it)
                     }
                 }
             }

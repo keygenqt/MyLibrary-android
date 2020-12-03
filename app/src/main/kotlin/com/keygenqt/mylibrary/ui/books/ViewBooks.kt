@@ -21,21 +21,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.ListSearchLinks
 import com.keygenqt.mylibrary.base.LiveDataEvent
-import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.utils.API_VERSION
-
-class ListSearchLinks(val self: Link, val next: Link? = null)
 
 class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkSearch = MutableLiveData(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY))
+    private val linkSearch = MutableLiveData(service.layer.getRootLink())
 
-    val changeSearch = linkSearch.switchMap { link ->
+    val changeLink = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
             if (link.isFirstPage()) {
                 emit(LiveDataEvent(ListSearchLinks(link)))
@@ -58,16 +55,16 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
     }
 
     fun findSearch(): ModelSearch? {
-        return service.findSearch()
+        return service.layer.findSearch()
     }
 
     fun findItems(link: Link, ids: List<Long> = emptyList()): List<ModelBook> {
-        return service.findItems(link, ids)
+        return service.layer.findItems(link, ids)
     }
 
     fun updateList(next: Link) {
         linkSearch.postValue(when (next.type) {
-            AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> next.linkWithParams(hashMapOf("userId" to service.preferences.userId.toString()))
+            AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> next.linkWithParams(hashMapOf("userId" to service.layer.userId().toString()))
             AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> next.linkWithParams(hashMapOf("sale" to "true"))
             else -> next
         })

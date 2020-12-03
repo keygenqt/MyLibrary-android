@@ -25,35 +25,31 @@ import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
+import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ResponseSuccessful
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ViewBook(private val service: ServiceBooks) : ViewModel() {
 
     var book: ModelBook? = null
 
-    val selfLink: MutableLiveData<LiveDataEvent<String>> = MutableLiveData()
+    val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
     val delete: MutableLiveData<LiveDataEvent<ResponseSuccessful>> = MutableLiveData()
 
-    val data = selfLink.switchMap { event ->
+    val changeLink = selfLink.switchMap { link ->
+        liveData(BaseExceptionHandler.getExceptionHandler()) {
+            emit(service.layer.findBookByLink(Link(link)))
+        }
+    }
+
+    val data = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            event.peekContent()?.let { link ->
-                service.getView(link) { model ->
-                    model?.let {
-                        book = model
-                        emit(LiveDataEvent(model))
-                        if (loading.value?.peekContent() == true) {
-                            delay(1200)
-                        }
-                        loading.postValue(LiveDataEvent(false))
-                    } ?: run {
-                        loading.postValue(LiveDataEvent(true))
-                    }
-                }
+            service.getView(link) { model ->
+                book = model
+                emit(LiveDataEvent(model))
             }
         }
     }

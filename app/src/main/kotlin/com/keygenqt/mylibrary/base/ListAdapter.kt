@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.ui.books.ListSearchLinks
 import java.util.*
 import kotlin.concurrent.schedule
 

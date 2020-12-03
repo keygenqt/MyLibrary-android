@@ -35,9 +35,7 @@ class ViewLogin(private val service: ServiceOther) : ViewModel() {
         liveData(getExceptionHandler(error)) {
             event?.peekContentHandled()?.let {
                 service.login(it[PARAMS.EMAIL]!!, it[PARAMS.PASSWORD]!!) { model ->
-                    service.preferences.userId = model.id
-                    service.preferences.token = model.token
-
+                    service.layer.setBaseUserData(model.id, model.token)
                     service.getRootLinks { links ->
                         service.getUserMe(links.links[ModelUser.API_KEY]?.value!!) {
                             emit(LiveDataEvent(model))

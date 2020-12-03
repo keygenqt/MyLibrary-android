@@ -21,9 +21,7 @@ import com.airbnb.lottie.Lottie
 import com.airbnb.lottie.LottieConfig
 import com.facebook.stetho.Stetho
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
-import com.keygenqt.mylibrary.di.moduleOther
-import com.keygenqt.mylibrary.di.moduleRetrofit
-import com.keygenqt.mylibrary.di.moduleViewModel
+import com.keygenqt.mylibrary.di.*
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -42,7 +40,9 @@ class App : Application() {
             modules(
                 moduleOther,
                 moduleRetrofit,
-                moduleViewModel
+                moduleViewModel,
+                moduleDb,
+                moduleService,
             )
         }
         registerActivityLifecycleCallbacks(exceptionHandler)

@@ -18,13 +18,15 @@ package com.keygenqt.mylibrary.ui.books
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -34,11 +36,8 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
 import kotlinx.android.synthetic.main.activity_main.view.toolbar
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import kotlinx.android.synthetic.main.fragment_book.view.*
@@ -51,9 +50,6 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     private val preferences: BaseSharedPreferences by inject()
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewBook by inject()
-
-    private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
-    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
 
     private var menu: Menu? = null
 
@@ -90,12 +86,12 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
             // start page
             if (viewModel.selfLink.value == null) {
-                viewModel.selfLink.postValue(LiveDataEvent(args.selfLink))
+                viewModel.selfLink.postValue(args.selfLink)
             }
 
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                viewModel.selfLink.postValue(LiveDataEvent(args.selfLink))
+                viewModel.selfLink.postValue(args.selfLink)
             }
             appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { _, verticalOffset ->
                 refresh.isEnabled = verticalOffset == 0
@@ -114,17 +110,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    @OnCreateAfter fun observeUpdateBook() {
-        initView {
-            observeUpdateBook.change.observe(viewLifecycleOwner) { event ->
-                event?.peekContentHandled()?.let { model ->
-                    updateView(model)
-                }
-            }
-        }
-    }
-
-    @OnCreateAfter fun loading() {
+    @OnCreateAfter
+    fun loading() {
         initView {
             viewModel.loading.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let {
@@ -135,17 +122,34 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    @OnCreateAfter fun initData() {
+    @OnCreateAfter
+    fun updateCache() {
         initView {
-            viewModel.data.observe(viewLifecycleOwner) { event ->
-                event?.peekContent()?.let { model ->
+            viewModel.changeLink.observe(viewLifecycleOwner) { model ->
+                statusProgressPage(model == null || model.genre.id == 0L)
+                model?.let {
                     updateView(model)
                 }
             }
         }
     }
 
-    @OnCreateAfter fun error() {
+    @OnCreateAfter
+    fun updateResponse() {
+        initView {
+            viewModel.data.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let { model ->
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        statusProgressPage(false)
+                        updateView(model)
+                    }, 1200)
+                }
+            }
+        }
+    }
+
+    @OnCreateAfter
+    fun error() {
         viewModel.error.observe(viewLifecycleOwner, { event ->
             event?.peekContentHandled()?.let { throwable ->
                 when (throwable) {
@@ -160,11 +164,11 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         })
     }
 
-    @OnCreateAfter fun delete() {
+    @OnCreateAfter
+    fun delete() {
         viewModel.delete.observe(viewLifecycleOwner, { event ->
             event?.peekContentHandled()?.let { result ->
                 if (result.status == 200) {
-                    observeUpdateBooks.change(viewModel.book)
                     Toast.makeText(activity, result.message, Toast.LENGTH_SHORT).show()
                     findNavController().navigateUp()
                 }

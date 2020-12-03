@@ -42,7 +42,7 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterGenres(R.layout.item_select_list, args.selectGenreId, commonFab, recyclerView) { linkNext ->
-                viewModel.updateList(linkNext)
+//                viewModel.updateList(linkNext)
             }
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {

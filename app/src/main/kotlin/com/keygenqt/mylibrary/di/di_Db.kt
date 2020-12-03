@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.di
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import retrofit2.Call
-import retrofit2.http.*
+import com.keygenqt.mylibrary.data.db.DbServiceBooks
+import com.keygenqt.mylibrary.data.db.DbServiceOther
+import com.keygenqt.mylibrary.ui.books.*
+import com.keygenqt.mylibrary.ui.other.ViewJoin
+import com.keygenqt.mylibrary.ui.other.ViewLogin
+import com.keygenqt.mylibrary.ui.other.ViewSplash
+import com.keygenqt.mylibrary.ui.settings.ViewEditProfile
+import com.keygenqt.mylibrary.ui.settings.ViewPassword
+import org.koin.dsl.module
 
-interface CommonApi {
-    @GET
-    fun get(@Url link: String): Call<JsonElement>
-
-    @POST
-    fun post(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
-
-    @PUT
-    fun put(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
-
-    @DELETE
-    fun delete(@Url link: String): Call<JsonElement>
+val moduleDb = module {
+    factory { DbServiceBooks(get(), get()) }
+    factory { DbServiceOther(get(), get()) }
 }

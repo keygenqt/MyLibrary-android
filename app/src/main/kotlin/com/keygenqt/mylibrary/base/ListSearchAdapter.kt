@@ -28,7 +28,6 @@ import com.google.android.material.chip.Chip
 import com.keygenqt.mylibrary.R.*
 import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.ui.books.ListSearchLinks
 import kotlinx.android.synthetic.main.item_search.view.*
 
 class AdapterHolderSearch(

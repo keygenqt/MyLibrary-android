@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.models
+package com.keygenqt.mylibrary.di
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.keygenqt.mylibrary.data.services.ServiceBooks
+import com.keygenqt.mylibrary.data.services.ServiceOther
+import org.koin.dsl.module
 
-@Entity(tableName = "ModelSearchBook")
-data class ModelSearchBook(
-    @PrimaryKey
-    var id: String = "",
-    var path: String,
-    var modelId: Long,
-    var selfLink: String
-)
+val moduleService = module {
+    factory { ServiceBooks(get(), get()) }
+    factory { ServiceOther(get(), get()) }
+}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.data.services
+package com.keygenqt.mylibrary.base
 
 import android.util.Log
 import com.google.gson.Gson
@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class CommonQuery(val api: CommonApi) {
+class BaseQuery(val api: BaseApi) {
 
     inline fun <reified T> getAsync(coroutineScope: CoroutineScope, link: String): Deferred<T> {
         return coroutineScope.async<T> {
