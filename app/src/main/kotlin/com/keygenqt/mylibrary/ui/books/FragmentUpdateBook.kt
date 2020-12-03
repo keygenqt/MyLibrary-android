@@ -29,10 +29,7 @@ import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBook
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
+import com.keygenqt.mylibrary.ui.utils.observes.*
 import kotlinx.android.synthetic.main.fragment_update_book.view.*
 import org.koin.android.ext.android.inject
 
@@ -44,10 +41,11 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
     private val observeSelectCover: ObserveSelectCover by activityViewModels()
+    private val observeUpdateBookList: ObserveUpdateBookList by activityViewModels()
     private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
     private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
 
-    private var selectGenreId: String? = null
+    private var selectGenreId: Long = 0
 
     // menu
     override fun onCreateOptionsMenu(): Int {
@@ -107,7 +105,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    @InitObserve fun observeSelectGenre() {
+    @OnCreateAfter fun observeSelectGenre() {
         initView {
             observeSelectGenre.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled().let { model ->
@@ -121,7 +119,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    @InitObserve fun observeSelectCover() {
+    @OnCreateAfter fun observeSelectCover() {
         initView {
             observeSelectCover.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled().let { model ->
@@ -134,26 +132,39 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    @InitObserve fun updateBook() {
+    @OnCreateAfter fun updateBook() {
         initView {
             viewModel.updateBook.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(false)
-                    clearError()
-                    scrollView.fullScroll(ScrollView.FOCUS_UP)
-                    this.hideKeyboard()
-                    body.requestFocus()
-                    Toast.makeText(activity, getString(R.string.update_book_updated_successfully), Toast.LENGTH_SHORT).show()
 
-                    // call change
-                    observeUpdateBook.change(viewModel.book)
-                    observeUpdateBooks.change(viewModel.book)
+                    if (args.selfLink.isEmpty()) {
+
+                        // call change
+                        observeUpdateBookList.change(true)
+
+                        Toast.makeText(activity, getString(R.string.update_book_added_successfully), Toast.LENGTH_SHORT).show()
+
+                        findNavController().navigateUp()
+                    } else {
+
+                        // call change
+                        observeUpdateBook.change(viewModel.book)
+                        observeUpdateBooks.change(viewModel.book)
+
+                        clearError()
+                        scrollView.fullScroll(ScrollView.FOCUS_UP)
+                        this.hideKeyboard()
+                        body.requestFocus()
+
+                        Toast.makeText(activity, getString(R.string.update_book_updated_successfully), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
 
-    @InitObserve fun loading() {
+    @OnCreateAfter fun loading() {
         initView {
             viewModel.loading.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let {
@@ -163,7 +174,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    @InitObserve fun initData() {
+    @OnCreateAfter fun initData() {
         initView {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
@@ -182,7 +193,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    @InitObserve fun validate() {
+    @OnCreateAfter fun validate() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->

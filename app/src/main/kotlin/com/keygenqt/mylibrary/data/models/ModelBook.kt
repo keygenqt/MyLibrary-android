@@ -29,8 +29,9 @@ import com.keygenqt.mylibrary.hal.API_KEY_SELF
 @Entity(tableName = "ModelBook")
 data class ModelBook(
 
+    @PrimaryKey
     @SerializedName("id")
-    var id: String = "",
+    var id: Long = 0,
 
     @SerializedName("image")
     var image: String? = null,
@@ -72,34 +73,13 @@ data class ModelBook(
     var user: ModelBookUser = ModelBookUser(),
 
     @Ignore
-    var genreId: String? = null
+    var genreId: Long? = null
 
 ) : BaseModel() {
 
-    @PrimaryKey
-    var key: String = ""
-        get() {
-            if (field.isEmpty()) {
-                return "$id-$type"
-            }
-            return field
-        }
-
-    var selfLink: String = ""
-        get() {
-            if (field.isEmpty() && links.containsKey(API_KEY_SELF)) {
-                return links.getValue(API_KEY_SELF).value
-            }
-            return field
-        }
-
-    var type: String = VIEW_KEY
-        set(value) {
-            if (key.isEmpty()) {
-                key = "$id-$value"
-            }
-            field = value
-        }
+    override fun baseId(): Long {
+        return id
+    }
 
     companion object {
         const val API_KEY = "books"

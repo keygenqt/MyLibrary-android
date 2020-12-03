@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -25,11 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
-import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
@@ -49,7 +46,7 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
             }
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                (recyclerView.adapter as ListAdapter<*>).updateList()
+//                (recyclerView.adapter as ListAdapter<*>).updateList()
             }
             args.selectGenreId?.let {
                 commonFab.showWithPadding(recyclerView)
@@ -61,12 +58,12 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
-    @InitObserve fun observeListItems() {
+    @OnCreateAfter fun observeListItems() {
         initView {
             viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
-                refresh.isRefreshing = false
-                (recyclerView.adapter as ListAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
-                notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
+//                refresh.isRefreshing = false
+//                (recyclerView.adapter as ListAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
+//                notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
             }
         }
     }

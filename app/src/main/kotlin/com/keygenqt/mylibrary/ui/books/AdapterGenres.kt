@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.item_select_list.view.title
 
 class AdapterGenres(
     @LayoutRes layout: Int,
-    var selectGenreId: String?,
+    var selectGenreId: Long?,
     private val fb: FloatingActionButton,
     private val recyclerView: RecyclerView,
     nextPage: (Link) -> Unit

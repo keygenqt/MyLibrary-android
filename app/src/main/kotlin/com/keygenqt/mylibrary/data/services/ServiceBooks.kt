@@ -16,11 +16,13 @@
 
 package com.keygenqt.mylibrary.data.services
 
+import android.util.Log
 import com.google.gson.Gson
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelBookDao
 import com.keygenqt.mylibrary.data.dao.ModelBookGenreDao
+import com.keygenqt.mylibrary.data.dao.ModelSearchBookDao
 import com.keygenqt.mylibrary.data.dao.ModelSearchDao
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
@@ -35,11 +37,11 @@ class ServiceBooks(
     private val query: CommonQuery
 ) {
 
-    suspend fun getSearch(key: String = ModelBook.API_KEY, response: suspend (ModelSearch) -> Unit) {
+    suspend fun getSearch(
+        key: String = ModelBook.API_KEY,
+        response: suspend (ModelSearch) -> Unit
+    ) {
         db.getDao<ModelSearchDao>().let { dao ->
-            dao.getModel(key)?.let { model ->
-                response.invoke(model)
-            }
             withContext(Dispatchers.IO) {
                 query.getAsync<ModelSearch>(this, "$key/$API_KEY_SEARCH").await().let { model ->
                     model.id = key
@@ -50,21 +52,35 @@ class ServiceBooks(
         }
     }
 
-    suspend fun getListSearch(linkSearch: LinkListSearch, response: suspend (ListDataModelBook) -> Unit) {
-        db.getDao<ModelBookDao>().let { dao ->
-            if (linkSearch.isFirstPage()) {
-                linkSearch.clear()
-                response.invoke(ListDataModelBook().apply {
-                    embedded = hashMapOf(ModelBook.API_KEY to dao.getAll(linkSearch.key))
-                    links = hashMapOf(API_KEY_SELF to linkSearch.getLinkModel())
-                })
-            }
-            withContext(Dispatchers.IO) {
-                query.getAsync<ListDataModelBook>(this, linkSearch.getLink()).await().let { listData ->
-                    // insert
-                    dao.deleteAll(linkSearch.key)
-                    dao.insert(listData.items.map { it.type = linkSearch.key; it }.toList())
-                    response.invoke(listData.mergeItems(linkSearch) as ListDataModelBook)
+    fun findSearch(): ModelSearch? {
+        db.getDao<ModelSearchDao>().let { dao ->
+            return dao.findModels(ModelBook.API_KEY)
+        }
+    }
+
+    fun findItems(link: Link, ids: List<Long>): List<ModelBook> {
+        db.getDao<ModelSearchBookDao>().let { dao ->
+            return dao.findSearchModels(link.linkClearPageable.value, ids).map { it.search }
+        }
+    }
+
+    suspend fun getListSearch(link: Link, response: suspend (Link?) -> Unit) {
+        db.getDao<ModelBookDao>().let { daoBook ->
+            db.getDao<ModelSearchBookDao>().let { daoSearch ->
+                withContext(Dispatchers.IO) {
+                    query.getAsync<ListDataModelBook>(this, link.value).await().let { listData ->
+                        if (link.isFirstPage()) {
+                            daoSearch.deleteByPath(link.linkClearPageable.value)
+                        }
+                        daoBook.insert(*listData.items.toTypedArray())
+                        daoSearch.insert(*(listData.items.map {
+                            ModelSearchBook(
+                                id = "${it.id}-${link.type}",
+                                path = link.linkClearPageable.value,
+                                modelId = it.id)
+                        }.toTypedArray()))
+                        response(listData.linkNext)
+                    }
                 }
             }
         }
@@ -72,11 +88,11 @@ class ServiceBooks(
 
     suspend fun getView(link: String, response: suspend (ModelBook?) -> Unit) {
         db.getDao<ModelBookDao>().let { dao ->
-            dao.getModel(link, ModelBook.VIEW_KEY)?.let { model ->
-                response.invoke(model)
-            } ?: run {
-                response.invoke(null)
-            }
+            //            dao.getModel(link, ModelBook.VIEW_KEY)?.let { model ->
+            //                response.invoke(model)
+            //            } ?: run {
+            //                response.invoke(null)
+            //            }
             withContext(Dispatchers.IO) {
                 query.getAsync<ModelBook>(this, link).await().let { model ->
                     model.links[ModelBook.API_KEY_GENRE]?.let { link ->
@@ -85,7 +101,7 @@ class ServiceBooks(
                     model.links[ModelBook.API_KEY_USER]?.let { link ->
                         model.user = query.getAsync<ModelBookUser>(this, link.value).await()
                     }
-                    dao.insert(model)
+                    dao.update(model)
                     response.invoke(model)
                 }
             }
@@ -99,20 +115,21 @@ class ServiceBooks(
     ) {
         db.getDao<ModelBookDao>().let { dao ->
             withContext(Dispatchers.IO) {
-                query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
+                query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await()
+                    .let {
 
-                    // update genre
-                    model.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                        model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
-                    }
+                        // update genre
+                        model.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                            model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
+                        }
 
-                    dao.getAllById(model.id).forEach {
-                        model.key = it.key
-                        model.type = it.type
-                        dao.update(model)
+                        //                    dao.getAllById(model.id).forEach {
+                        //                        model.key = it.key
+                        //                        model.type = it.type
+                        //                        dao.update(model)
+                        //                    }
+                        response.invoke()
                     }
-                    response.invoke()
-                }
             }
         }
     }
@@ -124,14 +141,18 @@ class ServiceBooks(
     ) {
         db.getDao<ModelBookDao>().let { dao ->
             withContext(Dispatchers.IO) {
-                query.postAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
-                    response.invoke()
-                }
+                query.postAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject)
+                    .await().let {
+                        response.invoke()
+                    }
             }
         }
     }
 
-    suspend fun getGenresList(linkList: LinkList, response: suspend (ListDataModelBookGenre) -> Unit) {
+    suspend fun getGenresList(
+        linkList: LinkList,
+        response: suspend (ListDataModelBookGenre) -> Unit
+    ) {
         db.getDao<ModelBookGenreDao>().let { dao ->
             if (linkList.isFirstPage()) {
                 linkList.clear()
@@ -141,13 +162,14 @@ class ServiceBooks(
                 })
             }
             withContext(Dispatchers.IO) {
-                query.getAsync<ListDataModelBookGenre>(this, linkList.getLink()).await().let { listData ->
-                    if (linkList.isFirstPage()) {
-                        dao.deleteAll()
+                query.getAsync<ListDataModelBookGenre>(this, linkList.getLink()).await()
+                    .let { listData ->
+                        if (linkList.isFirstPage()) {
+                            dao.deleteAll()
+                        }
+                        dao.insert(listData.items)
+                        //                    response.invoke(listData.mergeItems(linkList) as ListDataModelBookGenre)
                     }
-                    dao.insert(listData.items)
-                    response.invoke(listData.mergeItems(linkList) as ListDataModelBookGenre)
-                }
             }
         }
     }

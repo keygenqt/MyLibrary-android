@@ -16,61 +16,60 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
-import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.hal.LinkListSearch
 import com.keygenqt.mylibrary.utils.API_VERSION
+
+class ListSearchLinks(val self: Link, val next: Link? = null)
 
 class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
-    val linkSearch: MutableLiveData<LiveDataEvent<LinkListSearch>> = MutableLiveData()
+    private val linkSearch = MutableLiveData(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY))
 
-    val linkSearchSwitch = linkSearch.switchMap { event ->
+    val changeSearch = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
-            event?.peekContent()?.let { link ->
-                service.getListSearch(link) { models ->
-                    emit(LiveDataEvent(models))
-                }
+            if (link.isFirstPage()) {
+                emit(LiveDataEvent(ListSearchLinks(link)))
             }
         }
     }
 
-    val search: LiveData<LiveDataEvent<ModelSearch>> = liveData(getExceptionHandler()) {
+    val linkSwitch = linkSearch.switchMap { link ->
+        liveData(getExceptionHandler()) {
+            service.getListSearch(link) { linkNext ->
+                emit(ListSearchLinks(link, linkNext))
+            }
+        }
+    }
+
+    val search = liveData(getExceptionHandler()) {
         service.getSearch { search ->
-            emit(LiveDataEvent(search))
+            emit(search)
         }
     }
 
-    init {
-        updateList(ListSearchAdapter.SEARCH_SELF)
+    fun findSearch(): ModelSearch? {
+        return service.findSearch()
     }
 
-    fun updateList(key: String, link: Link? = null) {
-        if (key == ListSearchAdapter.SEARCH_SELF) {
-            linkSearch.postValue(LiveDataEvent(LinkListSearch(
-                key = key,
-                link = service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY),
-                items = mutableListOf()
-            )))
-        } else {
-            linkSearch.postValue(LiveDataEvent(LinkListSearch(
-                key = key,
-                items = linkSearch.value?.peekContent()?.items ?: mutableListOf(),
-                link = link!!.linkWithParams(
-                    when (key) {
-                        AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> hashMapOf("userId" to service.preferences.userId)
-                        AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> hashMapOf("sale" to "true")
-                        else -> hashMapOf()
-                    }
-                )
-            )))
-        }
+    fun findItems(link: Link, ids: List<Long> = emptyList()): List<ModelBook> {
+        return service.findItems(link, ids)
+    }
+
+    fun updateList(next: Link) {
+        linkSearch.postValue(when (next.type) {
+            AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> next.linkWithParams(hashMapOf("userId" to service.preferences.userId.toString()))
+            AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> next.linkWithParams(hashMapOf("sale" to "true"))
+            else -> next
+        })
     }
 }

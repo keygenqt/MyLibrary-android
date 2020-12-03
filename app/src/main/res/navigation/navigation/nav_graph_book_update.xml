@@ -29,8 +29,7 @@
       tools:layout="@layout/common_fragment_list">
     <argument
         android:name="selectGenreId"
-        app:argType="string"
-        app:nullable="true" />
+        app:argType="long" />
   </fragment>
 
   <fragment

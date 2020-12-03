@@ -82,7 +82,7 @@
   <string name="update_book_ISBN">ISBN</string>
   <string name="update_book_numberOfPages">Number Of Pages</string>
   <string name="update_book_updated_successfully">Book updated successfully</string>
-  <string name="update_book_create_successfully">Book create successfully</string>
+  <string name="update_book_added_successfully">Book added successfully</string>
   <string name="update_book_select_genre_done">Done</string>
   <string name="update_book_take_photo">Take Photo</string>
 

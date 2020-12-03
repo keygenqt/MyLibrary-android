@@ -27,7 +27,7 @@ data class ModelUser(
 
     @PrimaryKey
     @SerializedName("id")
-    var id: String = "",
+    var id: Long = 0,
 
     @SerializedName("email")
     var email: String = "",

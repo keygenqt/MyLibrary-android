@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
-import android.widget.ScrollView
 import android.widget.Toast
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
@@ -47,7 +46,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
         }
     }
 
-    @InitObserve fun afterSubmit() {
+    @OnCreateAfter fun afterSubmit() {
         initView {
             viewModel.password.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
@@ -62,7 +61,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
         }
     }
 
-    @InitObserve fun error() {
+    @OnCreateAfter fun error() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->

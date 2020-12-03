@@ -28,18 +28,19 @@ import com.keygenqt.mylibrary.hal.Link
 import kotlinx.android.synthetic.main.item_book_list.view.*
 import org.koin.java.KoinJavaComponent.inject
 
-class AdapterBooks(@LayoutRes layout: Int, nextPage: (String, Link) -> Unit) : ListSearchAdapter<ModelBook>(layout, nextPage) {
+class AdapterBooks(@LayoutRes layout: Int, nextPage: (Link) -> Unit) : ListSearchAdapter<ModelBook>(layout, nextPage) {
 
     private val preferences by inject(BaseSharedPreferences::class.java)
 
     companion object {
+        const val SEARCH_FIND_ALL = "findAll"
         const val SEARCH_FIND_ALL_BY_USER_ID = "findAllByUserId"
         const val SEARCH_FIND_ALL_BY_SALE = "findAllBySale"
     }
 
     override fun getStrings(): LinkedHashMap<String, Int> {
         return linkedMapOf(
-            SEARCH_SELF to R.string.search_books_self,
+            SEARCH_FIND_ALL to R.string.search_books_self,
             SEARCH_FIND_ALL_BY_USER_ID to R.string.search_books_findAllByUserId,
             SEARCH_FIND_ALL_BY_SALE to R.string.search_books_findAllBySale
         )

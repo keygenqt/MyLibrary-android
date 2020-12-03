@@ -12,9 +12,10 @@ import com.keygenqt.mylibrary.data.models.*
     ModelRoot::class,
     ModelUser::class,
     ModelBook::class,
+    ModelSearchBook::class,
     ModelBookGenre::class,
     ModelSearch::class,
-], version = 28, exportSchema = false)
+], version = 37, exportSchema = false)
 @TypeConverters(value = [
     ListConverter::class,
     MapConverter::class,
@@ -25,4 +26,5 @@ abstract class RoomConf : RoomDatabase() {
     abstract fun modelBookDao(): ModelBookDao
     abstract fun modelSearchDao(): ModelSearchDao
     abstract fun modelBookGenreDao(): ModelBookGenreDao
+    abstract fun modelSearchBookDao(): ModelSearchBookDao
 }

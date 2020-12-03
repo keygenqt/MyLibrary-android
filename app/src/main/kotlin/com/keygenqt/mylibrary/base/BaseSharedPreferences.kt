@@ -34,15 +34,16 @@ class BaseSharedPreferences(private val preferences: SharedPreferences) {
             }
         }
 
-    var userId: String?
+    var userId: Long?
         get() {
-            return preferences.getString("userId", null)
+            val value = preferences.getLong("userId", 0)
+            return if (value == 0L) null else value
         }
         set(value) {
             if (value == null) {
                 preferences.edit().remove("userId").apply()
             } else {
-                preferences.edit().putString("userId", value).apply()
+                preferences.edit().putLong("userId", value).apply()
             }
         }
 

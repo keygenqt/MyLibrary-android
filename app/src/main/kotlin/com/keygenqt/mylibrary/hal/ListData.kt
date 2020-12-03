@@ -73,31 +73,35 @@ open class ListData<T>(
             return null
         }
 
-    fun mergeItems(linkSearch: LinkListSearch): ListData<T> {
-        linkSearch.items.addAll(itemsAny)
-        itemsAny = linkSearch.items
-        return this
+    fun clear() {
+        items = emptyList()
     }
 
-    fun mergeItems(linkSearch: LinkList): ListData<T> {
-        linkSearch.items.addAll(itemsAny)
-        itemsAny = linkSearch.items
-        return this
-    }
-
-    fun updateItem(index: Int, item: T) {
-        if (index < items.size && items.isNotEmpty()) {
-            val list = ArrayList(items)
-            list[index] = item
-            items = list
-        }
-    }
-
-    fun removeItem(index: Int) {
-        if (index < items.size && items.isNotEmpty()) {
-            val list = ArrayList(items)
-            list.removeAt(index)
-            items = list
-        }
-    }
+//    fun mergeItems(linkSearch: LinkListSearch): ListData<T> {
+//        linkSearch.items.addAll(itemsAny)
+//        itemsAny = linkSearch.items
+//        return this
+//    }
+//
+//    fun mergeItems(linkSearch: LinkList): ListData<T> {
+//        linkSearch.items.addAll(itemsAny)
+//        itemsAny = linkSearch.items
+//        return this
+//    }
+//
+//    fun updateItem(index: Int, item: T) {
+//        if (index < items.size && items.isNotEmpty()) {
+//            val list = ArrayList(items)
+//            list[index] = item
+//            items = list
+//        }
+//    }
+//
+//    fun removeItem(index: Int) {
+//        if (index < items.size && items.isNotEmpty()) {
+//            val list = ArrayList(items)
+//            list.removeAt(index)
+//            items = list
+//        }
+//    }
 }

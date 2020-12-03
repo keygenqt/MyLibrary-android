@@ -114,7 +114,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    @InitObserve fun observeUpdateBook() {
+    @OnCreateAfter fun observeUpdateBook() {
         initView {
             observeUpdateBook.change.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
@@ -124,7 +124,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    @InitObserve fun loading() {
+    @OnCreateAfter fun loading() {
         initView {
             viewModel.loading.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let {
@@ -135,7 +135,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    @InitObserve fun initData() {
+    @OnCreateAfter fun initData() {
         initView {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContent()?.let { model ->
@@ -145,7 +145,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    @InitObserve fun error() {
+    @OnCreateAfter fun error() {
         viewModel.error.observe(viewLifecycleOwner, { event ->
             event?.peekContentHandled()?.let { throwable ->
                 when (throwable) {
@@ -160,7 +160,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         })
     }
 
-    @InitObserve fun delete() {
+    @OnCreateAfter fun delete() {
         viewModel.delete.observe(viewLifecycleOwner, { event ->
             event?.peekContentHandled()?.let { result ->
                 if (result.status == 200) {
@@ -188,8 +188,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
             bookPublisherBlock.visibility = if (model.publisher.isNullOrEmpty()) View.GONE else View.VISIBLE
             bookISBNBlock.visibility = if (model.isbn.isNullOrEmpty()) View.GONE else View.VISIBLE
-            bookYearBlock.visibility = if (model.year == "0") View.GONE else View.VISIBLE
-            bookPagesBlock.visibility = if (model.numberOfPages == "0") View.GONE else View.VISIBLE
+            bookYearBlock.visibility = if (model.year.isNullOrEmpty()) View.GONE else View.VISIBLE
+            bookPagesBlock.visibility = if (model.numberOfPages.isNullOrEmpty()) View.GONE else View.VISIBLE
 
             bookPublisher.text = model.publisher
             bookISBN.text = model.isbn
@@ -203,8 +203,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 bookCoverBlock.visibility = View.GONE
             }
 
-            bookSynopsisTitle.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
-            bookSynopsis.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
+            bookSynopsisBlock.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
             bookSynopsis.text = model.description
 
             bookGenre.text = getString(R.string.view_book_genre, model.genre.title)

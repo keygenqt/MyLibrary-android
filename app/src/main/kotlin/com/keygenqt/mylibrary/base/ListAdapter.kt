@@ -24,7 +24,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.hal.Link
-import java.util.Timer
+import com.keygenqt.mylibrary.ui.books.ListSearchLinks
+import java.util.*
 import kotlin.concurrent.schedule
 
 class AdapterHolder(
@@ -39,7 +40,7 @@ class AdapterHolderLoading(
 ) : ViewHolder(view)
 
 @Suppress("UNCHECKED_CAST")
-abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> Unit)? = null)
+abstract class ListAdapter<T>(@LayoutRes val id: Int, open var nextPage: ((Link) -> Unit)? = null)
     : RecyclerView.Adapter<ViewHolder>() {
 
     var linkSelf: Link? = null
@@ -94,18 +95,30 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, var nextPage: ((Link) -> U
         return items.size + (if (nextPage != null && linkNext != null) 1 else 0)
     }
 
-    open fun updateItems(items: List<Any>, linkSelf: Link? = null, linkNext: Link? = null) {
-        this.items.clear()
+    fun getLinkForUpdate(): Link? {
+        return linkSelf?.linkClearPageable
+    }
+
+    open fun updateLinks(links: ListSearchLinks): ListAdapter<T> {
+        if (links.self.isFirstPage()) {
+            this.items.clear()
+        }
+        linkSelf = links.self
+        linkNext = links.next
+        return this
+    }
+
+    open fun updateItems(items: List<Any>) {
         this.items.addAll(items)
-        this.linkNext = linkNext
-        this.linkSelf = linkSelf
         notifyDataSetChanged()
     }
 
-    open fun updateList() {
-        linkSelf?.let { link ->
-            nextPage?.invoke(link.linkClearPageable)
-        }
+    fun isEmpty(): Boolean {
+        return items.isEmpty()
+    }
+
+    fun getIds(): List<Long> {
+        return items.map { (it as BaseModel).baseId() }
     }
 
     fun updateItem(index: Int, item: Any) {

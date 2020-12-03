@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.item_select_list.view.title
 
 class AdapterCover(
     @LayoutRes layout: Int,
-    var selectGenreId: String?,
+    var selectCover: String?,
     private val fb: FloatingActionButton,
     private val recyclerView: RecyclerView
 ) : ListAdapter<String>(layout) {
@@ -41,26 +41,26 @@ class AdapterCover(
                 title.text = model
                 description.visibility = View.GONE
                 itemBlock.setOnClickListener {
-                    selectGenreId?.let {
+                    selectCover?.let {
                         items.forEachIndexed { index, any ->
-                            if (any is ModelBookGenre && any.id == selectGenreId) {
+                            if (any is String && any == selectCover) {
                                 notifyItemChanged(index)
                                 return@forEachIndexed
                             }
                         }
                     }
-                    selectGenreId = model
+                    selectCover = model
                     radioButton.isChecked = true
                     fb.showWithPadding(recyclerView)
                 }
-                radioButton.isChecked = model == selectGenreId
+                radioButton.isChecked = model == selectCover
             }
         }
     }
 
     fun getSelectItem(): String? {
         items.forEach {
-            if (it is String && it == selectGenreId) {
+            if (it is String && it == selectCover) {
                 return it
             }
         }

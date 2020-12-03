@@ -18,12 +18,21 @@ package com.keygenqt.mylibrary.hal
 
 import android.net.Uri
 import com.google.gson.annotations.SerializedName
-import java.util.HashMap
+import java.util.*
 
 data class Link(
     @SerializedName("href")
     var href: String = ""
 ) {
+    val type: String
+        get() {
+            return if (linkClearPageable.value.contains("$API_KEY_SEARCH/")) {
+                linkClearPageable.value.substringAfterLast("$API_KEY_SEARCH/")
+            } else {
+                "root"
+            }
+        }
+
     val value: String
         get() {
             return href.substringBefore("{")
@@ -55,10 +64,8 @@ data class Link(
 
     fun linkWithParams(params: HashMap<String, out String?>): Link {
         val uri = Uri.parse(value).buildUpon()
-        this.params.forEach {
-            if (params.containsKey(it)) {
-                uri.appendQueryParameter(it, params[it])
-            }
+        params.forEach {
+            uri.appendQueryParameter(it.key, it.value)
         }
         return Link(uri.toString())
     }
@@ -69,5 +76,9 @@ data class Link(
 
     fun isFirstPage(): Boolean {
         return !href.contains("""page=[1-9]+""".toRegex())
+    }
+
+    fun isPage(page: Int): Boolean {
+        return !href.contains("page=$page")
     }
 }

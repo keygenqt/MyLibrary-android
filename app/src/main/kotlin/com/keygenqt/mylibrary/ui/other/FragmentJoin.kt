@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import android.widget.ScrollView
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
@@ -73,7 +72,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
         }
     }
 
-    @InitObserve fun afterSubmit() {
+    @OnCreateAfter fun afterSubmit() {
         initView {
             viewModel.join.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
@@ -84,7 +83,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
         }
     }
 
-    @InitObserve fun validate() {
+    @OnCreateAfter fun validate() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->

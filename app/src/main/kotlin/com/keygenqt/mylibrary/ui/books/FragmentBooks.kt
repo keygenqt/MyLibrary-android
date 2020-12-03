@@ -18,7 +18,6 @@ package com.keygenqt.mylibrary.ui.books
 
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,18 +25,17 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
-import com.keygenqt.mylibrary.extensions.findIndex
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveUpdateBooks
-import kotlinx.android.synthetic.main.common_fragment_list.view.*
+import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
+import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
+import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
+import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
-
-    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
 
     // menu
     override fun onCreateOptionsMenu(): Int {
@@ -56,13 +54,15 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterBooks(R.layout.item_book_list) { key, linkNext ->
-                refresh.isRefreshing = ListSearchAdapter.SEARCH_PAGE != key
-                viewModel.updateList(key, linkNext)
+            recyclerView.adapter = AdapterBooks(R.layout.item_book_list) { next ->
+                statusProgress(next.isFirstPage())
+                viewModel.updateList(next)
             }
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-                (recyclerView.adapter as ListSearchAdapter<*>).updateList()
+                (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
+                    viewModel.updateList(it)
+                }
             }
             commonFab.setImageResource(R.drawable.ic_baseline_add)
             commonFab.showWithPadding(recyclerView)
@@ -72,26 +72,15 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
-    @InitObserve fun observeUpdateBook() {
+    @OnCreateAfter
+    fun updateAdapterCache() {
         initView {
-            observeUpdateBooks.change.observe(viewLifecycleOwner) { event ->
-                event?.peekContentHandled()?.let { model ->
-                    viewModel.linkSearchSwitch.value?.peekContent()?.let {
-                        val index = it.itemsAny.findIndex(model)
-                        if (model.enabled) {
-                            // update linkSearchSwitch
-                            it.updateItem(index, model)
-                            // update adapter
-                            (recyclerView.adapter as AdapterBooks).updateItem(index, model)
-                            // update search
-                            viewModel.linkSearch.value?.peekContent()?.updateItem(index, model)
-                        } else {
-                            // update linkSearchSwitch
-                            it.removeItem(index)
-                            // update adapter
-                            (recyclerView.adapter as AdapterBooks).removeItem(index)
-                            // update search
-                            viewModel.linkSearch.value?.peekContent()?.removeItem(index)
+            viewModel.changeSearch.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let { links ->
+                    (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
+                        adapter.updateLinks(links).updateItems(viewModel.findItems(links.self))
+                        viewModel.findSearch()?.let { search ->
+                            adapter.setSearchModel(search)
                         }
                     }
                 }
@@ -99,25 +88,25 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
-    @InitObserve fun linkSearchSwitch() {
+    @OnCreateAfter
+    fun linkSearchSwitch() {
         initView {
-            viewModel.linkSearchSwitch.observe(viewLifecycleOwner) { event ->
-                event?.peekContent()?.let { listData ->
+            viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
+                (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
+                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
+                    notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
                     refresh.isRefreshing = false
-                    (recyclerView.adapter as ListSearchAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
-                    notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
+                    statusProgress(false)
                 }
-
             }
         }
     }
 
-    @InitObserve fun search() {
+    @OnCreateAfter
+    fun search() {
         initView {
-            viewModel.search.observe(viewLifecycleOwner) { event ->
-                event?.peekContent()?.let { search ->
-                    (recyclerView.adapter as ListSearchAdapter<*>).addSearchModel(search)
-                }
+            viewModel.search.observe(viewLifecycleOwner) { search ->
+                (recyclerView.adapter as? ListSearchAdapter<*>)?.setSearchModel(search)
             }
         }
     }

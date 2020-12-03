@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.other
 
-import android.widget.ScrollView
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
@@ -59,7 +58,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    @InitObserve fun afterSubmit() {
+    @OnCreateAfter fun afterSubmit() {
         initView {
             viewModel.login.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
@@ -71,7 +70,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
         }
     }
 
-    @InitObserve fun observeError() {
+    @OnCreateAfter fun observeError() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->

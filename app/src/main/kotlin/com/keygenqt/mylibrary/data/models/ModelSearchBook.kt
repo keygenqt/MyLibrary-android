@@ -18,24 +18,11 @@ package com.keygenqt.mylibrary.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import com.keygenqt.mylibrary.base.BaseModel
 
-@Entity(tableName = "ModelBookGenre")
-data class ModelBookGenre(
-
+@Entity(tableName = "ModelSearchBook")
+data class ModelSearchBook(
     @PrimaryKey
-    @SerializedName("id")
-    var id: Long = 0,
-
-    @SerializedName("title")
-    var title: String = "",
-
-    @SerializedName("description")
-    var description: String = ""
-
-) : BaseModel() {
-    companion object {
-        const val API_KEY = "genres"
-    }
-}
+    var id: String = "",
+    var path: String,
+    var modelId: Long
+)

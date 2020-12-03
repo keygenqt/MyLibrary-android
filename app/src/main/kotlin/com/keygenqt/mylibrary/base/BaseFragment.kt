@@ -38,7 +38,7 @@ import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
-    annotation class InitObserve
+    annotation class OnCreateAfter
 
     private val preferences: BaseSharedPreferences by inject()
 
@@ -111,7 +111,7 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
     private fun callOnCreate() {
         this::class.java.declaredMethods.forEach { method ->
-            method.getAnnotation(InitObserve::class.java) ?: return@forEach
+            method.getAnnotation(OnCreateAfter::class.java) ?: return@forEach
             method.isAccessible = true
             method.invoke(this)
         }

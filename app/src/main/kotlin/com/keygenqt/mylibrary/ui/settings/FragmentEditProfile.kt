@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
@@ -65,7 +64,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         }
     }
 
-    @InitObserve fun observeUpdate() {
+    @OnCreateAfter fun observeUpdate() {
         initView {
             viewModel.updateUser.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
@@ -79,7 +78,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         }
     }
 
-    @InitObserve fun observeUserMe() {
+    @OnCreateAfter fun observeUserMe() {
         initView {
             viewModel.userMe.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { model ->
@@ -94,7 +93,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
         }
     }
 
-    @InitObserve fun observeError() {
+    @OnCreateAfter fun observeError() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->

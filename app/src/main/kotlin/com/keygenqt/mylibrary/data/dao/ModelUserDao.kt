@@ -10,7 +10,7 @@ import com.keygenqt.mylibrary.data.models.ModelUser
 interface ModelUserDao {
 
     @Query("SELECT * FROM ModelUser WHERE id =:id")
-    fun getModel(id: String): ModelUser
+    fun getModel(id: Long): ModelUser
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg model: ModelUser)

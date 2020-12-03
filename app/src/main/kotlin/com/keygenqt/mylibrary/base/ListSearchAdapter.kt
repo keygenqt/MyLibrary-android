@@ -22,29 +22,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView.*
 import com.google.android.material.chip.Chip
 import com.keygenqt.mylibrary.R.*
 import com.keygenqt.mylibrary.data.models.ModelSearch
-import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import com.keygenqt.mylibrary.hal.Link
-import kotlinx.android.synthetic.main.item_search.view.chipGroup
+import com.keygenqt.mylibrary.ui.books.ListSearchLinks
+import kotlinx.android.synthetic.main.item_search.view.*
 
 class AdapterHolderSearch(
     group: ViewGroup,
     var view: View = LayoutInflater.from(group.context).inflate(layout.item_search, group, false)
 ) : ViewHolder(view)
 
-abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPageSearch: ((String, Link) -> Unit)? = null)
-    : ListAdapter<T>(layout, { link -> nextPageSearch?.invoke(SEARCH_PAGE, link) }) {
-
-    companion object {
-        const val SEARCH_PAGE = "page"
-        const val SEARCH_SELF = "self"
-    }
+abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, nextPage: ((Link) -> Unit)? = null) : ListAdapter<T>(layout, nextPage) {
 
     var view: View? = null
+    var search: ModelSearch? = null
 
     abstract fun getStrings(): LinkedHashMap<String, Int>
 
@@ -58,9 +53,22 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
                     setChip(string.key, view, context.getString(string.value), it)
                 }
             }
+
+            // check first always
+            var isChecked = false
+            chipGroup.forEach {
+                if ((it as Chip).isChecked) {
+                    isChecked = true
+                    return@forEach
+                }
+            }
+            if (!isChecked) {
+                (chipGroup.getChildAt(0) as? Chip)?.isChecked = true
+            }
+
             chipGroup.setOnCheckedChangeListener { _, viewId ->
                 val checkedKey = chipGroup.findViewById<Chip>(viewId).tag.toString()
-                nextPageSearch?.invoke(checkedKey, model.links.getValue(checkedKey))
+                nextPage?.invoke(model.links.getValue(checkedKey))
             }
         }
     }
@@ -86,29 +94,23 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
         }
     }
 
-    override fun updateItems(items: List<Any>, linkSelf: Link?, linkNext: Link?) {
-        val search1 = this.items.filterIsInstance<ModelSearch>().firstOrNull()
-        super.updateItems(items, linkSelf, linkNext)
-        search1?.let {
-            this.items.filterIsInstance<ModelSearch>().firstOrNull() ?: run {
-                addSearchModel(search1)
-            }
+    override fun updateLinks(links: ListSearchLinks): ListAdapter<T> {
+        if (links.self.isFirstPage()) {
+            this.search = this.items.filterIsInstance<ModelSearch>().firstOrNull()
         }
+        return super.updateLinks(links)
     }
 
-    override fun updateList() {
-        view?.apply {
-            chipGroup.children.forEach { chip ->
-                if (chip is Chip && chip.isChecked) {
-                    linkSelf?.let { link ->
-                        nextPageSearch?.invoke(chip.tag as String, link.linkClearPageable)
-                    }
-                }
-            }
+    override fun updateItems(items: List<Any>) {
+        this.items.addAll(items)
+        search?.let {
+            this.items.add(0, it)
+            search = null
         }
+        notifyDataSetChanged()
     }
 
-    fun addSearchModel(search: ModelSearch) {
+    fun setSearchModel(search: ModelSearch) {
         if (this.items.firstOrNull() !is ModelSearch) {
             this.items.add(0, search)
         } else {
@@ -127,11 +129,7 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, private val nextPage
                     it.text = title
                     chipGroup.addView(it)
                     linkSelf?.let { linkSelf ->
-                        if (linkSelf.value.contains("$API_KEY_SEARCH/")) {
-                            it.isChecked = linkSelf.linkClear.value == link.linkClear.value
-                        } else {
-                            it.isChecked = key == SEARCH_SELF
-                        }
+                        it.isChecked = linkSelf.linkClear.value == link.linkClear.value
                     }
                 }
             }
