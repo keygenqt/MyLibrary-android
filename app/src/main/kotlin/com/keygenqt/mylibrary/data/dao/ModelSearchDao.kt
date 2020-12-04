@@ -13,8 +13,8 @@ interface ModelSearchDao {
     fun findModels(id: String): ModelSearch?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg model: ModelSearch)
+    fun insert(vararg model: ModelSearch)
 
     @Query("DELETE FROM ModelSearch")
-    suspend fun deleteAll()
+    fun deleteAll()
 }

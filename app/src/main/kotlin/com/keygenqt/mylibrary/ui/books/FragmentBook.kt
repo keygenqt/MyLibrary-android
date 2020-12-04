@@ -68,7 +68,9 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         when (id) {
             R.id.book_menu_edit -> {
                 viewModel.book?.let {
-                    findNavController().navigate(FragmentBookDirections.actionFragmentBookToFragmentEditBook(it.selfLink))
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        findNavController().navigate(FragmentBookDirections.actionFragmentBookToFragmentEditBook(it.selfLink))
+                    }, 300)
                 }
             }
             R.id.book_menu_delete -> {
@@ -125,7 +127,8 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     @OnCreateAfter
     fun updateCache() {
         initView {
-            viewModel.changeLink.observe(viewLifecycleOwner) { model ->
+            viewModel.changeLink.observe(viewLifecycleOwner) { link ->
+                val model = viewModel.getModel(link)
                 statusProgressPage(model == null || model.genre.id == 0L)
                 model?.let {
                     updateView(model)

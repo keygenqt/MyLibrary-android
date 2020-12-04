@@ -19,8 +19,12 @@ package com.keygenqt.mylibrary.data.db
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.*
+import com.keygenqt.mylibrary.data.hal.ListDataModelBook
+import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.models.ModelBookGenre
 import com.keygenqt.mylibrary.data.models.ModelSearch
+import com.keygenqt.mylibrary.data.models.ModelSearchBook
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.utils.API_VERSION
 
@@ -32,24 +36,12 @@ class DbServiceBooks(
         return preferences.userId
     }
 
-    fun getModelBookDao(): ModelBookDao {
-        return db.getDao()
-    }
-    
-    fun getModelSearchDao(): ModelSearchDao {
-        return db.getDao()
-    }
-
-    fun getModelBookGenreDao(): ModelBookGenreDao {
-        return db.getDao()
-    }
-
-    fun getModelSearchBookDao(): ModelSearchBookDao {
-        return db.getDao()
-    }
-
     fun getRootLink(): Link {
         return db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
+    }
+
+    fun getGenresLink(): Link {
+        return db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBookGenre.API_KEY)
     }
 
     fun findSearch(): ModelSearch? {
@@ -64,10 +56,71 @@ class DbServiceBooks(
         }
     }
 
+    fun findItemsGenres(ids: List<Long>): List<ModelBookGenre> {
+        db.getDao<ModelBookGenreDao>().let { dao ->
+            return dao.findModels(ids)
+        }
+    }
+
     fun findBookByLink(link: Link): ModelBook? {
-        getModelBookDao().findModel(link.value)?.let { model ->
+        db.getDao<ModelBookDao>().findModelByLink(link.value)?.let { model ->
             return model
         }
         return null
+    }
+
+    fun saveSearch(model: ModelSearch) {
+        db.getDao<ModelSearchDao>().insert(model)
+    }
+
+    fun saveListGenre(link: Link, list: ListDataModelBookGenre) {
+        db.getDao<ModelBookGenreDao>().let { dao ->
+            if (link.isFirstPage()) {
+                dao.deleteAll()
+            }
+            dao.insert(*list.items.toTypedArray())
+        }
+    }
+
+    fun saveListSearch(link: Link, list: ListDataModelBook) {
+        db.getDao<ModelBookDao>().let { daoBook ->
+            db.getDao<ModelSearchBookDao>().let { daoSearch ->
+                if (link.isFirstPage()) {
+                    daoSearch.deleteByPath(link.linkClearPageable.value)
+                }
+                daoBook.insert(*list.items.toTypedArray())
+                daoSearch.insert(*(list.items.map {
+                    ModelSearchBook(
+                        path = link.linkClearPageable.value,
+                        modelId = it.id,
+                        selfLink = it.selfLink
+                    )
+                }.toTypedArray()))
+            }
+        }
+    }
+
+    fun addBook(model: ModelBook) {
+        db.getDao<ModelBookDao>().insert(model)
+        db.getDao<ModelSearchBookDao>().let { daoSearch ->
+            daoSearch.findLinks().forEach { link ->
+                daoSearch.insert(
+                    ModelSearchBook(
+                        path = link,
+                        modelId = model.id,
+                        selfLink = model.selfLink
+                    )
+                )
+            }
+        }
+    }
+
+    fun saveBook(model: ModelBook) {
+        db.getDao<ModelBookDao>().update(model)
+    }
+
+    fun deleteBook(link: Link) {
+        db.getDao<ModelBookDao>().deleteByLink(link.value)
+        db.getDao<ModelSearchBookDao>().deleteByLink(link.value)
     }
 }

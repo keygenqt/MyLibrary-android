@@ -55,11 +55,11 @@ class FragmentCover : BaseFragment(R.layout.common_fragment_list) {
                 findNavController().navigateUp()
             }
 
-//            (recyclerView.adapter as ListAdapter<*>).updateItems(listOf(
-//                COVER_TYPE_SOFT,
-//                COVER_TYPE_SOLID,
-//                COVER_TYPE_OTHER,
-//            ))
+            (recyclerView.adapter as ListAdapter<*>).updateItems(listOf(
+                COVER_TYPE_SOFT,
+                COVER_TYPE_SOLID,
+                COVER_TYPE_OTHER,
+            ))
         }
     }
 }

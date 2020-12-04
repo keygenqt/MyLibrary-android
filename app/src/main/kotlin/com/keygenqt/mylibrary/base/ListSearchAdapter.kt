@@ -93,7 +93,7 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, nextPage: ((Link) ->
         }
     }
 
-    override fun updateLinks(links: ListSearchLinks): ListAdapter<T> {
+    override fun updateLinks(links: ListLinks): ListAdapter<T> {
         if (links.self.isFirstPage()) {
             this.search = this.items.filterIsInstance<ModelSearch>().firstOrNull()
         }

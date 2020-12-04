@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
-import com.keygenqt.mylibrary.base.ListSearchLinks
+import com.keygenqt.mylibrary.base.ListLinks
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelSearch
@@ -35,7 +35,7 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
     val changeLink = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
             if (link.isFirstPage()) {
-                emit(LiveDataEvent(ListSearchLinks(link)))
+                emit(LiveDataEvent(ListLinks(link)))
             }
         }
     }
@@ -43,7 +43,7 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
     val linkSwitch = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
             service.getListSearch(link) { linkNext ->
-                emit(ListSearchLinks(link, linkNext))
+                emit(ListLinks(link, linkNext))
             }
         }
     }

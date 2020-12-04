@@ -9,15 +9,15 @@ interface ModelBookDao {
     fun findAllByLink(selfLink: String): List<ModelBook>
 
     @Query("SELECT * FROM ModelBook WHERE selfLink=:selfLink")
-    fun findModel(selfLink: String): ModelBook?
+    fun findModelByLink(selfLink: String): ModelBook?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg model: ModelBook)
+    fun insert(vararg model: ModelBook)
 
     @Update
     fun update(model: ModelBook)
 
     @Query("DELETE FROM ModelBook WHERE selfLink=:selfLink")
-    suspend fun deleteByLink(selfLink: String)
+    fun deleteByLink(selfLink: String)
 }
 

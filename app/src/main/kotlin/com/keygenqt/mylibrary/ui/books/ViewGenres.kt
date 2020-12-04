@@ -16,36 +16,61 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
-import com.keygenqt.mylibrary.data.dao.ModelRootDao
+import com.keygenqt.mylibrary.base.ListLinks
+import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.models.ModelBookGenre
-import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.hal.LinkList
-import com.keygenqt.mylibrary.utils.API_VERSION
 
 class ViewGenres(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkList: MutableLiveData<LinkList> = MutableLiveData()
+    private val linkList: MutableLiveData<Link> = MutableLiveData(service.layer.getGenresLink())
 
-    val switchMap = linkList.switchMap { link ->
+    val changeLink = linkList.switchMap { link ->
         liveData(getExceptionHandler()) {
-            service.getGenresList(link) { models ->
-                emit(models)
+            if (link.isFirstPage()) {
+                emit(LiveDataEvent(ListLinks(link)))
             }
         }
     }
 
-//    init {
-//        updateList(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBookGenre.API_KEY))
-//    }
-//
-//    fun updateList(link: Link? = null) {
-//        linkList.postValue(LinkList(
-//            link = link!!,
-//            items = linkList.value?.items ?: mutableListOf(),
-//        ))
-//    }
+    val linkSwitch = linkList.switchMap { link ->
+        liveData(getExceptionHandler()) {
+            service.getListGenres(link) { linkNext ->
+                emit(ListLinks(link, linkNext))
+            }
+        }
+    }
+
+    fun findItems(ids: List<Long> = emptyList()): List<ModelBookGenre> {
+        return service.layer.findItemsGenres(ids)
+    }
+
+    fun updateList(next: Link) {
+        linkList.postValue(next)
+    }
+
+    //    val switchMap = linkList.switchMap { link ->
+    //        liveData(getExceptionHandler()) {
+    //            service.getGenresList(link) { models ->
+    //                emit(models)
+    //            }
+    //        }
+    //    }
+
+    //    init {
+    //        updateList(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBookGenre.API_KEY))
+    //    }
+    //
+    //    fun updateList(link: Link? = null) {
+    //        linkList.postValue(LinkList(
+    //            link = link!!,
+    //            items = linkList.value?.items ?: mutableListOf(),
+    //        ))
+    //    }
 }

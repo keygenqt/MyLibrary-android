@@ -39,9 +39,13 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
     val delete: MutableLiveData<LiveDataEvent<ResponseSuccessful>> = MutableLiveData()
 
+    fun getModel(link: Link): ModelBook? {
+        return service.layer.findBookByLink(link)
+    }
+
     val changeLink = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler()) {
-            emit(service.layer.findBookByLink(Link(link)))
+            emit(Link(link))
         }
     }
 
@@ -58,7 +62,7 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
         GlobalScope.launch(BaseExceptionHandler.getExceptionHandler()) {
             book?.let { book ->
                 book.enabled = false
-                service.deleteBook(book.links[API_KEY_SELF]) { result ->
+                service.deleteBook(book.links[API_KEY_SELF] ?: error("API_KEY_SELF not found")) { result ->
                     delete.postValue(LiveDataEvent(result))
                 }
             }

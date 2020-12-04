@@ -35,6 +35,11 @@ data class ModelBookGenre(
     var description: String = ""
 
 ) : BaseModel() {
+
+    override fun baseId(): Long {
+        return id
+    }
+
     companion object {
         const val API_KEY = "genres"
     }

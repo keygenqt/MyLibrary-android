@@ -89,7 +89,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     }
 
     @OnCreateAfter
-    fun linkSearchSwitch() {
+    fun updateResponse() {
         initView {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->

@@ -24,12 +24,14 @@ import androidx.navigation.fragment.navArgs
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import com.keygenqt.mylibrary.base.LiveDataEvent
+import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.models.ModelBookGenre
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
-import com.keygenqt.mylibrary.ui.utils.observes.*
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
+import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
 import kotlinx.android.synthetic.main.fragment_update_book.view.*
 import org.koin.android.ext.android.inject
 
@@ -41,11 +43,9 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
     private val observeSelectCover: ObserveSelectCover by activityViewModels()
-    private val observeUpdateBookList: ObserveUpdateBookList by activityViewModels()
-    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
-    private val observeUpdateBook: ObserveUpdateBook by activityViewModels()
 
-    private var selectGenreId: Long = 0
+    private var modelGenre: ModelBookGenre? = null
+    private var modelCover: String? = null
 
     // menu
     override fun onCreateOptionsMenu(): Int {
@@ -72,14 +72,14 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
         // start page
         if (viewModel.selfLink.value == null && args.selfLink.isNotEmpty()) {
-            viewModel.selfLink.postValue(LiveDataEvent(args.selfLink))
+            viewModel.selfLink.postValue(args.selfLink)
         }
 
         initView {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-                viewModel.params.postValue(LiveDataEvent(viewModel.book?.apply {
-                    genreId = selectGenreId
+                viewModel.params.postValue(viewModel.book?.apply {
+                    genreId = modelGenre?.id
                     coverType = textInputEditTextCover.text.toString()
                     title = textInputEditTextTitle.text.toString()
                     author = textInputEditTextAuthor.text.toString()
@@ -88,45 +88,66 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                     isbn = textInputEditTextISBN.text.toString()
                     numberOfPages = textInputEditTextNumberOfPages.text.toString()
                     description = textInputEditTextDescription.text.toString()
-                }))
+                })
             }
             selectGenre.setOnClickListener {
-                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(selectGenreId))
+                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(modelGenre?.id ?: 0))
             }
             selectCover.setOnClickListener {
-                val value = textInputEditTextCover.text?.let {
-                    if (it.isEmpty()) {
-                        return@let null
-                    }
-                    return@let it.toString()
-                }
-                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(value))
+                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(modelCover))
             }
         }
     }
 
-    @OnCreateAfter fun observeSelectGenre() {
+    @OnCreateAfter
+    fun observeSelectGenre() {
         initView {
             observeSelectGenre.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled().let { model ->
                     model?.let {
                         textInputLayoutGenre.isErrorEnabled = false
                         textInputEditTextGenre.setText(model.title)
-                        selectGenreId = model.id
+                        modelGenre = model
                     }
                 }
             }
         }
     }
 
-    @OnCreateAfter fun observeSelectCover() {
+    @OnCreateAfter
+    fun observeSelectCover() {
         initView {
             observeSelectCover.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled().let { model ->
                     model?.let {
                         textInputLayoutCover.isErrorEnabled = false
                         textInputEditTextCover.setText(model)
+                        modelCover = model
                     }
+                }
+            }
+        }
+    }
+
+    @OnCreateAfter
+    fun loading() {
+        initView {
+            viewModel.loading.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let {
+                    statusProgress(it)
+                }
+            })
+        }
+    }
+
+    @OnCreateAfter
+    fun updateCache() {
+        initView {
+            viewModel.changeLink.observe(viewLifecycleOwner) { link ->
+                val model = viewModel.getModel(link)
+                statusProgressPage(model == null || model.genre.id == 0L)
+                model?.let {
+                    updateView(model)
                 }
             }
         }
@@ -137,26 +158,14 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
             viewModel.updateBook.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(false)
-
                     if (args.selfLink.isEmpty()) {
-
-                        // call change
-                        observeUpdateBookList.change(true)
-
                         Toast.makeText(activity, getString(R.string.update_book_added_successfully), Toast.LENGTH_SHORT).show()
-
                         findNavController().navigateUp()
                     } else {
-
-                        // call change
-                        observeUpdateBook.change(viewModel.book)
-                        observeUpdateBooks.change(viewModel.book)
-
                         clearError()
                         scrollView.fullScroll(ScrollView.FOCUS_UP)
                         this.hideKeyboard()
                         body.requestFocus()
-
                         Toast.makeText(activity, getString(R.string.update_book_updated_successfully), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -164,86 +173,79 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    @OnCreateAfter fun loading() {
-        initView {
-            viewModel.loading.observe(viewLifecycleOwner, { event ->
-                event?.peekContentHandled()?.let {
-                    statusProgress(it)
-                }
-            })
-        }
-    }
-
-    @OnCreateAfter fun initData() {
+    @OnCreateAfter
+    fun updateResponse() {
         initView {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
-                    selectGenreId = model.genre.id
-                    textInputEditTextGenre.setText(model.genre.title)
-                    textInputEditTextCover.setText(model.coverType)
-                    textInputEditTextTitle.setText(model.title)
-                    textInputEditTextAuthor.setText(model.author)
-                    textInputEditTextPublisher.setText(model.publisher)
-                    textInputEditTextYear.setText(model.year)
-                    textInputEditTextISBN.setText(model.isbn)
-                    textInputEditTextNumberOfPages.setText(model.numberOfPages)
-                    textInputEditTextDescription.setText(model.description)
+                    statusProgressPage(false)
+                    updateView(model)
                 }
             }
         }
     }
 
-    @OnCreateAfter fun validate() {
+    @OnCreateAfter
+    fun validate() {
         initView {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->
 
-                    statusProgress(false)
-
-                    clearError()
-
-                    if (throwable is ValidateException) {
-                        throwable.errors.forEach {
-                            when (it.field) {
-                                "genreId" ->
-                                    if (textInputLayoutGenre.error.isNullOrEmpty()) {
-                                        textInputLayoutGenre.error = it.defaultMessage
-                                    }
-                                "coverType" ->
-                                    if (textInputLayoutCover.error.isNullOrEmpty()) {
-                                        textInputLayoutCover.error = it.defaultMessage
-                                    }
-                                "title" ->
-                                    if (textInputLayoutTitle.error.isNullOrEmpty()) {
-                                        textInputLayoutTitle.error = it.defaultMessage
-                                    }
-                                "author" ->
-                                    if (textInputLayoutAuthor.error.isNullOrEmpty()) {
-                                        textInputLayoutAuthor.error = it.defaultMessage
-                                    }
-                                "publisher" ->
-                                    if (textInputLayoutPublisher.error.isNullOrEmpty()) {
-                                        textInputLayoutPublisher.error = it.defaultMessage
-                                    }
-                                "year" ->
-                                    if (textInputLayoutYear.error.isNullOrEmpty()) {
-                                        textInputLayoutYear.error = it.defaultMessage
-                                    }
-                                "ISBN" ->
-                                    if (textInputLayoutISBN.error.isNullOrEmpty()) {
-                                        textInputLayoutISBN.error = it.defaultMessage
-                                    }
-                                "numberOfPages" ->
-                                    if (textInputLayoutNumberOfPages.error.isNullOrEmpty()) {
-                                        textInputLayoutNumberOfPages.error = it.defaultMessage
-                                    }
-                                "description" ->
-                                    if (textInputLayoutDescription.error.isNullOrEmpty()) {
-                                        textInputLayoutDescription.error = it.defaultMessage
-                                    }
+                    when (throwable) {
+                        is HttpException -> {
+                            if (throwable.status == 404 || throwable.status == 400) {
+                                Toast.makeText(activity, getString(R.string.view_book_get_error), Toast.LENGTH_SHORT).show()
+                                findNavController().navigateUp()
                             }
                         }
-                        textInputLayoutBlock.requestFocusTextInputLayoutError(scrollView)
+                        is ValidateException -> {
+
+                            statusProgress(false)
+
+                            clearError()
+
+                            throwable.errors.forEach {
+                                when (it.field) {
+                                    "genreId" ->
+                                        if (textInputLayoutGenre.error.isNullOrEmpty()) {
+                                            textInputLayoutGenre.error = it.defaultMessage
+                                        }
+                                    "coverType" ->
+                                        if (textInputLayoutCover.error.isNullOrEmpty()) {
+                                            textInputLayoutCover.error = it.defaultMessage
+                                        }
+                                    "title" ->
+                                        if (textInputLayoutTitle.error.isNullOrEmpty()) {
+                                            textInputLayoutTitle.error = it.defaultMessage
+                                        }
+                                    "author" ->
+                                        if (textInputLayoutAuthor.error.isNullOrEmpty()) {
+                                            textInputLayoutAuthor.error = it.defaultMessage
+                                        }
+                                    "publisher" ->
+                                        if (textInputLayoutPublisher.error.isNullOrEmpty()) {
+                                            textInputLayoutPublisher.error = it.defaultMessage
+                                        }
+                                    "year" ->
+                                        if (textInputLayoutYear.error.isNullOrEmpty()) {
+                                            textInputLayoutYear.error = it.defaultMessage
+                                        }
+                                    "ISBN" ->
+                                        if (textInputLayoutISBN.error.isNullOrEmpty()) {
+                                            textInputLayoutISBN.error = it.defaultMessage
+                                        }
+                                    "numberOfPages" ->
+                                        if (textInputLayoutNumberOfPages.error.isNullOrEmpty()) {
+                                            textInputLayoutNumberOfPages.error = it.defaultMessage
+                                        }
+                                    "description" ->
+                                        if (textInputLayoutDescription.error.isNullOrEmpty()) {
+                                            textInputLayoutDescription.error = it.defaultMessage
+                                        }
+                                }
+                            }
+                            textInputLayoutBlock.requestFocusTextInputLayoutError(scrollView)
+                        }
                     }
                 }
             })
@@ -261,6 +263,30 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
             textInputLayoutISBN.isErrorEnabled = false
             textInputLayoutNumberOfPages.isErrorEnabled = false
             textInputLayoutDescription.isErrorEnabled = false
+        }
+    }
+
+    private fun updateView(model: ModelBook) {
+        initView {
+            modelGenre?.let {
+                textInputEditTextGenre.setText(it.title)
+            } ?: run {
+                modelGenre = model.genre
+                textInputEditTextGenre.setText(model.genre.title)
+            }
+            modelCover?.let {
+                textInputEditTextCover.setText(modelCover)
+            } ?: run {
+                modelCover = model.coverType
+                textInputEditTextCover.setText(model.coverType)
+            }
+            textInputEditTextTitle.setText(model.title)
+            textInputEditTextAuthor.setText(model.author)
+            textInputEditTextPublisher.setText(model.publisher)
+            textInputEditTextYear.setText(model.year)
+            textInputEditTextISBN.setText(model.isbn)
+            textInputEditTextNumberOfPages.setText(model.numberOfPages)
+            textInputEditTextDescription.setText(model.description)
         }
     }
 }

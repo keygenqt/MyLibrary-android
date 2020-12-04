@@ -26,6 +26,7 @@ import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
+import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.utils.API_VERSION
 import kotlinx.coroutines.delay
 
@@ -33,43 +34,42 @@ class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
 
     var book: ModelBook? = null
 
-    val selfLink: MutableLiveData<LiveDataEvent<String>> = MutableLiveData()
+    val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
-    val params: MutableLiveData<LiveDataEvent<ModelBook?>> = MutableLiveData()
+    val params: MutableLiveData<ModelBook> = MutableLiveData()
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
-    val data = selfLink.switchMap { event ->
+    fun getModel(link: Link): ModelBook? {
+        return service.layer.findBookByLink(link)
+    }
+
+    val changeLink = selfLink.switchMap { link ->
+        liveData(BaseExceptionHandler.getExceptionHandler()) {
+            emit(Link(link))
+        }
+    }
+
+    val data = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            event.peekContent()?.let { link ->
-                service.getView(link) { model ->
-                    book = model
-                    model?.let {
-                        emit(LiveDataEvent(model))
-                        if (loading.value?.peekContent() == true) {
-                            delay(1200)
-                        }
-                        loading.postValue(LiveDataEvent(false))
-                    } ?: run {
-                        loading.postValue(LiveDataEvent(true))
-                    }
-                }
+            service.getView(link) { model ->
+                book = model
+                delay(1200)
+                emit(LiveDataEvent(model))
             }
         }
     }
 
-    val updateBook = params.switchMap { event ->
+    val updateBook = params.switchMap { model ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            event?.peekContentHandled()?.let { book ->
-                if (book.links.containsKey(API_KEY_SELF)) {
-                    // update
-                    service.updateBook(book.links.getValue(API_KEY_SELF).value, book) {
-                        emit(LiveDataEvent(true))
-                    }
-                } else {
-                    // add
-//                    service.addBook(service.db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY).value, book) {
-//                        emit(LiveDataEvent(true))
-//                    }
+            if (model.links.containsKey(API_KEY_SELF)) {
+                // update
+                service.updateBook(model.links.getValue(API_KEY_SELF).value, model) {
+                    emit(LiveDataEvent(true))
+                }
+            } else {
+                // add
+                service.addBook(model) {
+                    emit(LiveDataEvent(true))
                 }
             }
         }

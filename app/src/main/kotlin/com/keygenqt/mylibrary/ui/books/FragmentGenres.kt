@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -24,11 +26,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
-import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
-import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
-import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
+import kotlinx.android.synthetic.main.common_fragment_list.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -41,14 +42,16 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
     override fun onCreateView() {
         initView {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            recyclerView.adapter = AdapterGenres(R.layout.item_select_list, args.selectGenreId, commonFab, recyclerView) { linkNext ->
-//                viewModel.updateList(linkNext)
+            recyclerView.adapter = AdapterGenres(R.layout.item_select_list, args.selectGenreId, commonFab, recyclerView) { next ->
+                viewModel.updateList(next)
             }
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
-//                (recyclerView.adapter as ListAdapter<*>).updateList()
+                (recyclerView.adapter as? ListAdapter<*>)?.getLinkForUpdate()?.let {
+                    viewModel.updateList(it)
+                }
             }
-            args.selectGenreId?.let {
+            if (args.selectGenreId != 0L) {
                 commonFab.showWithPadding(recyclerView)
             }
             commonFab.setOnClickListener {
@@ -58,12 +61,29 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
-    @OnCreateAfter fun observeListItems() {
+    @OnCreateAfter
+    fun updateCache() {
         initView {
-            viewModel.switchMap.observe(viewLifecycleOwner) { listData ->
-//                refresh.isRefreshing = false
-//                (recyclerView.adapter as ListAdapter<*>).updateItems(listData.items, listData.linkSelf, listData.linkNext)
-//                notFound.visibility = if (listData.items.isEmpty()) View.VISIBLE else View.GONE
+            viewModel.changeLink.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let { links ->
+                    (recyclerView.adapter as? ListAdapter<*>)?.let { adapter ->
+                        adapter.updateLinks(links).updateItems(viewModel.findItems())
+                    }
+                }
+            }
+        }
+    }
+
+    @OnCreateAfter
+    fun updateResponse() {
+        initView {
+            viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
+                (recyclerView.adapter as? ListAdapter<*>)?.let { adapter ->
+                    adapter.updateLinks(links).updateItems(viewModel.findItems(adapter.getIds()))
+                    notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
+                    refresh.isRefreshing = false
+                    statusProgress(false)
+                }
             }
         }
     }

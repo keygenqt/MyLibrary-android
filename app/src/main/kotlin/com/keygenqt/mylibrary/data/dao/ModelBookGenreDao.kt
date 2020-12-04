@@ -9,18 +9,12 @@ import com.keygenqt.mylibrary.data.models.ModelBookGenre
 @Dao
 interface ModelBookGenreDao {
 
-    @Query("SELECT * FROM ModelBookGenre ORDER BY LENGTH(id) LIMIT :limit")
-    fun getAll(limit: Int = 10000): List<ModelBookGenre>
-
-    @Query("SELECT * FROM ModelBookGenre WHERE id=:id")
-    fun getModel(id: String): ModelBookGenre?
+    @Query("SELECT * FROM ModelBookGenre WHERE id NOT IN (:ids) ORDER BY id DESC")
+    fun findModels(ids: List<Long>): List<ModelBookGenre>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(model: List<ModelBookGenre>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(model: ModelBookGenre)
+    fun insert(vararg model: ModelBookGenre)
 
     @Query("DELETE FROM ModelBookGenre")
-    suspend fun deleteAll()
+    fun deleteAll()
 }

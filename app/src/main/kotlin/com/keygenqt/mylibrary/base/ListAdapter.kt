@@ -98,7 +98,7 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, open var nextPage: ((Link)
         return linkSelf?.linkClearPageable
     }
 
-    open fun updateLinks(links: ListSearchLinks): ListAdapter<T> {
+    open fun updateLinks(links: ListLinks): ListAdapter<T> {
         if (links.self.isFirstPage()) {
             this.items.clear()
         }
