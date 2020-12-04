@@ -28,7 +28,7 @@ import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_SOFT
 import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_SOLID
 import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_OTHER
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
+import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh

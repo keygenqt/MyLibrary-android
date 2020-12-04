@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.utils.observes
+package com.keygenqt.mylibrary.ui.observes
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.keygenqt.mylibrary.base.LiveDataEvent
-import com.keygenqt.mylibrary.data.models.ModelBook
 
-class ObserveUpdateBook : ViewModel() {
-    val change = MutableLiveData<LiveDataEvent<ModelBook?>>()
+class ObserveSelectCover : ViewModel() {
+    val selected = MutableLiveData<LiveDataEvent<String?>>()
 
-    fun change(item: ModelBook?) {
-        item?.let {
-            change.value = LiveDataEvent(item)
-        }
+    fun select(item: String?) {
+        selected.value = LiveDataEvent(item)
     }
 }

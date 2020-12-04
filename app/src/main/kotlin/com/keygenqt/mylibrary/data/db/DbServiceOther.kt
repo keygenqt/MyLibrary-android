@@ -53,25 +53,25 @@ class DbServiceOther(
     }
 
     fun getUrlUser(): Link {
-        return getModelRootDao().getModel(API_VERSION).getLink(ModelUser.API_KEY)
+        return getModelRootDao().findModel(API_VERSION).getLink(ModelUser.API_KEY)
     }
 
     fun getUrlLogin(): Link {
-        return getModelRootDao().getModel(API_VERSION).getLink(API_KEY_LOGIN)
+        return getModelRootDao().findModel(API_VERSION).getLink(API_KEY_LOGIN)
     }
 
     fun getUrlJoin(): Link {
-        return getModelRootDao().getModel(API_VERSION).getLink(API_KEY_JOIN)
+        return getModelRootDao().findModel(API_VERSION).getLink(API_KEY_JOIN)
     }
 
     fun getUrlPassword(): Link {
-        return getModelRootDao().getModel(API_VERSION).getLink(API_KEY_PASSWORD)
+        return getModelRootDao().findModel(API_VERSION).getLink(API_KEY_PASSWORD)
     }
 
     fun getUserMe(): ModelUser? {
         db.getDao<ModelUserDao>().let { dao ->
             preferences.userId?.let { userId ->
-                dao.getModel(userId).let { model ->
+                dao.findModel(userId).let { model ->
                     return model
                 }
             }

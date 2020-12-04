@@ -41,8 +41,12 @@ import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.relations.RelationBook
 import kotlinx.android.synthetic.main.activity_main.view.toolbar
 import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
+import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemGrayTheme
+import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemDarkTheme
+import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemGrayTheme
 import kotlinx.android.synthetic.main.fragment_book.*
 import kotlinx.android.synthetic.main.fragment_book.view.*
+import kotlinx.android.synthetic.main.fragment_update_book.view.switchItemSwap
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable

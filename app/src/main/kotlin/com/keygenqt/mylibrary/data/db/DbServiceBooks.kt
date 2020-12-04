@@ -36,12 +36,12 @@ class DbServiceBooks(
 
     fun getRootLink(path: String = ""): Link {
         return Link(
-            db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY).value + path
+            db.getDao<ModelRootDao>().findModel(API_VERSION).getLink(ModelBook.API_KEY).value + path
         )
     }
 
     fun getGenresLink(): Link {
-        return db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBookGenre.API_KEY)
+        return db.getDao<ModelRootDao>().findModel(API_VERSION).getLink(ModelBookGenre.API_KEY)
     }
 
     fun findSearch(): ModelSearch? {
@@ -139,7 +139,17 @@ class DbServiceBooks(
     }
 
     fun deleteBook(link: Link) {
-        db.getDao<ModelBookDao>().deleteByLink(link.value)
+        db.getDao<ModelBookDao>().let { dao ->
+            dao.findModelByLink(link.value)?.let { it ->
+                it.genre?.let { genre ->
+                    db.getDao<ModelBookGenreDao>().deleteById(genre.id)
+                }
+                it.user?.let { user ->
+                    db.getDao<ModelBookUserDao>().deleteById(user.id)
+                }
+                db.getDao<ModelBookDao>().deleteById(it.model.id)
+            }
+        }
         db.getDao<ModelSearchBookDao>().deleteByLink(link.value)
     }
 }

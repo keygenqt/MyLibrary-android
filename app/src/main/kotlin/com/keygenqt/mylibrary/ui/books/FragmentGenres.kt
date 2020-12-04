@@ -27,7 +27,7 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
+import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView

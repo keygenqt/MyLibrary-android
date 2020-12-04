@@ -16,10 +16,9 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +27,6 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
@@ -64,7 +62,6 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
-                    statusProgress(true)
                     viewModel.updateList(it)
                 }
             }
@@ -82,7 +79,8 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
                     (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                        adapter.updateLinks(links).updateItems(viewModel.findItems(links.self))
+                        adapter.updateLinks(links).updateItems(viewModel.findItems(links.self)
+                            .filter { !links.self.value.contains("sale=true") || it.sale })
                         viewModel.findSearch()?.let { search ->
                             adapter.setSearchModel(search)
                         }
@@ -97,13 +95,11 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
+                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds())
+                        .filter { !links.self.value.contains("sale=true") || it.sale })
                     notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
                     refresh.isRefreshing = false
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        statusProgress(false)
-                    }, 3000)
+                    statusProgress(false)
                 }
             }
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.utils.observes
+package com.keygenqt.mylibrary.ui.observes
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

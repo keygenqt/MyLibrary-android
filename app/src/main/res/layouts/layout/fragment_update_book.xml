@@ -275,11 +275,71 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutItemSwap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+
+          <androidx.appcompat.widget.SwitchCompat
+              android:id="@+id/switchItemSwap"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:layout_marginEnd="6dp"
+              android:layout_marginBottom="16dp"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              />
+
+          <LinearLayout
+              android:id="@+id/switchItemSwapBlock"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp"
+              app:layout_constraintBottom_toBottomOf="@+id/switchItemSwap"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="@+id/switchItemSwap"
+              tools:ignore="MissingConstraints"
+              >
+
+            <TextView
+                android:id="@+id/settingsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingStart="6dp"
+                android:paddingEnd="55dp"
+                android:paddingBottom="6dp"
+                android:text="@string/update_book_swap"
+                android:textColor="?attr/colorText"
+                />
+
+            <TextView
+                android:id="@+id/settingsSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="6dp"
+                android:paddingEnd="55dp"
+                android:text="@string/update_book_swap_desc"
+                android:textColor="?attr/colorTextLite"
+                android:textSize="13sp"
+                />
+
+          </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
             android:id="@+id/buttonSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding"
+            android:layout_marginTop="10dp"
             android:text="@string/button_submit"
             />
 

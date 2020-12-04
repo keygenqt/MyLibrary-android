@@ -31,8 +31,8 @@ import com.keygenqt.mylibrary.data.models.ModelBookGenre
 import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
-import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
+import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
+import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
 import kotlinx.android.synthetic.main.fragment_update_book.view.*
 import org.koin.android.ext.android.inject
 
@@ -79,6 +79,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         initView {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
+
                 viewModel.params.postValue(viewModel.relation?.model?.apply {
                     genreId = modelGenre?.id ?: 0L
                     coverType = textInputEditTextCover.text.toString()
@@ -89,6 +90,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                     isbn = textInputEditTextISBN.text.toString()
                     numberOfPages = textInputEditTextNumberOfPages.text.toString()
                     description = textInputEditTextDescription.text.toString()
+                    sale = switchItemSwap.isChecked
                 })
             }
             selectGenre.setOnClickListener {
@@ -293,6 +295,8 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                 textInputEditTextISBN.setText(model.isbn)
                 textInputEditTextNumberOfPages.setText(model.numberOfPages)
                 textInputEditTextDescription.setText(model.description)
+
+                switchItemSwap.isChecked = model.sale
             }
         }
     }

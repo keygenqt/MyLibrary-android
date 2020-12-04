@@ -1,3 +1,7 @@
+/*
+ * https://github.com/tommybuonomo/dotsindicator/blob/master/viewpagerdotsindicator-sample/src/main/java/com/tbuonomo/dotsindicatorsample/viewpager/ZoomOutPageTransformer.kt
+ */
+
 package com.keygenqt.mylibrary.ui.settings.utils
 
 import android.view.View
