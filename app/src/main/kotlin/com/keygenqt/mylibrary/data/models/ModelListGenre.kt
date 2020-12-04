@@ -14,18 +14,33 @@
  * limitations under the License.
  */
 
-package com.keygenqt.mylibrary.ui.utils.observes
+package com.keygenqt.mylibrary.data.models
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.keygenqt.mylibrary.base.LiveDataEvent
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
-import com.keygenqt.mylibrary.data.models.ModelListGenre
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.base.BaseModel
 
-class ObserveSelectGenre : ViewModel() {
-    val selected = MutableLiveData<LiveDataEvent<ModelListGenre?>>()
+@Entity(tableName = "ModelListGenre")
+data class ModelListGenre(
 
-    fun select(item: ModelListGenre?) {
-        selected.value = LiveDataEvent(item)
+    @PrimaryKey
+    @SerializedName("id")
+    var id: Long = 0,
+
+    @SerializedName("title")
+    var title: String = "",
+
+    @SerializedName("description")
+    var description: String = ""
+
+) : BaseModel() {
+
+    override fun baseId(): Long {
+        return id
+    }
+
+    companion object {
+        const val API_KEY = "genres"
     }
 }

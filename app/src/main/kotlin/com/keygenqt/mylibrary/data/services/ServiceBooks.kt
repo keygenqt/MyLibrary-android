@@ -22,6 +22,7 @@ import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.*
+import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ResponseSuccessful
@@ -52,31 +53,37 @@ class ServiceBooks(
         }
     }
 
-    suspend fun getView(link: String, response: suspend (ModelBook) -> Unit) {
+    suspend fun getView(link: String, response: suspend (RelationBook) -> Unit) {
         withContext(Dispatchers.IO) {
             query.getAsync<ModelBook>(this, link).await().let { model ->
-                model.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                    model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
-                }
-                model.links[ModelBook.API_KEY_USER]?.let { link ->
-                    model.user = query.getAsync<ModelBookUser>(this, link.value).await()
-                }
-                layer.saveBook(model)
-                response.invoke(model)
+                val relationBook = RelationBook(
+                    model = model,
+                    genre = model.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                        query.getAsync<ModelBookGenre>(this, link.value).await()
+                    },
+                    user = model.links[ModelBook.API_KEY_USER]?.let { link ->
+                        query.getAsync<ModelBookUser>(this, link.value).await()
+                    },
+                )
+                layer.saveBook(relationBook)
+                response.invoke(relationBook)
             }
         }
     }
 
     suspend fun updateBook(link: String, model: ModelBook, response: suspend () -> Unit) {
         withContext(Dispatchers.IO) {
-            query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {
-                model.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                    model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
-                }
-                model.links[ModelBook.API_KEY_USER]?.let { link ->
-                    model.user = query.getAsync<ModelBookUser>(this, link.value).await()
-                }
-                layer.saveBook(model)
+            query.putAsync<ModelBook>(this, link, Gson().toJsonTree(model).asJsonObject).await().let { model ->
+                val relationBook = RelationBook(
+                    model = model,
+                    genre = model.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                        query.getAsync<ModelBookGenre>(this, link.value).await()
+                    },
+                    user = model.links[ModelBook.API_KEY_USER]?.let { link ->
+                        query.getAsync<ModelBookUser>(this, link.value).await()
+                    },
+                )
+                layer.saveBook(relationBook)
                 response.invoke()
             }
         }
@@ -85,13 +92,16 @@ class ServiceBooks(
     suspend fun addBook(model: ModelBook, response: suspend () -> Unit) {
         withContext(Dispatchers.IO) {
             query.postAsync<ModelBook>(this, layer.getRootLink().value, Gson().toJsonTree(model).asJsonObject).await().let { updated ->
-                updated.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                    updated.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
-                }
-                updated.links[ModelBook.API_KEY_USER]?.let { link ->
-                    updated.user = query.getAsync<ModelBookUser>(this, link.value).await()
-                }
-                layer.addBook(updated)
+                val relationBook = RelationBook(
+                    model = updated,
+                    genre = updated.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                        query.getAsync<ModelBookGenre>(this, link.value).await()
+                    },
+                    user = updated.links[ModelBook.API_KEY_USER]?.let { link ->
+                        query.getAsync<ModelBookUser>(this, link.value).await()
+                    },
+                )
+                layer.addBook(relationBook)
                 response.invoke()
             }
         }

@@ -28,6 +28,7 @@ import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectCover
@@ -67,7 +68,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
             initToolbar {
                 title = getString(R.string.fragment_add_book_title)
             }
-            viewModel.book = ModelBook()
+            viewModel.relation = RelationBook(model = ModelBook())
         }
 
         // start page
@@ -78,8 +79,8 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         initView {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-                viewModel.params.postValue(viewModel.book?.apply {
-                    genreId = modelGenre?.id
+                viewModel.params.postValue(viewModel.relation?.model?.apply {
+                    genreId = modelGenre?.id ?: 0L
                     coverType = textInputEditTextCover.text.toString()
                     title = textInputEditTextTitle.text.toString()
                     author = textInputEditTextAuthor.text.toString()
@@ -107,7 +108,11 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                     model?.let {
                         textInputLayoutGenre.isErrorEnabled = false
                         textInputEditTextGenre.setText(model.title)
-                        modelGenre = model
+                        modelGenre = ModelBookGenre(
+                            id = model.id,
+                            title = model.title,
+                            description = model.description
+                        )
                     }
                 }
             }
@@ -145,7 +150,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         initView {
             viewModel.changeLink.observe(viewLifecycleOwner) { link ->
                 val model = viewModel.getModel(link)
-                statusProgressPage(model == null || model.genre.id == 0L)
+                statusProgressPage(model?.user == null || model.genre == null)
                 model?.let {
                     updateView(model)
                 }
@@ -266,27 +271,29 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    private fun updateView(model: ModelBook) {
+    private fun updateView(relation: RelationBook) {
         initView {
             modelGenre?.let {
                 textInputEditTextGenre.setText(it.title)
             } ?: run {
-                modelGenre = model.genre
-                textInputEditTextGenre.setText(model.genre.title)
+                modelGenre = relation.genre
+                textInputEditTextGenre.setText(relation.genre?.title)
             }
-            modelCover?.let {
-                textInputEditTextCover.setText(modelCover)
-            } ?: run {
-                modelCover = model.coverType
-                textInputEditTextCover.setText(model.coverType)
+            relation.model.let { model ->
+                modelCover?.let {
+                    textInputEditTextCover.setText(modelCover)
+                } ?: run {
+                    modelCover = model.coverType
+                    textInputEditTextCover.setText(model.coverType)
+                }
+                textInputEditTextTitle.setText(model.title)
+                textInputEditTextAuthor.setText(model.author)
+                textInputEditTextPublisher.setText(model.publisher)
+                textInputEditTextYear.setText(model.year)
+                textInputEditTextISBN.setText(model.isbn)
+                textInputEditTextNumberOfPages.setText(model.numberOfPages)
+                textInputEditTextDescription.setText(model.description)
             }
-            textInputEditTextTitle.setText(model.title)
-            textInputEditTextAuthor.setText(model.author)
-            textInputEditTextPublisher.setText(model.publisher)
-            textInputEditTextYear.setText(model.year)
-            textInputEditTextISBN.setText(model.isbn)
-            textInputEditTextNumberOfPages.setText(model.numberOfPages)
-            textInputEditTextDescription.setText(model.description)
         }
     }
 }

@@ -16,11 +16,13 @@
 
 package com.keygenqt.mylibrary.data.models
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseModel
 
+@Entity(tableName = "ModelBookUser")
 data class ModelBookUser(
 
     @PrimaryKey

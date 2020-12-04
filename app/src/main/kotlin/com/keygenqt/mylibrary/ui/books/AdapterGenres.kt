@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.data.models.ModelListGenre
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.hal.Link
 import kotlinx.android.synthetic.main.item_select_list.view.description
@@ -35,17 +36,17 @@ class AdapterGenres(
     private val fb: FloatingActionButton,
     private val recyclerView: RecyclerView,
     nextPage: (Link) -> Unit
-) : ListAdapter<ModelBookGenre>(layout, nextPage) {
+) : ListAdapter<ModelListGenre>(layout, nextPage) {
 
     override fun onBindViewHolder(holder: View, model: Any) {
-        if (model is ModelBookGenre) {
+        if (model is ModelListGenre) {
             holder.apply {
                 title.text = model.title
                 description.text = model.description
                 itemBlock.setOnClickListener {
                     selectGenreId?.let {
                         items.forEachIndexed { index, any ->
-                            if (any is ModelBookGenre && any.id == selectGenreId) {
+                            if (any is ModelListGenre && any.id == selectGenreId) {
                                 notifyItemChanged(index)
                                 return@forEachIndexed
                             }
@@ -60,9 +61,9 @@ class AdapterGenres(
         }
     }
 
-    fun getSelectItem(): ModelBookGenre? {
+    fun getSelectItem(): ModelListGenre? {
         items.forEach {
-            if (it is ModelBookGenre && it.id == selectGenreId) {
+            if (it is ModelListGenre && it.id == selectGenreId) {
                 return it
             }
         }

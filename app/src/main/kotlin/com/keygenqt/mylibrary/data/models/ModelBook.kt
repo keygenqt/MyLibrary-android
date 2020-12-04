@@ -66,14 +66,11 @@ data class ModelBook(
     @SerializedName("enabled")
     var enabled: Boolean = true,
 
-    @Embedded(prefix = "genre_")
-    var genre: ModelBookGenre = ModelBookGenre(),
+    @SerializedName("genreId")
+    var genreId: Long = 0,
 
-    @Embedded(prefix = "user_")
-    var user: ModelBookUser = ModelBookUser(),
-
-    @Ignore
-    var genreId: Long? = null
+    @SerializedName("userId")
+    var userId: Long = 0
 
 ) : BaseModel() {
 

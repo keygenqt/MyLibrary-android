@@ -21,10 +21,8 @@ import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.*
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
-import com.keygenqt.mylibrary.data.models.ModelBook
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
-import com.keygenqt.mylibrary.data.models.ModelSearch
-import com.keygenqt.mylibrary.data.models.ModelSearchBook
+import com.keygenqt.mylibrary.data.models.*
+import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.utils.API_VERSION
 
@@ -58,13 +56,13 @@ class DbServiceBooks(
         }
     }
 
-    fun findItemsGenres(ids: List<Long>): List<ModelBookGenre> {
-        db.getDao<ModelBookGenreDao>().let { dao ->
+    fun findItemsGenres(ids: List<Long>): List<ModelListGenre> {
+        db.getDao<ModelListGenreDao>().let { dao ->
             return dao.findModels(ids)
         }
     }
 
-    fun findBookByLink(link: Link): ModelBook? {
+    fun findBookByLink(link: Link): RelationBook? {
         db.getDao<ModelBookDao>().findModelByLink(link.value)?.let { model ->
             return model
         }
@@ -76,7 +74,7 @@ class DbServiceBooks(
     }
 
     fun saveListGenre(link: Link, list: ListDataModelBookGenre) {
-        db.getDao<ModelBookGenreDao>().let { dao ->
+        db.getDao<ModelListGenreDao>().let { dao ->
             if (link.isFirstPage()) {
                 dao.deleteAll()
             }
@@ -103,27 +101,41 @@ class DbServiceBooks(
         }
     }
 
-    fun addBook(model: ModelBook) {
-        db.getDao<ModelBookDao>().insert(model)
-        db.getDao<ModelSearchBookDao>().let { daoSearch ->
-            daoSearch.findLinks().forEach { link ->
-                if (!model.sale && link.contains("sale=true")) {
-                    return@forEach
-                }
-                daoSearch.insert(
-                    ModelSearchBook(
-                        id = link + model.id,
-                        path = link,
-                        modelId = model.id,
-                        selfLink = model.selfLink
+    fun addBook(relation: RelationBook) {
+        relation.model.let { model ->
+            db.getDao<ModelBookDao>().insert(model)
+            db.getDao<ModelSearchBookDao>().let { daoSearch ->
+                daoSearch.findLinks().forEach { link ->
+                    if (!model.sale && link.contains("sale=true")) {
+                        return@forEach
+                    }
+                    daoSearch.insert(
+                        ModelSearchBook(
+                            id = link + model.id,
+                            path = link,
+                            modelId = model.id,
+                            selfLink = model.selfLink
+                        )
                     )
-                )
+                }
             }
+        }
+        relation.genre?.let {
+            db.getDao<ModelBookGenreDao>().insert(it)
+        }
+        relation.user?.let {
+            db.getDao<ModelBookUserDao>().insert(it)
         }
     }
 
-    fun saveBook(model: ModelBook) {
-        db.getDao<ModelBookDao>().update(model)
+    fun saveBook(relation: RelationBook) {
+        db.getDao<ModelBookDao>().insert(relation.model)
+        relation.genre?.let {
+            db.getDao<ModelBookGenreDao>().insert(it)
+        }
+        relation.user?.let {
+            db.getDao<ModelBookUserDao>().insert(it)
+        }
     }
 
     fun deleteBook(link: Link) {

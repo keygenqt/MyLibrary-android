@@ -16,7 +16,7 @@
 
 package com.keygenqt.mylibrary.data.hal
 
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.data.models.ModelListGenre
 import com.keygenqt.mylibrary.hal.ListData
 
-class ListDataModelBookGenre() : ListData<ModelBookGenre>()
+class ListDataModelBookGenre : ListData<ModelListGenre>()

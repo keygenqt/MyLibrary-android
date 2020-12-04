@@ -23,23 +23,25 @@ import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ResponseSuccessful
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ViewBook(private val service: ServiceBooks) : ViewModel() {
 
-    var book: ModelBook? = null
+    var relation: RelationBook? = null
 
     val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
     val delete: MutableLiveData<LiveDataEvent<ResponseSuccessful>> = MutableLiveData()
 
-    fun getModel(link: Link): ModelBook? {
+    fun getModel(link: Link): RelationBook? {
         return service.layer.findBookByLink(link)
     }
 
@@ -51,16 +53,17 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
 
     val data = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            service.getView(link) { model ->
-                book = model
-                emit(LiveDataEvent(model))
+            service.getView(link) { response ->
+                relation = response
+                delay(1200)
+                emit(LiveDataEvent(relation))
             }
         }
     }
 
     fun delete() {
         GlobalScope.launch(BaseExceptionHandler.getExceptionHandler()) {
-            book?.let { book ->
+            relation?.model?.let { book ->
                 book.enabled = false
                 service.deleteBook(book.links[API_KEY_SELF] ?: error("API_KEY_SELF not found")) { result ->
                     delete.postValue(LiveDataEvent(result))

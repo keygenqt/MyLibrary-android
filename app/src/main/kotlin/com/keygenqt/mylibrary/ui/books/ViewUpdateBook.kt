@@ -22,24 +22,23 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.LiveDataEvent
-import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.hal.Link
-import com.keygenqt.mylibrary.utils.API_VERSION
 import kotlinx.coroutines.delay
 
 class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
 
-    var book: ModelBook? = null
+    var relation: RelationBook? = null
 
     val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
     val params: MutableLiveData<ModelBook> = MutableLiveData()
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
-    fun getModel(link: Link): ModelBook? {
+    fun getModel(link: Link): RelationBook? {
         return service.layer.findBookByLink(link)
     }
 
@@ -51,24 +50,24 @@ class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
 
     val data = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            service.getView(link) { model ->
-                book = model
+            service.getView(link) { result ->
+                relation = result
                 delay(1200)
-                emit(LiveDataEvent(model))
+                emit(LiveDataEvent(relation))
             }
         }
     }
 
-    val updateBook = params.switchMap { model ->
+    val updateBook = params.switchMap { book ->
         liveData(BaseExceptionHandler.getExceptionHandler(error)) {
-            if (model.links.containsKey(API_KEY_SELF)) {
+            if (book.links.containsKey(API_KEY_SELF)) {
                 // update
-                service.updateBook(model.links.getValue(API_KEY_SELF).value, model) {
+                service.updateBook(book.links.getValue(API_KEY_SELF).value, book) {
                     emit(LiveDataEvent(true))
                 }
             } else {
                 // add
-                service.addBook(model) {
+                service.addBook(book) {
                     emit(LiveDataEvent(true))
                 }
             }

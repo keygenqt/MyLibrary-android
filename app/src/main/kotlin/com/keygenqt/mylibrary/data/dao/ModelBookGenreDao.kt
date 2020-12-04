@@ -17,4 +17,7 @@ interface ModelBookGenreDao {
 
     @Query("DELETE FROM ModelBookGenre")
     fun deleteAll()
+
+    @Query("DELETE FROM ModelBookGenre WHERE id = :id")
+    fun deleteById(id: Long)
 }
