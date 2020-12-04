@@ -18,12 +18,15 @@ package com.keygenqt.mylibrary.ui.other
 
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import kotlinx.android.synthetic.main.fragment_splash.view.progressBarSplash
 import org.koin.android.ext.android.inject
+import java.net.ConnectException
 import java.util.Locale
 
 class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
@@ -32,7 +35,6 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
     private val preferences: BaseSharedPreferences by inject()
 
     override fun onCreateView() {
-        statusProgress(true)
 
         preferences.locale?.let {
             if (preferences.locale != Locale.getDefault().toLanguageTag()) {
@@ -70,5 +72,20 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
         }
 
         preferences.locale = Locale.getDefault().toLanguageTag()
+    }
+
+    @OnCreateAfter
+    fun error() {
+        viewModel.error.observe(viewLifecycleOwner, { event ->
+            event?.peekContentHandled()?.let { throwable ->
+                when (throwable) {
+                    is ConnectException -> {
+                        initView {
+                            progressBarSplash.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+        })
     }
 }

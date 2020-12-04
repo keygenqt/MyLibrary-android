@@ -52,13 +52,13 @@ class DbServiceBooks(
 
     fun findItems(link: Link, ids: List<Long>): List<ModelBook> {
         db.getDao<ModelSearchBookDao>().let { dao ->
-            return dao.findSearchModels(link.linkClearPageable.value, ids).map { it.search }
+            return dao.findSearchModels(link.linkClearPageable.value).map { it.search }.filter { !ids.contains(it.id) }
         }
     }
 
     fun findItemsGenres(ids: List<Long>): List<ModelListGenre> {
         db.getDao<ModelListGenreDao>().let { dao ->
-            return dao.findModels(ids)
+            return dao.findModels().filter { !ids.contains(it.id) }
         }
     }
 

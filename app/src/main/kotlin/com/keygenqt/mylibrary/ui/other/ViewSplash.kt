@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
@@ -33,13 +34,15 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
 
     lateinit var modelRoot: ModelRoot
 
+    val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
+
     val userMe = liveData(getExceptionHandler()) {
         service.getUserMe(modelRoot.links[ModelUser.API_KEY]?.value!!) { user ->
             emit(LiveDataEvent(user))
         }
     }
 
-    val links = liveData(getExceptionHandler()) {
+    val links = liveData(getExceptionHandler(error)) {
         service.getRootLinks { links ->
             modelRoot = links
             if (links.role == ModelRoot.API_ROLE_ANONYMOUS) {

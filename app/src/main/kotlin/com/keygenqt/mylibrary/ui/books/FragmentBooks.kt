@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -26,6 +28,7 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
+import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
@@ -61,6 +64,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             refresh.setOnRefreshListener {
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
+                    statusProgress(true)
                     viewModel.updateList(it)
                 }
             }
@@ -96,7 +100,10 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                     adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
                     notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
                     refresh.isRefreshing = false
-                    statusProgress(false)
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        statusProgress(false)
+                    }, 3000)
                 }
             }
         }

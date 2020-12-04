@@ -124,7 +124,7 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
 
     fun statusProgress(status: Boolean) {
         activity?.let {
-            it.appBarLayout.progressBar.visibility = if (status) View.VISIBLE else View.GONE
+            it.progressBar.visibility = if (status) View.VISIBLE else View.GONE
         }
     }
 

@@ -9,8 +9,8 @@ import com.keygenqt.mylibrary.data.models.ModelListGenre
 @Dao
 interface ModelListGenreDao {
 
-    @Query("SELECT * FROM ModelListGenre WHERE id NOT IN (:ids) ORDER BY id DESC")
-    fun findModels(ids: List<Long>): List<ModelListGenre>
+    @Query("SELECT * FROM ModelListGenre ORDER BY id DESC")
+    fun findModels(): List<ModelListGenre>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg model: ModelListGenre)

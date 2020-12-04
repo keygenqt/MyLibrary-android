@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -29,7 +28,10 @@ import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.utils.observes.ObserveSelectGenre
-import kotlinx.android.synthetic.main.common_fragment_list.view.*
+import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
+import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
+import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
+import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
