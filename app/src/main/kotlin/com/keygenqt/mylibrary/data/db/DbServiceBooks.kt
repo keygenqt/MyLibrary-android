@@ -36,8 +36,10 @@ class DbServiceBooks(
         return preferences.userId
     }
 
-    fun getRootLink(): Link {
-        return db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY)
+    fun getRootLink(path: String = ""): Link {
+        return Link(
+            db.getDao<ModelRootDao>().getModel(API_VERSION).getLink(ModelBook.API_KEY).value + path
+        )
     }
 
     fun getGenresLink(): Link {
@@ -89,11 +91,12 @@ class DbServiceBooks(
                     daoSearch.deleteByPath(link.linkClearPageable.value)
                 }
                 daoBook.insert(*list.items.toTypedArray())
-                daoSearch.insert(*(list.items.map {
+                daoSearch.insert(*(list.items.map { model ->
                     ModelSearchBook(
+                        id = link.linkClearPageable.value + model.id,
                         path = link.linkClearPageable.value,
-                        modelId = it.id,
-                        selfLink = it.selfLink
+                        modelId = model.id,
+                        selfLink = model.selfLink
                     )
                 }.toTypedArray()))
             }
@@ -104,8 +107,12 @@ class DbServiceBooks(
         db.getDao<ModelBookDao>().insert(model)
         db.getDao<ModelSearchBookDao>().let { daoSearch ->
             daoSearch.findLinks().forEach { link ->
+                if (!model.sale && link.contains("sale=true")) {
+                    return@forEach
+                }
                 daoSearch.insert(
                     ModelSearchBook(
+                        id = link + model.id,
                         path = link,
                         modelId = model.id,
                         selfLink = model.selfLink

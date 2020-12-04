@@ -84,14 +84,14 @@ class ServiceBooks(
 
     suspend fun addBook(model: ModelBook, response: suspend () -> Unit) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelUser>(this, layer.getRootLink().value, Gson().toJsonTree(model).asJsonObject).await().let {
-                model.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                    model.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
+            query.postAsync<ModelBook>(this, layer.getRootLink().value, Gson().toJsonTree(model).asJsonObject).await().let { updated ->
+                updated.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                    updated.genre = query.getAsync<ModelBookGenre>(this, link.value).await()
                 }
-                model.links[ModelBook.API_KEY_USER]?.let { link ->
-                    model.user = query.getAsync<ModelBookUser>(this, link.value).await()
+                updated.links[ModelBook.API_KEY_USER]?.let { link ->
+                    updated.user = query.getAsync<ModelBookUser>(this, link.value).await()
                 }
-                layer.addBook(model)
+                layer.addBook(updated)
                 response.invoke()
             }
         }

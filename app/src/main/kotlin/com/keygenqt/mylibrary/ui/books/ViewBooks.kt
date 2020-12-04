@@ -30,7 +30,7 @@ import com.keygenqt.mylibrary.hal.Link
 
 class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkSearch = MutableLiveData(service.layer.getRootLink())
+    private val linkSearch = MutableLiveData(service.layer.getRootLink("/search/findAll"))
 
     val changeLink = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {

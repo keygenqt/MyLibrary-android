@@ -22,6 +22,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "ModelSearchBook")
 data class ModelSearchBook(
     @PrimaryKey
+    var id: String,
     var selfLink: String,
     var path: String,
     var modelId: Long,
