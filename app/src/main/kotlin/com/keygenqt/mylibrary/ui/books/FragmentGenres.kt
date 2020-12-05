@@ -39,6 +39,7 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
 
     private val args: FragmentGenresArgs by navArgs()
     private val viewModel: ViewGenres by inject()
+
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
 
     override fun onCreateView() {

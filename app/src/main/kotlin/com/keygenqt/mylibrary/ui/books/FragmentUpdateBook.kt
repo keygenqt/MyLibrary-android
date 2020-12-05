@@ -33,6 +33,7 @@ import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
+import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
 import kotlinx.android.synthetic.main.fragment_update_book.view.*
 import org.koin.android.ext.android.inject
 
@@ -44,6 +45,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
     private val observeSelectCover: ObserveSelectCover by activityViewModels()
+    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
 
     private var modelGenre: ModelBookGenre? = null
     private var modelCover: String? = null
@@ -167,6 +169,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                     statusProgress(false)
                     if (args.selfLink.isEmpty()) {
                         Toast.makeText(activity, getString(R.string.update_book_added_successfully), Toast.LENGTH_SHORT).show()
+                        observeUpdateBooks.update(true)
                         findNavController().navigateUp()
                     } else {
                         clearError()

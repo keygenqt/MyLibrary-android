@@ -18,6 +18,7 @@ package com.keygenqt.mylibrary.ui.books
 
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arlib.floatingsearchview.FloatingSearchView.*
@@ -28,6 +29,7 @@ import com.keygenqt.mylibrary.annotations.ActionBarSearchEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
+import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
 import kotlinx.android.synthetic.main.activity_main.floatingSearchView
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
@@ -40,6 +42,10 @@ import org.koin.android.ext.android.inject
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
+
+    private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
+
+    private var updateBooks = false
 
     // menu
     override fun onCreateOptionsMenu(): Int {
@@ -103,6 +109,17 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     }
 
     @OnCreateAfter
+    fun observeUpdateBooks() {
+        initView {
+            observeUpdateBooks.update.observe(viewLifecycleOwner) { event ->
+                event?.peekContentHandled()?.let {
+                    updateBooks = it
+                }
+            }
+        }
+    }
+
+    @OnCreateAfter
     fun updateCache() {
         initView {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
@@ -124,11 +141,16 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
     fun updateResponse() {
         initView {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
-                (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
-                    notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
-                    refresh.isRefreshing = false
-                    statusProgress(false)
+                if (updateBooks) {
+                    updateBooks = false
+                    viewModel.updateList(links.self.linkClearPageable)
+                } else {
+                    (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
+                        adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
+                        notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
+                        refresh.isRefreshing = false
+                        statusProgress(false)
+                    }
                 }
             }
         }

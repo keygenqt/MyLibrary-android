@@ -103,33 +103,6 @@ class DbServiceBooks(
         }
     }
 
-    fun addBook(relation: RelationBook) {
-        relation.model.let { model ->
-            db.getDao<ModelBookDao>().insert(model)
-            db.getDao<ModelSearchBookDao>().let { daoSearch ->
-                daoSearch.findLinks().forEach { link ->
-                    if (!model.sale && link.contains("sale=true")) {
-                        return@forEach
-                    }
-                    daoSearch.insert(
-                        ModelSearchBook(
-                            id = link + model.id,
-                            path = link,
-                            modelId = model.id,
-                            selfLink = model.selfLink
-                        )
-                    )
-                }
-            }
-        }
-        relation.genre?.let {
-            db.getDao<ModelBookGenreDao>().insert(it)
-        }
-        relation.user?.let {
-            db.getDao<ModelBookUserDao>().insert(it)
-        }
-    }
-
     fun saveBook(relation: RelationBook) {
         db.getDao<ModelBookDao>().insert(relation.model)
         relation.genre?.let {

@@ -21,7 +21,10 @@ import com.keygenqt.mylibrary.base.BaseQuery
 import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
-import com.keygenqt.mylibrary.data.models.*
+import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.data.models.ModelBookUser
+import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.hal.API_KEY_SEARCH
 import com.keygenqt.mylibrary.hal.Link
@@ -91,17 +94,7 @@ class ServiceBooks(
 
     suspend fun addBook(model: ModelBook, response: suspend () -> Unit) {
         withContext(Dispatchers.IO) {
-            query.postAsync<ModelBook>(this, layer.getRootLink().value, Gson().toJsonTree(model).asJsonObject).await().let { updated ->
-                val relationBook = RelationBook(
-                    model = updated,
-                    genre = updated.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                        query.getAsync<ModelBookGenre>(this, link.value).await()
-                    },
-                    user = updated.links[ModelBook.API_KEY_USER]?.let { link ->
-                        query.getAsync<ModelBookUser>(this, link.value).await()
-                    },
-                )
-                layer.addBook(relationBook)
+            query.postAsync<ModelBook>(this, layer.getRootLink().value, Gson().toJsonTree(model).asJsonObject).await().let {
                 response.invoke()
             }
         }

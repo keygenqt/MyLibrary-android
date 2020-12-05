@@ -6,171 +6,148 @@
     android:layout_height="match_parent"
     >
 
-  <androidx.constraintlayout.widget.ConstraintLayout
+  <LinearLayout
+      android:id="@+id/linearLayout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:orientation="vertical"
       >
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbarBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         >
 
       <androidx.constraintlayout.widget.ConstraintLayout
-          android:id="@+id/toolbarBlock"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/common_background_action_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-
-          <androidx.appcompat.widget.Toolbar
-              android:id="@+id/toolbar"
-              android:layout_width="0dp"
-              android:layout_height="?attr/actionBarSize"
-              android:layout_marginEnd="4dp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              app:titleTextColor="@color/colorWhite"
-              />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:indeterminateTint="?attr/colorActionMenu"
-            android:padding="0dp"
-            android:paddingTop="-4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarBlock"
-            tools:ignore="RtlSymmetry"
-            />
-
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:id="@+id/contentMain"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          app:layout_behavior="@string/appbar_scrolling_view_behavior"
-          >
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_nav_menu"
-            />
-
-        <fragment
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_graph_app"
-            />
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
-    <com.arlib.floatingsearchview.FloatingSearchView
-        android:id="@+id/floatingSearchView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:floatingSearch_searchBarMarginLeft="1dp"
-        app:floatingSearch_searchBarMarginRight="1dp"
-        app:floatingSearch_searchHint="Search..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:floatingSearch_leftActionMode="showSearch"
-        app:floatingSearch_menu="@menu/menu_search"
-        />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/spawnAnimation"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/colorBackgroundLoading"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/loading"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/colorBackgroundLoading"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-      <ImageView
-          android:id="@+id/ivMoon"
+          android:id="@+id/appBarLayout"
           android:layout_width="0dp"
-          android:layout_height="170dp"
-          android:adjustViewBounds="true"
-          android:scaleType="centerCrop"
-          android:src="@drawable/moon"
-          android:visibility="gone"
+          android:layout_height="wrap_content"
+          android:background="@drawable/common_background_action_bar"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent"
-          tools:ignore="ContentDescription"
-          />
+          >
 
-      <com.airbnb.lottie.LottieAnimationView
-          android:id="@+id/lottieAnimationView"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:lottie_fileName="lottie_loader.json"
-          app:lottie_loop="true"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@color/colorWhite"
+            />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <ProgressBar
+          android:id="@+id/progressBar"
+          style="?android:attr/progressBarStyleHorizontal"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:indeterminate="true"
+          android:indeterminateTint="?attr/colorActionMenu"
+          android:padding="0dp"
+          android:paddingTop="-4dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/toolbarBlock"
+          tools:ignore="RtlSymmetry"
           />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+      <com.google.android.material.bottomnavigation.BottomNavigationView
+          android:id="@+id/bottomNavigationView"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="0dp"
+          android:layout_marginEnd="0dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:menu="@menu/bottom_nav_menu"
+          />
+
+      <fragment
+          android:id="@+id/nav_host_fragment"
+          android:name="androidx.navigation.fragment.NavHostFragment"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          app:defaultNavHost="true"
+          app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:navGraph="@navigation/nav_graph_app"
+          />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </LinearLayout>
+
+  <com.arlib.floatingsearchview.FloatingSearchView
+      android:id="@+id/floatingSearchView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:floatingSearch_searchBarMarginLeft="1dp"
+      app:floatingSearch_searchBarMarginRight="1dp"
+      app:floatingSearch_searchHint="Search..."
+      app:floatingSearch_leftActionMode="showSearch"
+      app:floatingSearch_menu="@menu/menu_search"
+      />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/spawnAnimation"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="?attr/colorBackgroundLoading"
+      android:visibility="gone"
+      />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/loading"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="?attr/colorBackgroundLoading"
+      android:clickable="true"
+      android:focusable="true"
+      android:visibility="gone"
+      >
+
+    <ImageView
+        android:id="@+id/ivMoon"
+        android:layout_width="0dp"
+        android:layout_height="170dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/moon"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_fileName="lottie_loader.json"
+        app:lottie_loop="true"
+        />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
