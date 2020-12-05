@@ -27,11 +27,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.ActionBarSearchEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.progressBar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.reflect.full.findAnnotation
@@ -98,6 +98,11 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
                 activity.findViewById<View>(R.id.bottomNavigationView)?.visibility = View.VISIBLE
             } ?: run {
                 activity.findViewById<View>(R.id.bottomNavigationView)?.visibility = View.GONE
+            }
+            this::class.java.kotlin.findAnnotation<ActionBarSearchEnable>()?.let {
+                activity.floatingSearchView.visibility = View.VISIBLE
+            } ?: run {
+                activity.floatingSearchView.visibility = View.INVISIBLE
             }
 
             activity.currentFocus?.hideKeyboard()

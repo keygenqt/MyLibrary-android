@@ -23,6 +23,9 @@
 
   // common
   <string name="filter_view_example_gizmos">filter_view_example_gizmos</string>
+  <string name="common_search">Search</string>
+  <string name="common_action_voice">Voice</string>
+  <string name="common_action_menu">Menu</string>
 
   <string name="list_not_found">Nothing found</string>
   <string name="exit_info">Please click back again to exit</string>
@@ -87,7 +90,6 @@
   <string name="update_book_take_photo">Take Photo</string>
   <string name="update_book_swap">Book Swap</string>
   <string name="update_book_swap_desc">Provides an opportunity to show your desire to exchange this book with other members</string>
-
 
   // settings
   <string name="settings_title">SETTINGS</string>

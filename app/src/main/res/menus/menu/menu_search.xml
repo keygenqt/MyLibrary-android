@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+      android:id="@+id/action_voice"
+      android:icon="@drawable/ic_baseline_keyboard_voice"
+      android:title="@string/common_action_voice"
+      android:visible="false"
+      app:showAsAction="ifRoom" />
+
+  <item
+      android:id="@+id/action_menu"
+      android:icon="@drawable/ic_baseline_more"
+      android:title="@string/common_action_menu"
+      app:showAsAction="ifRoom" />
+</menu>

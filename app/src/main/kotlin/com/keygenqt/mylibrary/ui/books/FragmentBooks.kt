@@ -18,15 +18,15 @@ package com.keygenqt.mylibrary.ui.books
 
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
+import com.keygenqt.mylibrary.annotations.ActionBarSearchEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.extensions.showWithPadding
+import kotlinx.android.synthetic.main.activity_main.floatingSearchView
 import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
 import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
 import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
+@ActionBarSearchEnable
 class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private val viewModel: ViewBooks by inject()
@@ -59,7 +60,12 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                 statusProgress(next.isFirstPage())
                 viewModel.updateList(next)
             }
-            refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            refresh.setColorSchemeColors(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorAccent
+                )
+            )
             refresh.setOnRefreshListener {
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
                     viewModel.updateList(it)
@@ -70,6 +76,20 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             commonFab.setOnClickListener {
                 findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBookAdd())
             }
+
+            activity?.floatingSearchView?.apply {
+                setSearchText(viewModel.searchValue)
+                setOnQueryChangeListener { _, newQuery ->
+                    viewModel.searchValue = if (newQuery.isNullOrEmpty()) null else newQuery
+                }
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.action_menu -> {
+                            activity?.openOptionsMenu()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -79,7 +99,8 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
                     (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                        adapter.updateLinks(links).updateItems(viewModel.findItemsLimit(links.self, 10))
+                        adapter.updateLinks(links)
+                            .updateItems(viewModel.findItemsLimit(links.self, 10))
                         viewModel.findSearch()?.let { search ->
                             adapter.setSearchModel(search)
                         }
@@ -94,7 +115,8 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
+                    adapter.updateLinks(links)
+                        .updateItems(viewModel.findItems(links.self, adapter.getIds()))
                     notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
                     refresh.isRefreshing = false
                     statusProgress(false)
