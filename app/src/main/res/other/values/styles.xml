@@ -43,4 +43,13 @@
     <item name="android:fontFamily">sans-serif-medium</item>
   </style>
 
+  <style name="SearchView">
+    <item name="floatingSearch_backgroundColor">?attr/colorBackgroundListItem</item>
+    <item name="floatingSearch_viewSearchInputTextColor">?attr/colorTextItem</item>
+    <item name="floatingSearch_hintTextColor">?attr/colorTextItem</item>
+    <item name="floatingSearch_clearBtnColor">?attr/colorTextItem</item>
+    <item name="floatingSearch_leftActionColor">?attr/colorTextItem</item>
+    <item name="floatingSearch_menuItemIconColor">?attr/colorTextItem</item>
+  </style>
+
 </resources>

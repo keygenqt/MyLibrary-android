@@ -18,6 +18,8 @@ package com.keygenqt.mylibrary.base
 
 import android.graphics.Color.*
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.annotation.LayoutRes
@@ -34,6 +36,8 @@ import com.keygenqt.mylibrary.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import java.util.Timer
+import kotlin.concurrent.schedule
 import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
@@ -43,6 +47,19 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
     private val preferences: BaseSharedPreferences by inject()
 
     private var _view: View? = null
+
+    var timer = Timer()
+
+    fun searchDelay(delegate: () -> Unit) {
+        timer.cancel()
+        timer = Timer()
+        timer.schedule(200) {
+            Handler(Looper.getMainLooper()).post {
+                delegate.invoke()
+            }
+            timer.cancel()
+        }
+    }
 
     infix fun BaseFragment.initToolbar(delegate: Toolbar.() -> Unit) =
         activity?.let {

@@ -86,12 +86,12 @@ class BaseSharedPreferences(private val preferences: SharedPreferences) {
 
     val resDefaultBook: Int
         get() {
-            return if (darkTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book
+            return if (darkTheme || grayTheme) R.drawable.img_default_book_dark else R.drawable.img_default_book
         }
 
     val resDefaultUser: Int
         get() {
-            return if (darkTheme) R.drawable.img_default_user_dark else R.drawable.img_default_user
+            return if (darkTheme || grayTheme) R.drawable.img_default_user_dark else R.drawable.img_default_user
         }
 
 }

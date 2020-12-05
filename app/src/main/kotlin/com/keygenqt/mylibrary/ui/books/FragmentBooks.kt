@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -94,16 +95,15 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                         }
                     }
                 }
-                setOnSearchListener(object : OnSearchListener {
-                    override fun onSuggestionClicked(searchSuggestion: SearchSuggestion?) {}
-                    override fun onSearchAction(currentQuery: String?) {
+                setOnQueryChangeListener { _, newQuery ->
+                    searchDelay {
                         initView {
                             (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
-                                viewModel.updateSearch(it, if (currentQuery.isNullOrEmpty()) null else currentQuery)
+                                viewModel.updateSearch(it, if (newQuery.isNullOrEmpty()) null else newQuery)
                             }
                         }
                     }
-                })
+                }
             }
         }
     }

@@ -140,6 +140,7 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <com.arlib.floatingsearchview.FloatingSearchView
+      style="@style/SearchView"
       android:id="@+id/floatingSearchView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -149,6 +150,7 @@
       app:floatingSearch_searchHint="Search..."
       app:floatingSearch_leftActionMode="showSearch"
       app:floatingSearch_menu="@menu/menu_search"
+      app:floatingSearch_showSearchKey="false"
       />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
