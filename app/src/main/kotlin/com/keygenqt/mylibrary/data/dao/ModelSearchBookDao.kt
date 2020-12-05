@@ -38,4 +38,7 @@ interface ModelSearchBookDao {
 
     @Query("DELETE FROM ModelSearchBook WHERE selfLink=:selfLink")
     fun deleteByLink(selfLink: String)
+
+    @Query("DELETE FROM ModelSearchBook WHERE path LIKE '%' || '?search=' || '%' OR path LIKE '%' || '&search=' || '%' ")
+    fun clearSearchBookHistory()
 }

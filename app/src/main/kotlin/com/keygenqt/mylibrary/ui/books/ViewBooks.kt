@@ -36,9 +36,7 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
     val changeLink = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
-            if (link.isFirstPage()) {
-                emit(LiveDataEvent(ListLinks(link)))
-            }
+            emit(LiveDataEvent(ListLinks(link)))
         }
     }
 
@@ -68,11 +66,20 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
         return service.layer.findItems(link = link, exclude = ids)
     }
 
+    fun updateSearch(next: Link, search: String?) {
+        searchValue = search
+        updateList(next)
+    }
+
     fun updateList(next: Link) {
-        linkSearch.postValue(when (next.type) {
-            AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> next.linkWithParams(hashMapOf("userId" to service.layer.userId().toString()))
-            AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> next.linkWithParams(hashMapOf("sale" to "true"))
-            else -> next
+        val link = if (next.getSearch() != searchValue) next.linkWithSearch(searchValue) else next
+        if (link.isFirstPage()) {
+            service.layer.clearSearchBookHistory()
+        }
+        linkSearch.postValue(when (link.type) {
+            AdapterBooks.SEARCH_FIND_ALL_BY_USER_ID -> link.linkWithParams(hashMapOf("userId" to service.layer.userId().toString()))
+            AdapterBooks.SEARCH_FIND_ALL_BY_SALE -> link.linkWithParams(hashMapOf("sale" to "true"))
+            else -> link
         })
     }
 }

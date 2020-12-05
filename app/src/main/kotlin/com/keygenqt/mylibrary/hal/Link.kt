@@ -18,7 +18,7 @@ package com.keygenqt.mylibrary.hal
 
 import android.net.Uri
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import java.util.HashMap
 
 data class Link(
     @SerializedName("href")
@@ -27,7 +27,7 @@ data class Link(
     val type: String
         get() {
             return if (linkClearPageable.value.contains("$API_KEY_SEARCH/")) {
-                linkClearPageable.value.substringAfterLast("$API_KEY_SEARCH/")
+                linkClearPageable.value.substringAfterLast("$API_KEY_SEARCH/").substringBefore("?")
             } else {
                 "root"
             }
@@ -80,5 +80,34 @@ data class Link(
 
     fun isPage(page: Int): Boolean {
         return !href.contains("page=$page")
+    }
+
+    fun removeSearch(): Link {
+        val uri = Uri.parse(value)
+        val uriClear = uri.buildUpon().clearQuery()
+        uri.queryParameterNames.forEach {
+            if (it != "search") {
+                uriClear.appendQueryParameter(it, uri.getQueryParameter(it))
+            }
+        }
+        return Link(uriClear.toString())
+    }
+
+    fun linkWithSearch(search: String?): Link {
+        val uri = Uri.parse(value)
+        val uriClear = uri.buildUpon().clearQuery()
+        uri.queryParameterNames.forEach {
+            if (it != "page" && it != "size" && it != "search") {
+                uriClear.appendQueryParameter(it, uri.getQueryParameter(it))
+            }
+        }
+        search?.let {
+            uriClear.appendQueryParameter("search", search)
+        }
+        return Link(uriClear.toString())
+    }
+
+    fun getSearch(): String? {
+        return Uri.parse(value).getQueryParameter("search")
     }
 }

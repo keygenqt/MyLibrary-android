@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.data.db
 
+import android.util.Log
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.*
@@ -152,5 +153,9 @@ class DbServiceBooks(
             }
         }
         db.getDao<ModelSearchBookDao>().deleteByLink(link.value)
+    }
+
+    fun clearSearchBookHistory() {
+        db.getDao<ModelSearchBookDao>().clearSearchBookHistory()
     }
 }

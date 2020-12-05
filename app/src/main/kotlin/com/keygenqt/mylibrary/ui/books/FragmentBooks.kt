@@ -20,6 +20,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.arlib.floatingsearchview.FloatingSearchView.*
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.ActionBarSearchEnable
@@ -79,9 +81,6 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
             activity?.floatingSearchView?.apply {
                 setSearchText(viewModel.searchValue)
-                setOnQueryChangeListener { _, newQuery ->
-                    viewModel.searchValue = if (newQuery.isNullOrEmpty()) null else newQuery
-                }
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.action_menu -> {
@@ -89,6 +88,16 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                         }
                     }
                 }
+                setOnSearchListener(object : OnSearchListener {
+                    override fun onSuggestionClicked(searchSuggestion: SearchSuggestion?) {}
+                    override fun onSearchAction(currentQuery: String?) {
+                        initView {
+                            (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
+                                viewModel.updateSearch(it, if (currentQuery.isNullOrEmpty()) null else currentQuery)
+                            }
+                        }
+                    }
+                })
             }
         }
     }
@@ -98,11 +107,12 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
-                    (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                        adapter.updateLinks(links)
-                            .updateItems(viewModel.findItemsLimit(links.self, 10))
-                        viewModel.findSearch()?.let { search ->
-                            adapter.setSearchModel(search)
+                    if (viewModel.searchValue == null && links.self.isFirstPage()) {
+                        (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
+                            adapter.updateLinks(links).updateItems(viewModel.findItemsLimit(links.self, 10))
+                            viewModel.findSearch()?.let { search ->
+                                adapter.setSearchModel(search)
+                            }
                         }
                     }
                 }
@@ -115,8 +125,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                    adapter.updateLinks(links)
-                        .updateItems(viewModel.findItems(links.self, adapter.getIds()))
+                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
                     notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
                     refresh.isRefreshing = false
                     statusProgress(false)

@@ -109,6 +109,13 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, nextPage: ((Link) ->
         notifyDataSetChanged()
     }
 
+    override fun isEmpty(): Boolean {
+        if (this.items.firstOrNull() is ModelSearch) {
+            return items.size == 1
+        }
+        return items.isEmpty()
+    }
+
     fun setSearchModel(search: ModelSearch) {
         if (this.items.firstOrNull() !is ModelSearch) {
             this.items.add(0, search)

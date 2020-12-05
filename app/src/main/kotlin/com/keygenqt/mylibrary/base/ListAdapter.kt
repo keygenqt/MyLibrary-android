@@ -112,7 +112,7 @@ abstract class ListAdapter<T>(@LayoutRes val id: Int, open var nextPage: ((Link)
         notifyDataSetChanged()
     }
 
-    fun isEmpty(): Boolean {
+    open fun isEmpty(): Boolean {
         return items.isEmpty()
     }
 
