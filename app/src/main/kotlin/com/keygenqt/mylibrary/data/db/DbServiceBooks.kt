@@ -50,15 +50,16 @@ class DbServiceBooks(
         }
     }
 
-    fun findItems(link: Link, ids: List<Long>): List<ModelBook> {
+    fun findItems(link: Link, exclude: List<Long> = emptyList(), limit: Int = 1000): List<ModelBook> {
         db.getDao<ModelSearchBookDao>().let { dao ->
-            return dao.findSearchModels(link.linkClearPageable.value).map { it.search }.filter { !ids.contains(it.id) }
+            return dao.findSearchModels(link.linkClearPageable.value, limit)
+                .map { it.search }.filter { !exclude.contains(it.id) }
         }
     }
 
-    fun findItemsGenres(ids: List<Long>): List<ModelListGenre> {
+    fun findItemsGenres(exclude: List<Long> = emptyList(), limit: Int = 1000): List<ModelListGenre> {
         db.getDao<ModelListGenreDao>().let { dao ->
-            return dao.findModels().filter { !ids.contains(it.id) }
+            return dao.findModels(limit).filter { !exclude.contains(it.id) }
         }
     }
 

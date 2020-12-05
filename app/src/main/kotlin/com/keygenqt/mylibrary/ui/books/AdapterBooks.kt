@@ -65,4 +65,8 @@ class AdapterBooks(@LayoutRes layout: Int, nextPage: (Link) -> Unit) : ListSearc
             }
         }
     }
+
+    override fun updateItems(items: List<Any>) {
+        super.updateItems(items.filter { !(linkSelf?.value?.contains("sale=true") ?: false) || (it as ModelBook).sale })
+    }
 }

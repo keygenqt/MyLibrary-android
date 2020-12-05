@@ -58,8 +58,12 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
         return service.layer.findSearch()
     }
 
+    fun findItemsLimit(link: Link, limit: Int): List<ModelBook> {
+        return service.layer.findItems(link = link, limit = limit)
+    }
+
     fun findItems(link: Link, ids: List<Long> = emptyList()): List<ModelBook> {
-        return service.layer.findItems(link, ids)
+        return service.layer.findItems(link = link, exclude = ids)
     }
 
     fun updateList(next: Link) {

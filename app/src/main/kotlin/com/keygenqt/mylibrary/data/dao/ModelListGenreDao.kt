@@ -25,8 +25,8 @@ import com.keygenqt.mylibrary.data.models.ModelListGenre
 @Dao
 interface ModelListGenreDao {
 
-    @Query("SELECT * FROM ModelListGenre ORDER BY id DESC")
-    fun findModels(): List<ModelListGenre>
+    @Query("SELECT * FROM ModelListGenre ORDER BY id DESC LIMIT :limit")
+    fun findModels(limit: Int): List<ModelListGenre>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg model: ModelListGenre)

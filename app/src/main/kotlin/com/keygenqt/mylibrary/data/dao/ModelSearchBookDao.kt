@@ -30,8 +30,8 @@ interface ModelSearchBookDao {
     fun deleteByPath(path: String)
 
     @Transaction
-    @Query("SELECT * FROM ModelSearchBook WHERE path = :path ORDER BY modelId DESC")
-    fun findSearchModels(path: String): List<RelationSearchBook>
+    @Query("SELECT * FROM ModelSearchBook WHERE path = :path ORDER BY modelId DESC LIMIT :limit ")
+    fun findSearchModels(path: String, limit: Int): List<RelationSearchBook>
 
     @Query("SELECT DISTINCT path FROM ModelSearchBook")
     fun findLinks(): List<String>

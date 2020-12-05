@@ -23,6 +23,7 @@ import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.ListLinks
 import com.keygenqt.mylibrary.base.LiveDataEvent
+import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelListGenre
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
@@ -47,8 +48,12 @@ class ViewGenres(private val service: ServiceBooks) : ViewModel() {
         }
     }
 
+    fun findItemsLimit(limit: Int): List<ModelListGenre> {
+        return service.layer.findItemsGenres(limit = limit)
+    }
+
     fun findItems(ids: List<Long> = emptyList()): List<ModelListGenre> {
-        return service.layer.findItemsGenres(ids)
+        return service.layer.findItemsGenres(exclude = ids)
     }
 
     fun updateList(next: Link) {

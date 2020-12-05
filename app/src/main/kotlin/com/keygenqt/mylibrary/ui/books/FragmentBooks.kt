@@ -79,8 +79,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
                     (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                        adapter.updateLinks(links).updateItems(viewModel.findItems(links.self)
-                            .filter { !links.self.value.contains("sale=true") || it.sale })
+                        adapter.updateLinks(links).updateItems(viewModel.findItemsLimit(links.self, 10))
                         viewModel.findSearch()?.let { search ->
                             adapter.setSearchModel(search)
                         }
@@ -95,8 +94,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         initView {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds())
-                        .filter { !links.self.value.contains("sale=true") || it.sale })
+                    adapter.updateLinks(links).updateItems(viewModel.findItems(links.self, adapter.getIds()))
                     notFound.visibility = if (adapter.isEmpty()) View.VISIBLE else View.GONE
                     refresh.isRefreshing = false
                     statusProgress(false)

@@ -69,7 +69,7 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
                     (recyclerView.adapter as? ListAdapter<*>)?.let { adapter ->
-                        adapter.updateLinks(links).updateItems(viewModel.findItems())
+                        adapter.updateLinks(links).updateItems(viewModel.findItemsLimit(10))
                     }
                 }
             }
