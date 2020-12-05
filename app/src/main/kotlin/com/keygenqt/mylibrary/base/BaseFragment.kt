@@ -103,6 +103,7 @@ abstract class BaseFragment(@LayoutRes private val layoutId: Int) : Fragment() {
                 activity.floatingSearchView.visibility = View.VISIBLE
             } ?: run {
                 activity.floatingSearchView.visibility = View.INVISIBLE
+                activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             }
 
             activity.currentFocus?.hideKeyboard()

@@ -7,7 +7,6 @@
     >
 
   <LinearLayout
-      android:id="@+id/linearLayout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
@@ -95,17 +94,6 @@
 
   </LinearLayout>
 
-  <com.arlib.floatingsearchview.FloatingSearchView
-      android:id="@+id/floatingSearchView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:floatingSearch_searchBarMarginLeft="1dp"
-      app:floatingSearch_searchBarMarginRight="1dp"
-      app:floatingSearch_searchHint="Search..."
-      app:floatingSearch_leftActionMode="showSearch"
-      app:floatingSearch_menu="@menu/menu_search"
-      />
-
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/spawnAnimation"
       android:layout_width="match_parent"
@@ -150,5 +138,17 @@
         />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <com.arlib.floatingsearchview.FloatingSearchView
+      android:id="@+id/floatingSearchView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:floatingSearch_searchBarMarginLeft="1dp"
+      app:floatingSearch_searchBarMarginRight="1dp"
+      android:visibility="gone"
+      app:floatingSearch_searchHint="Search..."
+      app:floatingSearch_leftActionMode="showSearch"
+      app:floatingSearch_menu="@menu/menu_search"
+      />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
