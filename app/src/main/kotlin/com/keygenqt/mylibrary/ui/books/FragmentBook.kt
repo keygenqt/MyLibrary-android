@@ -225,7 +225,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
         relation.user?.let { user ->
             Glide.with(this)
-                .load(if (user.image.isEmpty()) user.avatarRes else user.image)
+                .load(if (user.image.isNullOrEmpty()) user.avatarRes else user.image)
                 .placeholder(preferences.resDefaultUser)
                 .error(preferences.resDefaultUser)
                 .into(userAvatar)

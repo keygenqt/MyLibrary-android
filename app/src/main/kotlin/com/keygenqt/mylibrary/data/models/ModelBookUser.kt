@@ -45,7 +45,7 @@ data class ModelBookUser(
     var bio: String? = null,
 
     @SerializedName("image")
-    var image: String = "",
+    var image: String? = null,
 
     @SerializedName("avatar")
     var avatar: String = ""
