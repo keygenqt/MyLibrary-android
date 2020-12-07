@@ -20,10 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
@@ -37,21 +34,13 @@ import com.keygenqt.mylibrary.annotations.SpawnAnimation
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.exceptions.HttpException
-import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.relations.RelationBook
-import kotlinx.android.synthetic.main.activity_main.view.toolbar
-import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
-import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemGrayTheme
-import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemDarkTheme
-import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemGrayTheme
-import kotlinx.android.synthetic.main.fragment_book.*
-import kotlinx.android.synthetic.main.fragment_book.view.*
-import kotlinx.android.synthetic.main.fragment_update_book.view.switchItemSwap
+import com.keygenqt.mylibrary.databinding.FragmentBookBinding
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @SpawnAnimation
-class FragmentBook : BaseFragment(R.layout.fragment_book) {
+class FragmentBook : BaseFragment<FragmentBookBinding>() {
 
     private val preferences: BaseSharedPreferences by inject()
     private val args: FragmentBookArgs by navArgs()
@@ -88,9 +77,12 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
         }
     }
 
-    // bind view
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentBookBinding {
+        return FragmentBookBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
 
             // start page
             if (viewModel.selfLink.value == null) {
@@ -120,7 +112,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
     @OnCreateAfter
     fun loading() {
-        initView {
+        bind {
             viewModel.loading.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let {
                     statusProgressPage(it)
@@ -132,7 +124,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
     @OnCreateAfter
     fun updateCache() {
-        initView {
+        bind {
             viewModel.changeLink.observe(viewLifecycleOwner) { link ->
                 val model = viewModel.getModel(link)
                 statusProgressPage(model?.user == null || model.genre == null)
@@ -145,7 +137,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
 
     @OnCreateAfter
     fun updateResponse() {
-        initView {
+        bind {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
                     statusProgressPage(false)
@@ -184,12 +176,12 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
     }
 
     private fun updateView(relation: RelationBook) {
-        relation.model.let { model ->
-            initToolbar {
-                toolbar.title = model.title
-            }
-            initView {
-                Glide.with(this)
+        bind {
+            relation.model.let { model ->
+                toolbar {
+                    title = model.title
+                }
+                Glide.with(root)
                     .load(model.image)
                     .placeholder(preferences.resDefaultBook)
                     .error(preferences.resDefaultBook)
@@ -208,7 +200,7 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 bookYear.text = model.year
                 bookPages.text = model.numberOfPages
 
-                model.getCoverType(context)?.let {
+                model.getCoverType(root.context)?.let {
                     bookCover.text = it
                     bookCoverBlock.visibility = View.VISIBLE
                 } ?: run {
@@ -218,27 +210,27 @@ class FragmentBook : BaseFragment(R.layout.fragment_book) {
                 bookSynopsisBlock.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
                 bookSynopsis.text = model.description
             }
-        }
-        relation.genre?.let { genre ->
-            bookGenre.text = getString(R.string.view_book_genre, genre.title)
-            bookGenreDesc.text = genre.description
-        }
-        relation.user?.let { user ->
-            Glide.with(this)
-                .load(if (user.image.isNullOrEmpty()) user.avatarRes else user.image)
-                .placeholder(preferences.resDefaultUser)
-                .error(preferences.resDefaultUser)
-                .into(userAvatar)
+            relation.genre?.let { genre ->
+                bookGenre.text = getString(R.string.view_book_genre, genre.title)
+                bookGenreDesc.text = genre.description
+            }
+            relation.user?.let { user ->
+                Glide.with(root)
+                    .load(if (user.image.isNullOrEmpty()) user.avatarRes else user.image)
+                    .placeholder(preferences.resDefaultUser)
+                    .error(preferences.resDefaultUser)
+                    .into(userAvatar)
 
-            userName.visibility = if (user.nickname.isEmpty()) View.GONE else View.VISIBLE
-            userBio.visibility = if (user.bio == null || user.bio!!.isEmpty()) View.GONE else View.VISIBLE
-            userName.text = user.nickname
-            userBio.text = user.bio
+                userName.visibility = if (user.nickname.isEmpty()) View.GONE else View.VISIBLE
+                userBio.visibility = if (user.bio == null || user.bio!!.isEmpty()) View.GONE else View.VISIBLE
+                userName.text = user.nickname
+                userBio.text = user.bio
 
-            menu?.iterator()?.forEach {
-                when (it.itemId) {
-                    R.id.book_menu_edit -> it.isVisible = preferences.userId == user.id
-                    R.id.book_menu_delete -> it.isVisible = preferences.userId == user.id
+                menu?.iterator()?.forEach {
+                    when (it.itemId) {
+                        R.id.book_menu_edit -> it.isVisible = preferences.userId == user.id
+                        R.id.book_menu_delete -> it.isVisible = preferences.userId == user.id
+                    }
                 }
             }
         }

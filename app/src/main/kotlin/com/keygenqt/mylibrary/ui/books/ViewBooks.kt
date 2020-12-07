@@ -36,7 +36,9 @@ class ViewBooks(private val service: ServiceBooks) : ViewModel() {
 
     val changeLink = linkSearch.switchMap { link ->
         liveData(getExceptionHandler()) {
-            emit(LiveDataEvent(ListLinks(link)))
+            if (searchValue == null && link.isFirstPage()) {
+                emit(LiveDataEvent(ListLinks(link)))
+            }
         }
     }
 

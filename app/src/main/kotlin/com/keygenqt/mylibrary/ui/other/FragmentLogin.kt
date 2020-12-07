@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
@@ -23,14 +25,14 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
+import com.keygenqt.mylibrary.databinding.FragmentLoginBinding
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.other.FragmentLogin.PARAMS.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
 import org.koin.android.ext.android.inject
 import java.util.Locale
 
 @ActionBarEnable
-class FragmentLogin : BaseFragment(R.layout.fragment_login) {
+class FragmentLogin : BaseFragment<FragmentLoginBinding>() {
 
     private val viewModel: ViewLogin by inject()
 
@@ -39,8 +41,12 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
         PASSWORD,
     }
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginBinding {
+        return FragmentLoginBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
             if (BuildConfig.DEBUG) {
                 textInputEditTextEmail.setText(R.string.user_email)
                 textInputEditTextPassw.setText(R.string.user_passw)
@@ -59,7 +65,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     }
 
     @OnCreateAfter fun afterSubmit() {
-        initView {
+        bind {
             viewModel.login.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     clearError()
@@ -71,7 +77,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     }
 
     @OnCreateAfter fun observeError() {
-        initView {
+        bind {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->
                     statusProgress(false)
@@ -99,7 +105,7 @@ class FragmentLogin : BaseFragment(R.layout.fragment_login) {
     }
 
     private fun clearError() {
-        initView {
+        bind {
             textInputLayoutEmail.isErrorEnabled = false
             textInputLayoutPassw.isErrorEnabled = false
         }

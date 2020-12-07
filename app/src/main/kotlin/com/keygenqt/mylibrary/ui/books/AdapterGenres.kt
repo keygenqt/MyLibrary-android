@@ -21,26 +21,22 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.keygenqt.mylibrary.base.ListAdapter
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
 import com.keygenqt.mylibrary.data.models.ModelListGenre
+import com.keygenqt.mylibrary.databinding.ItemSelectListBinding
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.hal.Link
-import kotlinx.android.synthetic.main.item_select_list.view.description
-import kotlinx.android.synthetic.main.item_select_list.view.itemBlock
-import kotlinx.android.synthetic.main.item_select_list.view.radioButton
-import kotlinx.android.synthetic.main.item_select_list.view.title
 
 class AdapterGenres(
     @LayoutRes layout: Int,
     var selectGenreId: Long?,
     private val fb: FloatingActionButton,
     private val recyclerView: RecyclerView,
-    nextPage: (Link) -> Unit
+    nextPage: (Link) -> Unit,
 ) : ListAdapter<ModelListGenre>(layout, nextPage) {
 
     override fun onBindViewHolder(holder: View, model: Any) {
         if (model is ModelListGenre) {
-            holder.apply {
+            ItemSelectListBinding.bind(holder).apply {
                 title.text = model.title
                 description.text = model.description
                 itemBlock.setOnClickListener {

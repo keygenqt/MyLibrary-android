@@ -1,11 +1,11 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("org.jetbrains.dokka")
     id("com.cookpad.android.plugin.license-tools")
+    id("com.google.gms.google-services")
 }
 
 tasks.dokkaHtml.configure {
@@ -45,6 +45,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -59,9 +62,20 @@ android {
     }
 }
 
+// firebase
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:26.1.1"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+}
+
+// action bar search
+dependencies {
+    implementation("com.github.arimorty:floatingsearchview:2.1.1")
+}
+
+// lottie
 dependencies {
     implementation("com.airbnb.android:lottie:3.5.0")
-    implementation("com.github.arimorty:floatingsearchview:2.1.1")
 }
 
 // Glide
@@ -99,12 +113,14 @@ dependencies {
     implementation("androidx.security:security-identity-credential:1.0.0-alpha01")
 }
 
+// retrofit
 dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 }
 
+// other
 dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("com.google.android.material:material:1.2.1")
@@ -114,13 +130,15 @@ dependencies {
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
 }
 
+// kotlin
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.20")
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.20")
 }
 
+// navigation
 dependencies {
     implementation("androidx.navigation:navigation-fragment:2.3.1")
     implementation("androidx.navigation:navigation-ui:2.3.1")
@@ -128,12 +146,14 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.3.1")
 }
 
+// for tests
 dependencies {
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }
 
+// lifecycle
 dependencies {
     implementation("org.koin:koin-android:${findProperty("koin_version")}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")

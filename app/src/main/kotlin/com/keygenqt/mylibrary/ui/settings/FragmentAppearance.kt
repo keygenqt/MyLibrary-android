@@ -19,25 +19,26 @@ package com.keygenqt.mylibrary.ui.settings
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.navigation.fragment.findNavController
-import com.keygenqt.mylibrary.R
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
+import com.keygenqt.mylibrary.databinding.FragmentAppearanceBinding
 import com.keygenqt.mylibrary.ui.activities.MainActivity
-import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemDarkTheme
-import kotlinx.android.synthetic.main.fragment_appearance.view.constraintLayoutItemGrayTheme
-import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemDarkTheme
-import kotlinx.android.synthetic.main.fragment_appearance.view.switchItemGrayTheme
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentAppearance : BaseFragment(R.layout.fragment_appearance) {
+class FragmentAppearance : BaseFragment<FragmentAppearanceBinding>() {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentAppearanceBinding {
+        return FragmentAppearanceBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
 
             switchItemDarkTheme.isChecked = sharedPreferences.darkTheme
             constraintLayoutItemDarkTheme.setOnClickListener {

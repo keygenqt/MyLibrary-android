@@ -21,23 +21,19 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.keygenqt.mylibrary.base.ListAdapter
-import com.keygenqt.mylibrary.data.models.ModelBookGenre
+import com.keygenqt.mylibrary.databinding.ItemSelectListBinding
 import com.keygenqt.mylibrary.extensions.showWithPadding
-import kotlinx.android.synthetic.main.item_select_list.view.description
-import kotlinx.android.synthetic.main.item_select_list.view.itemBlock
-import kotlinx.android.synthetic.main.item_select_list.view.radioButton
-import kotlinx.android.synthetic.main.item_select_list.view.title
 
 class AdapterCover(
     @LayoutRes layout: Int,
     var selectCover: String?,
     private val fb: FloatingActionButton,
-    private val recyclerView: RecyclerView
+    private val recyclerView: RecyclerView,
 ) : ListAdapter<String>(layout) {
 
     override fun onBindViewHolder(holder: View, model: Any) {
         if (model is String) {
-            holder.apply {
+            ItemSelectListBinding.bind(holder).apply {
                 title.text = model
                 description.visibility = View.GONE
                 itemBlock.setOnClickListener {

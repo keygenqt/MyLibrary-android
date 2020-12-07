@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -29,16 +31,16 @@ import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelBookGenre
 import com.keygenqt.mylibrary.data.relations.RelationBook
+import com.keygenqt.mylibrary.databinding.FragmentUpdateBookBinding
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
-import kotlinx.android.synthetic.main.fragment_update_book.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
+class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
 
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewUpdateBook by inject()
@@ -50,7 +52,6 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
     private var modelGenre: ModelBookGenre? = null
     private var modelCover: String? = null
 
-    // menu
     override fun onCreateOptionsMenu(): Int {
         return R.menu.menu_edit_book
     }
@@ -63,11 +64,14 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
         }
     }
 
-    // bind view
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentUpdateBookBinding {
+        return FragmentUpdateBookBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
 
         if (args.selfLink.isEmpty()) {
-            initToolbar {
+            toolbar {
                 title = getString(R.string.fragment_add_book_title)
             }
             viewModel.relation = RelationBook(model = ModelBook())
@@ -78,7 +82,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
             viewModel.selfLink.postValue(args.selfLink)
         }
 
-        initView {
+        bind {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
 
@@ -96,17 +100,17 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                 })
             }
             selectGenre.setOnClickListener {
-                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(modelGenre?.id ?: 0))
+                root.findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(modelGenre?.id ?: 0))
             }
             selectCover.setOnClickListener {
-                findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(modelCover))
+                root.findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(modelCover))
             }
         }
     }
 
     @OnCreateAfter
     fun observeSelectGenre() {
-        initView {
+        bind {
             observeSelectGenre.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled().let { model ->
                     model?.let {
@@ -125,7 +129,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     @OnCreateAfter
     fun observeSelectCover() {
-        initView {
+        bind {
             observeSelectCover.selected.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled().let { model ->
                     model?.let {
@@ -140,7 +144,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     @OnCreateAfter
     fun loading() {
-        initView {
+        bind {
             viewModel.loading.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(it)
@@ -151,7 +155,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     @OnCreateAfter
     fun updateCache() {
-        initView {
+        bind {
             viewModel.changeLink.observe(viewLifecycleOwner) { link ->
                 val model = viewModel.getModel(link)
                 statusProgressPage(model?.user == null || model.genre == null)
@@ -163,18 +167,18 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
     }
 
     @OnCreateAfter fun updateBook() {
-        initView {
+        bind {
             viewModel.updateBook.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(false)
                     if (args.selfLink.isEmpty()) {
                         Toast.makeText(activity, getString(R.string.update_book_added_successfully), Toast.LENGTH_SHORT).show()
                         observeUpdateBooks.update(true)
-                        findNavController().navigateUp()
+                        root.findNavController().navigateUp()
                     } else {
                         clearError()
                         scrollView.fullScroll(ScrollView.FOCUS_UP)
-                        this.hideKeyboard()
+                        root.hideKeyboard()
                         body.requestFocus()
                         Toast.makeText(activity, getString(R.string.update_book_updated_successfully), Toast.LENGTH_SHORT).show()
                     }
@@ -185,7 +189,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     @OnCreateAfter
     fun updateResponse() {
-        initView {
+        bind {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
                     statusProgressPage(false)
@@ -197,7 +201,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
 
     @OnCreateAfter
     fun validate() {
-        initView {
+        bind {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->
 
@@ -205,7 +209,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
                         is HttpException -> {
                             if (throwable.status == 404 || throwable.status == 400) {
                                 Toast.makeText(activity, getString(R.string.view_book_get_error), Toast.LENGTH_SHORT).show()
-                                findNavController().navigateUp()
+                                root.findNavController().navigateUp()
                             }
                         }
                         is ValidateException -> {
@@ -263,7 +267,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
     }
 
     private fun clearError() {
-        initView {
+        bind {
             textInputLayoutGenre.isErrorEnabled = false
             textInputLayoutCover.isErrorEnabled = false
             textInputLayoutTitle.isErrorEnabled = false
@@ -277,7 +281,7 @@ class FragmentUpdateBook : BaseFragment(R.layout.fragment_update_book) {
     }
 
     private fun updateView(relation: RelationBook) {
-        initView {
+        bind {
             modelGenre?.let {
                 textInputEditTextGenre.setText(it.title)
             } ?: run {

@@ -21,22 +21,26 @@ import android.content.Context
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_licenses.view.containerLicenses
-import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceDesc
-import kotlinx.android.synthetic.main.view_fragment_licenses_item.view.licenceTitle
+import com.keygenqt.mylibrary.databinding.FragmentLicensesBinding
+import com.keygenqt.mylibrary.databinding.ViewFragmentLicensesItemBinding
 import org.json.JSONArray
 import org.json.JSONObject
 
 @ActionBarEnable
-class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
+class FragmentLicenses : BaseFragment<FragmentLicensesBinding>() {
+
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentLicensesBinding {
+        return FragmentLicensesBinding.inflate(inflater, container, false)
+    }
 
     @SuppressLint("InflateParams")
     override fun onCreateView() {
-        initView {
+        bind {
             containerLicenses.removeAllViews()
 
             loadJsonArray(JSONArray().apply {
@@ -55,21 +59,21 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                 })
             })
 
-            val body = JSONObject(context.resources.assets.open("licenses.json").bufferedReader().use { it.readText() })
+            val body = JSONObject(root.context.resources.assets.open("licenses.json").bufferedReader().use { it.readText() })
 
             loadJsonArray(body.getJSONArray("libraries"))
         }
     }
 
     private fun loadJsonArray(licenses: JSONArray) {
-        initView {
+        bind {
             for (i in 0 until licenses.length()) {
                 val item = licenses.getJSONObject(i)
                 if (item.has("libraryName") && item.has("license") && item.has("licenseUrl")) {
-                    (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                    (root.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                         .inflate(R.layout.view_fragment_licenses_item, null)?.let { view ->
                             if (item.has("url")) {
-                                containerLicenses.addView(view.apply {
+                                containerLicenses.addView(ViewFragmentLicensesItemBinding.bind(view).apply {
                                     licenceTitle.text = item.getString("libraryName")
                                     licenceDesc.text = Html.fromHtml(
                                         getString(
@@ -87,9 +91,9 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                                         HtmlCompat.FROM_HTML_MODE_LEGACY
                                     )
                                     licenceDesc.movementMethod = LinkMovementMethod.getInstance()
-                                })
+                                }.root)
                             } else {
-                                containerLicenses.addView(view.apply {
+                                containerLicenses.addView(ViewFragmentLicensesItemBinding.bind(view).apply {
                                     licenceDesc.text = Html.fromHtml(
                                         getString(
                                             R.string.licenses_desc,
@@ -100,7 +104,7 @@ class FragmentLicenses : BaseFragment(R.layout.fragment_licenses) {
                                         HtmlCompat.FROM_HTML_MODE_LEGACY
                                     )
                                     licenceDesc.movementMethod = LinkMovementMethod.getInstance()
-                                })
+                                }.root)
                             }
                         }
                 }

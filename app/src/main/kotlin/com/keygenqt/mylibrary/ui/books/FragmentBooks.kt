@@ -16,31 +16,27 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.arlib.floatingsearchview.FloatingSearchView.*
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
+import com.arlib.floatingsearchview.FloatingSearchView
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.ActionBarSearchEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListSearchAdapter
+import com.keygenqt.mylibrary.databinding.CommonFragmentListBinding
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
-import kotlinx.android.synthetic.main.activity_main.floatingSearchView
-import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
-import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
-import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
-import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 @ActionBarSearchEnable
-class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
+class FragmentBooks : BaseFragment<CommonFragmentListBinding>() {
 
     private val viewModel: ViewBooks by inject()
 
@@ -48,7 +44,6 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     private var updateBooks = false
 
-    // menu
     override fun onCreateOptionsMenu(): Int {
         return R.menu.menu_main_page
     }
@@ -61,9 +56,12 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
         }
     }
 
-    // bind view
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): CommonFragmentListBinding {
+        return CommonFragmentListBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterBooks(R.layout.item_book_list) { next ->
                 statusProgress(next.isFirstPage())
@@ -86,7 +84,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                 findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBookAdd())
             }
 
-            activity?.floatingSearchView?.apply {
+            activity?.findViewById<FloatingSearchView>(R.id.floatingSearchView)?.apply {
                 setSearchText(viewModel.searchValue)
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
@@ -97,7 +95,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
                 }
                 setOnQueryChangeListener { _, newQuery ->
                     searchDelay {
-                        initView {
+                        bind {
                             (recyclerView.adapter as? ListSearchAdapter<*>)?.getLinkForUpdate()?.let {
                                 viewModel.updateSearch(it, if (newQuery.isNullOrEmpty()) null else newQuery)
                             }
@@ -110,7 +108,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     @OnCreateAfter
     fun observeUpdateBooks() {
-        initView {
+        bind {
             observeUpdateBooks.update.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     updateBooks = it
@@ -121,16 +119,12 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     @OnCreateAfter
     fun updateCache() {
-        initView {
+        bind {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
-                    if (viewModel.searchValue == null && links.self.isFirstPage()) {
-                        (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
-                            adapter.updateLinks(links).updateItems(viewModel.findItemsLimit(links.self, 10))
-                            viewModel.findSearch()?.let { search ->
-                                adapter.setSearchModel(search)
-                            }
-                        }
+                    (recyclerView.adapter as? ListSearchAdapter<*>)?.let { adapter ->
+                        adapter.updateLinks(links).updateItems(viewModel.findItemsLimit(links.self, 10))
+                        viewModel.findSearch()?.let { adapter.setSearchModel(it) }
                     }
                 }
             }
@@ -139,7 +133,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     @OnCreateAfter
     fun updateResponse() {
-        initView {
+        bind {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 if (updateBooks) {
                     updateBooks = false
@@ -158,7 +152,7 @@ class FragmentBooks : BaseFragment(R.layout.common_fragment_list) {
 
     @OnCreateAfter
     fun search() {
-        initView {
+        bind {
             viewModel.search.observe(viewLifecycleOwner) { search ->
                 (recyclerView.adapter as? ListSearchAdapter<*>)?.setSearchModel(search)
             }

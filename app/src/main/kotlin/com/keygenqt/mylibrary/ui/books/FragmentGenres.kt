@@ -16,7 +16,9 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -26,24 +28,25 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListAdapter
+import com.keygenqt.mylibrary.databinding.CommonFragmentListBinding
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
-import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
-import kotlinx.android.synthetic.main.common_fragment_list.view.notFound
-import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
-import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
+class FragmentGenres : BaseFragment<CommonFragmentListBinding>() {
 
     private val args: FragmentGenresArgs by navArgs()
     private val viewModel: ViewGenres by inject()
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): CommonFragmentListBinding {
+        return CommonFragmentListBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterGenres(R.layout.item_select_list, args.selectGenreId, commonFab, recyclerView) { next ->
                 viewModel.updateList(next)
@@ -59,14 +62,14 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
             }
             commonFab.setOnClickListener {
                 observeSelectGenre.select((recyclerView.adapter as AdapterGenres).getSelectItem())
-                findNavController().navigateUp()
+                root.findNavController().navigateUp()
             }
         }
     }
 
     @OnCreateAfter
     fun updateCache() {
-        initView {
+        bind {
             viewModel.changeLink.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { links ->
                     (recyclerView.adapter as? ListAdapter<*>)?.let { adapter ->
@@ -79,7 +82,7 @@ class FragmentGenres : BaseFragment(R.layout.common_fragment_list) {
 
     @OnCreateAfter
     fun updateResponse() {
-        initView {
+        bind {
             viewModel.linkSwitch.observe(viewLifecycleOwner) { links ->
                 (recyclerView.adapter as? ListAdapter<*>)?.let { adapter ->
                     adapter.updateLinks(links).updateItems(viewModel.findItems(adapter.getIds()))

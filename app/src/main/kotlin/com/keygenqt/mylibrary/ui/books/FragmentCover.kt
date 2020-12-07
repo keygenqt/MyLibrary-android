@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,23 +26,25 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.ListAdapter
+import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_OTHER
 import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_SOFT
 import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_SOLID
-import com.keygenqt.mylibrary.data.models.ModelBook.Companion.COVER_TYPE_OTHER
+import com.keygenqt.mylibrary.databinding.CommonFragmentListBinding
 import com.keygenqt.mylibrary.extensions.showWithPadding
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
-import kotlinx.android.synthetic.main.common_fragment_list.view.commonFab
-import kotlinx.android.synthetic.main.common_fragment_list.view.recyclerView
-import kotlinx.android.synthetic.main.common_fragment_list.view.refresh
 
 @ActionBarEnable
-class FragmentCover : BaseFragment(R.layout.common_fragment_list) {
+class FragmentCover : BaseFragment<CommonFragmentListBinding>() {
 
     private val args: FragmentCoverArgs by navArgs()
     private val observeSelectCover: ObserveSelectCover by activityViewModels()
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): CommonFragmentListBinding {
+        return CommonFragmentListBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
 
             refresh.isEnabled = false
 
@@ -52,7 +56,7 @@ class FragmentCover : BaseFragment(R.layout.common_fragment_list) {
             }
             commonFab.setOnClickListener {
                 observeSelectCover.select((recyclerView.adapter as AdapterCover).getSelectItem())
-                findNavController().navigateUp()
+                root.findNavController().navigateUp()
             }
 
             (recyclerView.adapter as ListAdapter<*>).updateItems(listOf(

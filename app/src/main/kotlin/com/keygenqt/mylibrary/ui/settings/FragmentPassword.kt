@@ -16,26 +16,32 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Toast
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
+import com.keygenqt.mylibrary.databinding.FragmentPasswordBinding
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
-import kotlinx.android.synthetic.main.fragment_password.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentPassword : BaseFragment(R.layout.fragment_password) {
+class FragmentPassword : BaseFragment<FragmentPasswordBinding>() {
 
     private val viewModel: ViewPassword by inject()
 
     class RequestPassword(var password: String, var rpassword: String)
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentPasswordBinding {
+        return FragmentPasswordBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
                 viewModel.params.postValue(LiveDataEvent(RequestPassword(
@@ -47,11 +53,11 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
     }
 
     @OnCreateAfter fun afterSubmit() {
-        initView {
+        bind {
             viewModel.password.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     clearError()
-                    this.hideKeyboard()
+                    root.hideKeyboard()
                     body.requestFocus()
                     textInputEditTextPassword.setText("")
                     textInputEditTextRPassword.setText("")
@@ -62,7 +68,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
     }
 
     @OnCreateAfter fun error() {
-        initView {
+        bind {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->
                     statusProgress(false)
@@ -90,7 +96,7 @@ class FragmentPassword : BaseFragment(R.layout.fragment_password) {
     }
 
     private fun clearError() {
-        initView {
+        bind {
             textInputLayoutPassword.isErrorEnabled = false
             textInputLayoutRPassword.isErrorEnabled = false
         }

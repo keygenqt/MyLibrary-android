@@ -21,16 +21,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.keygenqt.mylibrary.R
-import kotlinx.android.synthetic.main.view_avatar.view.imageViewAvatar
-import kotlinx.android.synthetic.main.view_avatar.view.textViewName
+import com.keygenqt.mylibrary.databinding.ViewAvatarBinding
 
 class DotIndicatorPagerAdapter(private val items: LinkedHashMap<Int, Int>) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(container.context).inflate(R.layout.view_avatar, container, false)
         items.keys.toList()[position].let { key ->
-            item.imageViewAvatar.setImageResource(key)
-            item.textViewName.text = container.resources.getString(items[key]!!)
+            ViewAvatarBinding.bind(item).apply {
+                imageViewAvatar.setImageResource(key)
+                textViewName.text = container.resources.getString(items[key]!!)
+            }
         }
         container.addView(item)
         return item

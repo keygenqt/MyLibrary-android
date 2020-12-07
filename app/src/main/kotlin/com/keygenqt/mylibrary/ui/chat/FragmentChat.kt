@@ -16,13 +16,20 @@
 
 package com.keygenqt.mylibrary.ui.chat
 
-import com.keygenqt.mylibrary.R
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.BottomNavigationEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.databinding.FragmentChatBinding
 
 @ActionBarEnable
 @BottomNavigationEnable
-class FragmentChat : BaseFragment(R.layout.fragment_chat) {
+class FragmentChat : BaseFragment<FragmentChatBinding>() {
+
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentChatBinding {
+        return FragmentChatBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {}
 }

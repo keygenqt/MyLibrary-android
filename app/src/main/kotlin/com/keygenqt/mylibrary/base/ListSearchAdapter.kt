@@ -25,14 +25,15 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView.*
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.R.*
 import com.keygenqt.mylibrary.data.models.ModelSearch
 import com.keygenqt.mylibrary.hal.Link
-import kotlinx.android.synthetic.main.item_search.view.*
 
 class AdapterHolderSearch(
     group: ViewGroup,
-    var view: View = LayoutInflater.from(group.context).inflate(layout.item_search, group, false)
+    var view: View = LayoutInflater.from(group.context).inflate(layout.item_search, group, false),
 ) : ViewHolder(view)
 
 abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, nextPage: ((Link) -> Unit)? = null) : ListAdapter<T>(layout, nextPage) {
@@ -45,29 +46,31 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, nextPage: ((Link) ->
     private fun bindView(view: View, model: ModelSearch) {
         view.apply {
             this@ListSearchAdapter.view = this
-            chipGroup.setOnCheckedChangeListener(null)
-            chipGroup.removeAllViews()
-            getStrings().forEach { string ->
-                model.links[string.key]?.let {
-                    setChip(string.key, view, context.getString(string.value), it)
+            this.findViewById<ChipGroup>(R.id.chipGroup)?.let { chipGroup ->
+                chipGroup.setOnCheckedChangeListener(null)
+                chipGroup.removeAllViews()
+                getStrings().forEach { string ->
+                    model.links[string.key]?.let {
+                        setChip(string.key, view, context.getString(string.value), it)
+                    }
                 }
-            }
 
-            // check first always
-            var isChecked = false
-            chipGroup.forEach {
-                if ((it as Chip).isChecked) {
-                    isChecked = true
-                    return@forEach
+                // check first always
+                var isChecked = false
+                chipGroup.forEach {
+                    if ((it as Chip).isChecked) {
+                        isChecked = true
+                        return@forEach
+                    }
                 }
-            }
-            if (!isChecked) {
-                (chipGroup.getChildAt(0) as? Chip)?.isChecked = true
-            }
+                if (!isChecked) {
+                    (chipGroup.getChildAt(0) as? Chip)?.isChecked = true
+                }
 
-            chipGroup.setOnCheckedChangeListener { _, viewId ->
-                val checkedKey = chipGroup.findViewById<Chip>(viewId).tag.toString()
-                nextPage?.invoke(model.links.getValue(checkedKey))
+                chipGroup.setOnCheckedChangeListener { _, viewId ->
+                    val checkedKey = chipGroup.findViewById<Chip>(viewId).tag.toString()
+                    nextPage?.invoke(model.links.getValue(checkedKey))
+                }
             }
         }
     }
@@ -133,7 +136,7 @@ abstract class ListSearchAdapter<T>(@LayoutRes layout: Int, nextPage: ((Link) ->
                     it.id = View.generateViewId()
                     it.tag = key
                     it.text = title
-                    chipGroup.addView(it)
+                    findViewById<ChipGroup>(R.id.chipGroup).addView(it)
                     linkSelf?.let { linkSelf ->
                         it.isChecked = linkSelf.linkClear.value == link.linkClear.value
                     }

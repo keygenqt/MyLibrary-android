@@ -16,24 +16,25 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager.*
-import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
+import com.keygenqt.mylibrary.databinding.FragmentJoinBinding
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.other.FragmentJoin.PARAMS.*
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
 import com.keygenqt.mylibrary.utils.AVATARS
-import kotlinx.android.synthetic.main.fragment_join.view.*
 import org.koin.android.ext.android.inject
 import java.util.Locale
 
 @ActionBarEnable
-class FragmentJoin : BaseFragment(R.layout.fragment_join) {
+class FragmentJoin : BaseFragment<FragmentJoinBinding>() {
 
     private val viewModel: ViewJoin by inject()
 
@@ -46,8 +47,12 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
         PASSWORD,
     }
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentJoinBinding {
+        return FragmentJoinBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
             dotsIndicator.setViewPager(viewPager.apply {
                 adapter = DotIndicatorPagerAdapter(AVATARS)
                 setPageTransformer(true, ZoomOutPageTransformer())
@@ -73,7 +78,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     }
 
     @OnCreateAfter fun afterSubmit() {
-        initView {
+        bind {
             viewModel.join.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     clearError()
@@ -84,7 +89,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     }
 
     @OnCreateAfter fun validate() {
-        initView {
+        bind {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->
                     statusProgress(false)
@@ -116,7 +121,7 @@ class FragmentJoin : BaseFragment(R.layout.fragment_join) {
     }
 
     private fun clearError() {
-        initView {
+        bind {
             textInputLayoutNickname.isErrorEnabled = false
             textInputLayoutEmail.isErrorEnabled = false
             textInputLayoutPassw.isErrorEnabled = false

@@ -24,8 +24,8 @@ import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.data.models.ModelBook
+import com.keygenqt.mylibrary.databinding.ItemBookListBinding
 import com.keygenqt.mylibrary.hal.Link
-import kotlinx.android.synthetic.main.item_book_list.view.*
 import org.koin.java.KoinJavaComponent.inject
 
 class AdapterBooks(@LayoutRes layout: Int, nextPage: (Link) -> Unit) : ListSearchAdapter<ModelBook>(layout, nextPage) {
@@ -48,19 +48,19 @@ class AdapterBooks(@LayoutRes layout: Int, nextPage: (Link) -> Unit) : ListSearc
 
     override fun onBindViewHolder(holder: View, model: Any) {
         if (model is ModelBook) {
-            holder.apply {
+            ItemBookListBinding.bind(holder).apply {
                 title.text = model.title
                 author.text = model.author
                 subtitle.text = model.description
 
-                Glide.with(this)
+                Glide.with(root)
                     .load(model.image)
                     .placeholder(preferences.resDefaultBook)
                     .error(preferences.resDefaultBook)
                     .into(imageBook)
 
                 itemBlock.setOnClickListener {
-                    findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBook(model.selfLink))
+                    root.findNavController().navigate(FragmentBooksDirections.actionFragmentBooksToFragmentBook(model.selfLink))
                 }
             }
         }

@@ -25,6 +25,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.keygenqt.mylibrary.R
+import com.keygenqt.mylibrary.databinding.CommonFragmentListBinding
 import com.keygenqt.mylibrary.ui.books.FragmentBooks
 import com.keygenqt.mylibrary.ui.chat.FragmentChat
 import com.keygenqt.mylibrary.ui.other.FragmentLogin
@@ -76,9 +77,9 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
         return super.onSupportNavigateUp()
     }
 
-    fun getCurrentFragment(): BaseFragment? {
+    fun getCurrentFragment(): BaseFragment<*>? {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let {
-            return it.childFragmentManager.fragments[0] as? BaseFragment
+            return it.childFragmentManager.fragments[0] as? BaseFragment<*>
         }
         return null
     }

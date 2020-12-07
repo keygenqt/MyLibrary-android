@@ -16,17 +16,18 @@
 
 package com.keygenqt.mylibrary.ui.activities
 
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseActivity
 import com.keygenqt.mylibrary.ui.books.FragmentBooks
 import com.keygenqt.mylibrary.ui.chat.FragmentChat
 import com.keygenqt.mylibrary.ui.other.FragmentLogin
-import kotlinx.android.synthetic.main.activity_main.bottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.toolbar
 
 class MainActivity : BaseActivity(R.layout.activity_main, R.navigation.nav_graph_app) {
+
     override fun onCreate() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -35,8 +36,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, R.navigation.nav_graph
                 R.id.FragmentChat
             )
         )
-        toolbar.setupWithNavController(controller, appBarConfiguration)
-        bottomNavigationView.setupWithNavController(controller)
+
+        findViewById<Toolbar>(R.id.toolbar).setupWithNavController(controller, appBarConfiguration)
+        findViewById<BottomNavigationView>(R.id.bottomNavigationView).setupWithNavController(controller)
     }
 
     override fun onBackPressed() {

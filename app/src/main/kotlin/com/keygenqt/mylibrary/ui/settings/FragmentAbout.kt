@@ -19,21 +19,24 @@ package com.keygenqt.mylibrary.ui.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockFeedback
-import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockLicenses
-import kotlinx.android.synthetic.main.fragment_about.view.settingsBlockRate
-import kotlinx.android.synthetic.main.fragment_about.view.settingsTextVersion
+import com.keygenqt.mylibrary.databinding.FragmentAboutBinding
 
 @ActionBarEnable
-class FragmentAbout : BaseFragment(R.layout.fragment_about) {
+class FragmentAbout : BaseFragment<FragmentAboutBinding>() {
+
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentAboutBinding {
+        return FragmentAboutBinding.inflate(inflater, container, false)
+    }
 
     override fun onCreateView() {
-        initView {
+        bind {
 
             settingsTextVersion.text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
 

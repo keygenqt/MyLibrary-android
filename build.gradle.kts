@@ -11,6 +11,7 @@ buildscript {
         classpath("org.jetbrains.dokka:dokka-gradle-plugin:${findProperty("dokka_version")}")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1")
         classpath("gradle.plugin.com.cookpad.android.plugin:plugin:1.2.5")
+        classpath("com.google.gms:google-services:4.3.4")
     }
 }
 

@@ -16,6 +16,8 @@
 
 package com.keygenqt.mylibrary.ui.settings
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager.*
 import com.keygenqt.mylibrary.R
@@ -23,22 +25,26 @@ import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
+import com.keygenqt.mylibrary.databinding.FragmentEditProfileBinding
 import com.keygenqt.mylibrary.extensions.hideKeyboard
 import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.settings.utils.DotIndicatorPagerAdapter
 import com.keygenqt.mylibrary.ui.settings.utils.ZoomOutPageTransformer
 import com.keygenqt.mylibrary.utils.AVATARS
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
+class FragmentEditProfile : BaseFragment<FragmentEditProfileBinding>() {
 
     private val viewModel: ViewEditProfile by inject()
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentEditProfileBinding {
+        return FragmentEditProfileBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
         statusProgress(true)
-        initView {
+        bind {
             dotsIndicator.setViewPager(viewPager.apply {
                 adapter = DotIndicatorPagerAdapter(AVATARS)
                 setPageTransformer(true, ZoomOutPageTransformer())
@@ -65,12 +71,12 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     }
 
     @OnCreateAfter fun observeUpdate() {
-        initView {
+        bind {
             viewModel.updateUser.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
                     statusProgress(false)
                     clearError()
-                    this.hideKeyboard()
+                    root.hideKeyboard()
                     body.requestFocus()
                     Toast.makeText(activity, getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
                 }
@@ -79,7 +85,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     }
 
     @OnCreateAfter fun observeUserMe() {
-        initView {
+        bind {
             viewModel.userMe.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { model ->
                     statusProgress(viewModel.user == null)
@@ -94,7 +100,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     }
 
     @OnCreateAfter fun observeError() {
-        initView {
+        bind {
             viewModel.error.observe(viewLifecycleOwner, { event ->
                 event?.peekContentHandled()?.let { throwable ->
 
@@ -131,7 +137,7 @@ class FragmentEditProfile : BaseFragment(R.layout.fragment_edit_profile) {
     }
 
     private fun clearError() {
-        initView {
+        bind {
             textInputLayoutNickname.isErrorEnabled = false
             textInputLayoutWebsite.isErrorEnabled = false
             textInputLayoutLocation.isErrorEnabled = false

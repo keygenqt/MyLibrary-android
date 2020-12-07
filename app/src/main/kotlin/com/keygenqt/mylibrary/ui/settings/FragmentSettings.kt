@@ -17,21 +17,26 @@
 package com.keygenqt.mylibrary.ui.settings
 
 import android.app.AlertDialog
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import kotlinx.android.synthetic.main.fragment_settings.view.*
+import com.keygenqt.mylibrary.databinding.FragmentSettingsBinding
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
-class FragmentSettings : BaseFragment(R.layout.fragment_settings) {
+class FragmentSettings : BaseFragment<FragmentSettingsBinding>() {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
 
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsBinding {
+        return FragmentSettingsBinding.inflate(inflater, container, false)
+    }
+
     override fun onCreateView() {
-        initView {
+        bind {
             settingsBlockAppearance.setOnClickListener {
                 findNavController().navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAppearance())
             }

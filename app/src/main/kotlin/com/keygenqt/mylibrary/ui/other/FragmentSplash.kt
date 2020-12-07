@@ -18,21 +18,27 @@ package com.keygenqt.mylibrary.ui.other
 
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
-import kotlinx.android.synthetic.main.fragment_splash.view.progressBarSplash
+import com.keygenqt.mylibrary.databinding.FragmentSplashBinding
 import org.koin.android.ext.android.inject
 import java.net.ConnectException
 import java.util.Locale
 
-class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
+class FragmentSplash : BaseFragment<FragmentSplashBinding>() {
 
     private val viewModel: ViewSplash by inject()
     private val preferences: BaseSharedPreferences by inject()
+
+    override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentSplashBinding {
+        return FragmentSplashBinding.inflate(inflater, container, false)
+    }
 
     override fun onCreateView() {
 
@@ -76,16 +82,16 @@ class FragmentSplash : BaseFragment(R.layout.fragment_splash) {
 
     @OnCreateAfter
     fun error() {
-        viewModel.error.observe(viewLifecycleOwner, { event ->
-            event?.peekContentHandled()?.let { throwable ->
-                when (throwable) {
-                    is ConnectException -> {
-                        initView {
+        bind {
+            viewModel.error.observe(viewLifecycleOwner, { event ->
+                event?.peekContentHandled()?.let { throwable ->
+                    when (throwable) {
+                        is ConnectException -> {
                             progressBarSplash.visibility = View.GONE
                         }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 }
