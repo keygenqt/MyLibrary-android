@@ -18,25 +18,39 @@ package com.keygenqt.mylibrary.data.services
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.keygenqt.mylibrary.base.BaseExceptionHandler
 import com.keygenqt.mylibrary.base.BaseQuery
-import com.keygenqt.mylibrary.data.RoomDatabase
-import com.keygenqt.mylibrary.data.dao.ModelRootDao
-import com.keygenqt.mylibrary.data.dao.ModelUserDao
-import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.db.DbServiceOther
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
-import com.keygenqt.mylibrary.hal.API_KEY_JOIN
-import com.keygenqt.mylibrary.hal.API_KEY_LOGIN
-import com.keygenqt.mylibrary.hal.API_KEY_PASSWORD
-import com.keygenqt.mylibrary.utils.API_VERSION
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ServiceOther(
     val layer: DbServiceOther,
-    private val query: BaseQuery
+    private val query: BaseQuery,
 ) {
+
+    fun registerMessage(token: String, response: () -> Unit) {
+        GlobalScope.launch(BaseExceptionHandler.getExceptionHandler()) {
+            if (layer.preferences.tokenMessage == token) {
+                response.invoke()
+            } else {
+                withContext(Dispatchers.IO) {
+                    query.putAsync<Void>(this, layer.getUrlMessageToken().value,
+                        JsonObject().apply {
+                            addProperty("token", token)
+                        }
+                    ).await().let {
+                        layer.preferences.tokenMessage = token
+                        response.invoke()
+                    }
+                }
+            }
+        }
+    }
 
     suspend fun getUserMe(link: String, response: suspend (ModelUser) -> Unit) {
         layer.getModelUserDao().let { dao ->
@@ -61,7 +75,7 @@ class ServiceOther(
     suspend fun login(
         email: String,
         password: String,
-        response: suspend (ModelUser) -> Unit
+        response: suspend (ModelUser) -> Unit,
     ) {
         withContext(Dispatchers.IO) {
             query.postAsync<ModelUser>(this, layer.getUrlLogin().value,
@@ -82,7 +96,7 @@ class ServiceOther(
         nickname: String,
         email: String,
         password: String,
-        response: suspend (ModelUser) -> Unit
+        response: suspend (ModelUser) -> Unit,
     ) {
         withContext(Dispatchers.IO) {
             query.postAsync<ModelUser>(this, layer.getUrlJoin().value,
@@ -103,7 +117,7 @@ class ServiceOther(
     suspend fun password(
         password: String,
         rpassword: String,
-        response: suspend (Boolean) -> Unit
+        response: suspend (Boolean) -> Unit,
     ) {
         withContext(Dispatchers.IO) {
             query.postAsync<ModelUser>(this, layer.getUrlPassword().value,
@@ -120,7 +134,7 @@ class ServiceOther(
     suspend fun updateUser(
         link: String,
         model: ModelUser,
-        response: suspend () -> Unit
+        response: suspend () -> Unit,
     ) {
         withContext(Dispatchers.IO) {
             query.putAsync<ModelUser>(this, link, Gson().toJsonTree(model).asJsonObject).await().let {

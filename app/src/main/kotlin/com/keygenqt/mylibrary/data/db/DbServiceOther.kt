@@ -21,15 +21,12 @@ import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.ModelRootDao
 import com.keygenqt.mylibrary.data.dao.ModelUserDao
 import com.keygenqt.mylibrary.data.models.ModelUser
-import com.keygenqt.mylibrary.hal.API_KEY_JOIN
-import com.keygenqt.mylibrary.hal.API_KEY_LOGIN
-import com.keygenqt.mylibrary.hal.API_KEY_PASSWORD
-import com.keygenqt.mylibrary.hal.Link
+import com.keygenqt.mylibrary.hal.*
 import com.keygenqt.mylibrary.utils.API_VERSION
 
 class DbServiceOther(
     val db: RoomDatabase,
-    val preferences: BaseSharedPreferences
+    val preferences: BaseSharedPreferences,
 ) {
     fun userId(): Long? {
         return preferences.userId
@@ -50,6 +47,10 @@ class DbServiceOther(
 
     fun getModelRootDao(): ModelRootDao {
         return db.getDao()
+    }
+
+    fun getUrlMessageToken(): Link {
+        return getModelRootDao().findModel(API_VERSION).getLink(API_KEY_MESSAGE_TOKEN)
     }
 
     fun getUrlUser(): Link {

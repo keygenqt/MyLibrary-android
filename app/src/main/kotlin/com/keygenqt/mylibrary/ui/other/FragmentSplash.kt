@@ -50,14 +50,11 @@ class FragmentSplash : BaseFragment<FragmentSplashBinding>() {
 
         val defaultInit = {
             Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.links.observe(viewLifecycleOwner, { event1 ->
-                    event1?.peekContentHandled()?.let {
-                        viewModel.userMe.observe(viewLifecycleOwner, { event2 ->
-                            event2?.peekContentHandled()?.let {
-                                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
-                            }
-                        })
-                    }
+                viewModel.links.observe(viewLifecycleOwner, {
+                    viewModel.registerMessage()
+                    viewModel.userMe.observe(viewLifecycleOwner, {
+                        findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
+                    })
                 })
             }, 1000)
         }

@@ -29,8 +29,7 @@ import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.awaitResponse
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class BaseQuery(val api: BaseApi) {
 
@@ -48,10 +47,13 @@ class BaseQuery(val api: BaseApi) {
         }
     }
 
-    inline fun <reified T> putAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject = JsonObject()): Deferred<T> {
-        return coroutineScope.async<T> {
+    inline fun <reified T> putAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject = JsonObject()): Deferred<T?> {
+        return coroutineScope.async<T?> {
             val body = api.put(link, params).awaitResponse().checkResponse()
-            Gson().fromJson(body, T::class.java)
+            if (T::class != Void::class) {
+                Gson().fromJson(body, T::class.java)
+            }
+            null
         }
     }
 

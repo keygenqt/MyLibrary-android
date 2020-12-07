@@ -16,15 +16,17 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
+import com.keygenqt.mylibrary.base.BaseFirebaseMessaging
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.models.ModelRoot
 import com.keygenqt.mylibrary.data.models.ModelUser
-import com.keygenqt.mylibrary.data.db.DbServiceOther
 import com.keygenqt.mylibrary.data.services.ServiceOther
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -35,12 +37,6 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
     lateinit var modelRoot: ModelRoot
 
     val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
-
-    val userMe = liveData(getExceptionHandler()) {
-        service.getUserMe(modelRoot.links[ModelUser.API_KEY]?.value!!) { user ->
-            emit(LiveDataEvent(user))
-        }
-    }
 
     val links = liveData(getExceptionHandler(error)) {
         service.getRootLinks { links ->
@@ -53,7 +49,23 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
                     message = "Access is denied",
                 )
             }
-            emit(LiveDataEvent(links))
+            emit(links)
+        }
+    }
+
+    val userMe = links.switchMap {
+        liveData(getExceptionHandler()) {
+            service.getUserMe(modelRoot.links[ModelUser.API_KEY]?.value!!) { user ->
+                emit(user)
+            }
+        }
+    }
+
+    fun registerMessage() {
+        BaseFirebaseMessaging.getToken { token ->
+            service.registerMessage(token) {
+                Log.d("ViewSplash", "Refreshed token: $token")
+            }
         }
     }
 }

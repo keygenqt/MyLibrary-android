@@ -1,5 +1,6 @@
 <!DOCTYPE resources [<!ENTITY spaces "\u0020\u0020\u0020\u0020\u0020">]>
 <resources>
+
   <string name="app_name">MyLibrary</string>
 
   // fragment titles

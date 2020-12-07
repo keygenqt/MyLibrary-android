@@ -77,17 +77,19 @@ class ServiceBooks(
     suspend fun updateBook(link: String, model: ModelBook, response: suspend () -> Unit) {
         withContext(Dispatchers.IO) {
             query.putAsync<ModelBook>(this, link, Gson().toJsonTree(model).asJsonObject).await().let { model ->
-                val relationBook = RelationBook(
-                    model = model,
-                    genre = model.links[ModelBook.API_KEY_GENRE]?.let { link ->
-                        query.getAsync<ModelBookGenre>(this, link.value).await()
-                    },
-                    user = model.links[ModelBook.API_KEY_USER]?.let { link ->
-                        query.getAsync<ModelBookUser>(this, link.value).await()
-                    },
-                )
-                layer.saveBook(relationBook)
-                response.invoke()
+                model?.let {
+                    val relationBook = RelationBook(
+                        model = model,
+                        genre = model.links[ModelBook.API_KEY_GENRE]?.let { link ->
+                            query.getAsync<ModelBookGenre>(this, link.value).await()
+                        },
+                        user = model.links[ModelBook.API_KEY_USER]?.let { link ->
+                            query.getAsync<ModelBookUser>(this, link.value).await()
+                        },
+                    )
+                    layer.saveBook(relationBook)
+                    response.invoke()
+                }
             }
         }
     }
