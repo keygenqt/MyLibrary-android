@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.dokka")
     id("com.cookpad.android.plugin.license-tools")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 tasks.dokkaHtml.configure {
@@ -66,6 +67,7 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:26.1.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 }
 
 // action bar search

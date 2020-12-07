@@ -24,16 +24,18 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.keygenqt.mylibrary.R
-import com.keygenqt.mylibrary.databinding.CommonFragmentListBinding
-import com.keygenqt.mylibrary.ui.books.FragmentBooks
-import com.keygenqt.mylibrary.ui.chat.FragmentChat
-import com.keygenqt.mylibrary.ui.other.FragmentLogin
 import org.koin.android.ext.android.inject
 
 abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val graphId: Int) : AppCompatActivity() {
 
     private val sharedPreferences: BaseSharedPreferences by inject()
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     lateinit var controller: NavController
 
@@ -41,8 +43,19 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
 
     abstract fun onCreate()
 
+    private val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.ITEM_NAME, when (val title = destination.label.toString()) {
+                "{title}" -> "Book View"
+                else -> title
+            })
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        firebaseAnalytics = Firebase.analytics
 
         when {
             sharedPreferences.darkTheme -> {
@@ -82,5 +95,15 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
             return it.childFragmentManager.fragments[0] as? BaseFragment<*>
         }
         return null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        controller.addOnDestinationChangedListener(listener)
+    }
+
+    override fun onPause() {
+        controller.removeOnDestinationChangedListener(listener)
+        super.onPause()
     }
 }
