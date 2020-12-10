@@ -24,7 +24,11 @@ class BaseFirebaseMessaging : FirebaseMessagingService() {
         fun getToken(delegate: (String) -> Unit) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Log.e("BaseFirebaseMessaging", "Fetching FCM registration token failed", task.exception)
+                    Log.e(
+                        "BaseFirebaseMessaging",
+                        "Fetching FCM registration token failed",
+                        task.exception
+                    )
                     return@OnCompleteListener
                 } else {
                     delegate.invoke(task.result.toString())
@@ -34,33 +38,36 @@ class BaseFirebaseMessaging : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        remoteMessage.notification?.body?.let {
-            sendNotification(it)
+        remoteMessage.notification?.let {
+            sendNotification(it.channelId ?: "channelId", it.title ?: "", it.body ?: "")
         }
     }
 
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(channelId: String, title: String, messageBody: String) {
+
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 
-        val channelId = "default_notification_channel_id"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_baseline_local_library)
-            .setContentTitle(getString(R.string.app_name))
+            .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
+            val channel = NotificationChannel(
+                channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 

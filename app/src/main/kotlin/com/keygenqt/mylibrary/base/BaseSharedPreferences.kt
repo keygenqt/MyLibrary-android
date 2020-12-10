@@ -59,18 +59,6 @@ class BaseSharedPreferences(private val preferences: SharedPreferences) {
             }
         }
 
-    var tokenMessage: String?
-        get() {
-            return preferences.getString("tokenMessage", null)
-        }
-        set(value) {
-            if (value == null) {
-                preferences.edit().remove("tokenMessage").apply()
-            } else {
-                preferences.edit().putString("tokenMessage", value).apply()
-            }
-        }
-
     var darkTheme: Boolean
         get() {
             return preferences.getBoolean("darkTheme", false)

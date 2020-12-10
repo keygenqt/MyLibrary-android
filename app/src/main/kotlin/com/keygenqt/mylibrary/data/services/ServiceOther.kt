@@ -35,18 +35,13 @@ class ServiceOther(
 
     fun registerMessage(token: String, response: () -> Unit) {
         GlobalScope.launch(BaseExceptionHandler.getExceptionHandler()) {
-            if (layer.preferences.tokenMessage == token) {
-                response.invoke()
-            } else {
-                withContext(Dispatchers.IO) {
-                    query.putAsync<Void>(this, layer.getUrlMessageToken().value,
-                        JsonObject().apply {
-                            addProperty("token", token)
-                        }
-                    ).await().let {
-                        layer.preferences.tokenMessage = token
-                        response.invoke()
+            withContext(Dispatchers.IO) {
+                query.putAsync<Void>(this, layer.getUrlMessageToken().value,
+                    JsonObject().apply {
+                        addProperty("token", token)
                     }
+                ).await().let {
+                    response.invoke()
                 }
             }
         }

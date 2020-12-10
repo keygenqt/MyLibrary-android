@@ -17,10 +17,13 @@
 package com.keygenqt.mylibrary.base
 
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.LayoutRes
 import androidx.annotation.NavigationRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
@@ -79,6 +82,13 @@ abstract class BaseActivity(@LayoutRes val contentId: Int, @NavigationRes val gr
 
         controller = findNavController(R.id.nav_host_fragment)
         controller.setGraph(graphId)
+
+//        intent.action?.let {
+//            if (it.contains("https")) {
+//                Log.e("fuck", it)
+//                controller.navigate(NavDeepLinkRequest.Builder.fromUri(it.toUri()).build())
+//            }
+//        }
 
         setupActionBarWithNavController(controller)
 

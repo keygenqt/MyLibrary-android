@@ -51,7 +51,6 @@ class FragmentSplash : BaseFragment<FragmentSplashBinding>() {
         val defaultInit = {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModel.links.observe(viewLifecycleOwner, {
-                    viewModel.registerMessage()
                     viewModel.userMe.observe(viewLifecycleOwner, {
                         findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
                     })
@@ -66,10 +65,6 @@ class FragmentSplash : BaseFragment<FragmentSplashBinding>() {
             }
             requireActivity().intent.hasExtra("changeTheme") -> {
                 findNavController().createDeepLink().setDestination(R.id.FragmentAppearance).createPendingIntent().send()
-
-                // @todo example deep link
-                // val request = NavDeepLinkRequest.Builder.fromUri("app://myapp/frag3".toUri()).build()
-                // findNavController().navigate(request)
             }
             else -> defaultInit.invoke()
         }

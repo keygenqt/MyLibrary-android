@@ -56,12 +56,13 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
     val userMe = links.switchMap {
         liveData(getExceptionHandler()) {
             service.getUserMe(modelRoot.links[ModelUser.API_KEY]?.value!!) { user ->
+                registerMessage()
                 emit(user)
             }
         }
     }
 
-    fun registerMessage() {
+    private fun registerMessage() {
         BaseFirebaseMessaging.getToken { token ->
             service.registerMessage(token) {
                 Log.d("ViewSplash", "Refreshed token: $token")

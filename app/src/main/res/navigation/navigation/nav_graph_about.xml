@@ -22,6 +22,7 @@
       tools:layout="@layout/fragment_licenses">
     <deepLink
         android:id="@+id/deepLink"
+        android:autoVerify="true"
         app:uri="https://keygenqt.com/licenses" />
   </fragment>
 
