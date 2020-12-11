@@ -45,6 +45,10 @@ class ViewBook(private val service: ServiceBooks) : ViewModel() {
         return service.layer.findBookByLink(link)
     }
 
+    fun getLinkViewBook(id: String): String {
+        return service.layer.getLinkViewBook(id).value
+    }
+
     val changeLink = selfLink.switchMap { link ->
         liveData(BaseExceptionHandler.getExceptionHandler()) {
             emit(Link(link))

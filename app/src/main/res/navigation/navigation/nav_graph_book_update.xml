@@ -11,8 +11,8 @@
       android:label="@string/fragment_update_book_title"
       tools:layout="@layout/fragment_update_book">
     <argument
-        android:defaultValue=""
         android:name="selfLink"
+        android:defaultValue=""
         app:argType="string" />
     <action
         android:id="@+id/action_FragmentEditBook_to_FragmentGenres"

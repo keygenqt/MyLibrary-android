@@ -18,16 +18,22 @@ package com.keygenqt.mylibrary.ui.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.navigation.NavController
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.databinding.FragmentLicensesBinding
 import com.keygenqt.mylibrary.databinding.ViewFragmentLicensesItemBinding
+import com.keygenqt.mylibrary.ui.books.FragmentBooksDirections
+import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -36,6 +42,14 @@ class FragmentLicenses : BaseFragment<FragmentLicensesBinding>() {
 
     override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentLicensesBinding {
         return FragmentLicensesBinding.inflate(inflater, container, false)
+    }
+
+    @UpStack
+    fun stack(uri: Uri, nav: NavController) {
+        Log.e("kkk", uri.toString())
+        nav.navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
+        nav.navigate(FragmentBooksDirections.actionFragmentBooksToFragmentSettings())
+        nav.navigate(FragmentSettingsDirections.actionFragmentSettingsToFragmentAbout())
     }
 
     @SuppressLint("InflateParams")

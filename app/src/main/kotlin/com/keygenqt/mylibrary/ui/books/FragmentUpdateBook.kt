@@ -16,11 +16,14 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.keygenqt.mylibrary.R
@@ -37,12 +40,13 @@ import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
+import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
 
-    private val args: FragmentBookArgs by navArgs()
+    private val args: FragmentUpdateBookArgs by navArgs()
     private val viewModel: ViewUpdateBook by inject()
 
     private val observeSelectGenre: ObserveSelectGenre by activityViewModels()

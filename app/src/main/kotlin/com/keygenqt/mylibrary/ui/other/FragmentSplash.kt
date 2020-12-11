@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -23,10 +24,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseFragment
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.databinding.FragmentSplashBinding
+import com.keygenqt.mylibrary.extensions.navigateUri
 import org.koin.android.ext.android.inject
 import java.net.ConnectException
 import java.util.Locale
@@ -34,6 +37,7 @@ import java.util.Locale
 class FragmentSplash : BaseFragment<FragmentSplashBinding>() {
 
     private val viewModel: ViewSplash by inject()
+    private val args: FragmentSplashArgs by navArgs()
     private val preferences: BaseSharedPreferences by inject()
 
     override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentSplashBinding {
@@ -52,21 +56,34 @@ class FragmentSplash : BaseFragment<FragmentSplashBinding>() {
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModel.links.observe(viewLifecycleOwner, {
                     viewModel.userMe.observe(viewLifecycleOwner, {
-                        findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
+                        activity?.intent?.let { intent ->
+                            if (intent.action == "android.intent.action.DEEP_LINK") {
+                                // open if bg notification
+                                findNavController().navigateUri(requireContext(), intent)
+                            } else {
+                                findNavController().navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
+                            }
+                        }
                     })
                 })
             }, 1000)
         }
 
-        when {
-            preferences.locale != Locale.getDefault().toLanguageTag() -> defaultInit.invoke()
-            requireActivity().intent.hasExtra("code") -> {
-
+        when (val intent = activity?.intent) {
+            is Intent -> {
+                when {
+                    !args.uri.isNullOrEmpty() -> {
+                        // open if not foreground notification
+                        findNavController().navigateUri(requireContext(), args.uri!!)
+                    }
+                    intent.hasExtra("changeTheme") -> {
+                        findNavController().createDeepLink().setDestination(R.id.FragmentAppearance).createPendingIntent().send()
+                    }
+                    else -> {
+                        defaultInit.invoke()
+                    }
+                }
             }
-            requireActivity().intent.hasExtra("changeTheme") -> {
-                findNavController().createDeepLink().setDestination(R.id.FragmentAppearance).createPendingIntent().send()
-            }
-            else -> defaultInit.invoke()
         }
 
         preferences.locale = Locale.getDefault().toLanguageTag()

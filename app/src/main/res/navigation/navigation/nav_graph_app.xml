@@ -5,11 +5,15 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/FragmentSplash">
 
-
   <fragment
       android:id="@+id/FragmentSplash"
       android:name="com.keygenqt.mylibrary.ui.other.FragmentSplash"
       tools:layout="@layout/fragment_splash">
+    <argument
+        android:name="uri"
+        android:defaultValue=""
+        app:argType="string"
+        app:nullable="true" />
     <action
         android:id="@+id/action_FragmentSplash_to_UserApp"
         app:destination="@id/userApp" />
@@ -62,10 +66,10 @@
           app:destination="@id/FragmentBook" />
       <action
           android:id="@+id/action_FragmentBooks_to_FragmentBookAdd"
-          app:destination="@id/nav_graph_book_update" >
+          app:destination="@id/nav_graph_book_update">
         <argument
-            android:defaultValue=""
             android:name="selfLink"
+            android:defaultValue=""
             app:argType="string" />
       </action>
     </fragment>
@@ -74,28 +78,36 @@
         android:id="@+id/FragmentChat"
         android:name="com.keygenqt.mylibrary.ui.chat.FragmentChat"
         android:label="@string/fragment_chat_title"
-        tools:layout="@layout/common_fragment_list"/>
+        tools:layout="@layout/common_fragment_list" />
 
     <fragment
         android:id="@+id/FragmentBook"
         android:name="com.keygenqt.mylibrary.ui.books.FragmentBook"
-        android:label="{title}"
         tools:layout="@layout/fragment_book">
       <argument
           android:name="selfLink"
-          app:argType="string" />
+          android:defaultValue="@null"
+          app:argType="string"
+          app:nullable="true" />
       <argument
-          android:name="title"
-          android:defaultValue=""
-          app:argType="string" />
+          android:name="id"
+          android:defaultValue="@null"
+          app:argType="string"
+          app:nullable="true" />
       <action
           android:id="@+id/action_FragmentBook_to_FragmentEditBook"
           app:destination="@id/nav_graph_book_update">
         <argument
-            android:defaultValue=""
             android:name="selfLink"
+            android:defaultValue=""
             app:argType="string" />
       </action>
+
+      <deepLink
+          android:id="@+id/deepLinkBook"
+          android:autoVerify="true"
+          app:action="android.intent.action.DEEP_LINK"
+          app:uri="@string/link_book" />
     </fragment>
 
     <include app:graph="@navigation/nav_graph_settings" />

@@ -20,10 +20,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -36,6 +38,7 @@ import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.databinding.FragmentBookBinding
+import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
@@ -81,12 +84,23 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
         return FragmentBookBinding.inflate(inflater, container, false)
     }
 
+    @UpStack
+    fun stack(uri: Uri, nav: NavController) {
+        nav.navigate(FragmentSplashDirections.actionFragmentSplashToUserApp())
+    }
+
     override fun onCreateView() {
         bind {
 
             // start page
             if (viewModel.selfLink.value == null) {
-                viewModel.selfLink.postValue(args.selfLink)
+                Log.e("kkk", args.toString())
+
+                args.id?.let {
+                    viewModel.selfLink.postValue(viewModel.getLinkViewBook(it))
+                } ?: run {
+                    viewModel.selfLink.postValue(args.selfLink)
+                }
             }
 
             refresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))

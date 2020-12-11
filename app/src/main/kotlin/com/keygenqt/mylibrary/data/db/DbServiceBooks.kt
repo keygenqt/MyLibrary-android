@@ -16,7 +16,6 @@
 
 package com.keygenqt.mylibrary.data.db
 
-import android.util.Log
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.data.RoomDatabase
 import com.keygenqt.mylibrary.data.dao.*
@@ -29,10 +28,16 @@ import com.keygenqt.mylibrary.utils.API_VERSION
 
 class DbServiceBooks(
     val db: RoomDatabase,
-    val preferences: BaseSharedPreferences
+    val preferences: BaseSharedPreferences,
 ) {
     fun userId(): Long? {
         return preferences.userId
+    }
+
+    fun getLinkViewBook(id: String): Link {
+        return Link(
+            db.getDao<ModelRootDao>().findModel(API_VERSION).getLink(ModelBook.API_KEY).value + "/$id"
+        )
     }
 
     fun getRootLink(path: String = ""): Link {

@@ -44,6 +44,7 @@ import kotlin.reflect.full.findAnnotation
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
     annotation class OnCreateAfter
+    annotation class UpStack
 
     private val preferences: BaseSharedPreferences by inject()
 

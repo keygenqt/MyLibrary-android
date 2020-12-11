@@ -21,9 +21,10 @@
       android:label="@string/fragment_licenses_title"
       tools:layout="@layout/fragment_licenses">
     <deepLink
-        android:id="@+id/deepLink"
+        android:id="@+id/deepLinkLicenses"
         android:autoVerify="true"
-        app:uri="https://keygenqt.com/licenses" />
+        app:action="android.intent.action.DEEP_LINK"
+        app:uri="@string/link_licenses" />
   </fragment>
 
 </navigation>

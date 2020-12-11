@@ -1,0 +1,5 @@
+<!DOCTYPE resources [<!ENTITY spaces "\u0020\u0020\u0020\u0020\u0020">]>
+<resources>
+  <string name="link_licenses" translatable="false">http://192.168.1.68:8080/licenses</string>
+  <string name="link_book" translatable="false">http://192.168.1.68:8080/books/{id}</string>
+</resources>
