@@ -20,6 +20,9 @@ import com.keygenqt.mylibrary.R
 class BaseFirebaseMessaging : FirebaseMessagingService() {
 
     companion object {
+
+        private var ID: Int = 1
+
         fun getToken(delegate: (String) -> Unit) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -45,6 +48,24 @@ class BaseFirebaseMessaging : FirebaseMessagingService() {
     private fun sendNotification(channelId: String, title: String, messageBody: String, uri: String?) {
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val pendingIntent = NavDeepLinkBuilder(this)
+            .setGraph(R.navigation.nav_graph_app)
+            .setDestination(R.id.FragmentSplash)
+            .setArguments(Bundle().apply {
+                uri?.let {
+                    putString("uri", uri)
+                }
+            })
+            .createPendingIntent()
+
+        val groupBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_baseline_local_library)
+            .setContentTitle(title)
+            .setContentText(messageBody)
+            .setAutoCancel(true)
+            .setGroup(channelId)
+            .setGroupSummary(true)
+            .setContentIntent(pendingIntent)
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_baseline_local_library)
@@ -52,15 +73,8 @@ class BaseFirebaseMessaging : FirebaseMessagingService() {
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
-            .setContentIntent(NavDeepLinkBuilder(this)
-                .setGraph(R.navigation.nav_graph_app)
-                .setDestination(R.id.FragmentSplash)
-                .setArguments(Bundle().apply {
-                    uri?.let {
-                        putString("uri", uri)
-                    }
-                })
-                .createPendingIntent())
+            .setGroup(channelId)
+            .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -69,6 +83,8 @@ class BaseFirebaseMessaging : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build())
+        notificationManager.notify(0, groupBuilder.build())
+        notificationManager.notify(ID, notificationBuilder.build())
+        ID++
     }
 }
