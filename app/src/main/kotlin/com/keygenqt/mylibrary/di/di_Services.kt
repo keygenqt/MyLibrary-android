@@ -21,6 +21,6 @@ import com.keygenqt.mylibrary.data.services.ServiceOther
 import org.koin.dsl.module
 
 val moduleService = module {
-    factory { ServiceBooks(get(), get()) }
-    factory { ServiceOther(get(), get()) }
+    single { ServiceBooks(get(), get()) }
+    single { ServiceOther(get(), get()) }
 }

@@ -29,7 +29,7 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 val moduleRetrofit = module {
-    factory { provideRetrofit(get()) }
+    single { provideRetrofit(get()) }
     single { provideService(provideApi(get())) }
 }
 

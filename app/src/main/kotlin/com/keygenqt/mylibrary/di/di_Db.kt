@@ -27,6 +27,6 @@ import com.keygenqt.mylibrary.ui.settings.ViewPassword
 import org.koin.dsl.module
 
 val moduleDb = module {
-    factory { DbServiceBooks(get(), get()) }
-    factory { DbServiceOther(get(), get()) }
+    single { DbServiceBooks(get(), get()) }
+    single { DbServiceOther(get(), get()) }
 }
