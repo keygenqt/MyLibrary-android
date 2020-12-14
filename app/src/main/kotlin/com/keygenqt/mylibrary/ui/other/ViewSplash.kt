@@ -44,7 +44,7 @@ class ViewSplash(private val service: ServiceOther) : ViewModel() {
             if (links.role == ModelRoot.API_ROLE_ANONYMOUS) {
                 throw HttpException(
                     datetime = SimpleDateFormat("d MMM yyyy", Locale.US).format(Date()),
-                    status = 403,
+                    status = 401,
                     error = "Access is denied",
                     message = "Access is denied",
                 )

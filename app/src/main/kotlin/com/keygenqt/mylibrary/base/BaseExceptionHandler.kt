@@ -34,6 +34,8 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
 
     companion object {
 
+        const val UNAUTHORIZED = 401
+
         private val error: MutableLiveData<LiveDataEvent<Throwable>> = MutableLiveData()
 
         fun getExceptionHandler(delegate: (LiveDataEvent<Throwable>) -> Unit): CoroutineExceptionHandler {
@@ -62,7 +64,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                         if (throwable.status == 405) {
                             Toast.makeText(activity, "Method Not Allowed", Toast.LENGTH_SHORT).show()
                         }
-                        if (throwable.status == 403) {
+                        if (throwable.status == UNAUTHORIZED) {
                             sharedPreferences.token = null
                             error.removeObservers(activity as LifecycleOwner)
                             activity.findNavController(R.id.nav_host_fragment)
