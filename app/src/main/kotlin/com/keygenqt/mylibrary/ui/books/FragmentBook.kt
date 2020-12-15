@@ -20,7 +20,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -94,8 +93,6 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
 
             // start page
             if (viewModel.selfLink.value == null) {
-                Log.e("kkk", args.toString())
-
                 args.id?.let {
                     viewModel.selfLink.postValue(viewModel.getLinkViewBook(it))
                 } ?: run {
@@ -223,6 +220,8 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
 
                 bookSynopsisBlock.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
                 bookSynopsis.text = model.description
+
+                buttonMessage.visibility = if (model.sale) View.VISIBLE else View.GONE
             }
             relation.genre?.let { genre ->
                 bookGenre.text = getString(R.string.view_book_genre, genre.title)
