@@ -21,6 +21,7 @@ allprojects {
         google()
         jcenter()
         maven("https://artifactory.keygenqt.com/artifactory/open-source")
+        maven("https://jitpack.io")
     }
 }
 

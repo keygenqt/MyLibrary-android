@@ -44,117 +44,150 @@
           android:orientation="vertical"
           >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <com.google.android.material.textfield.TextInputLayout
-              android:id="@+id/textInputLayoutGenre"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/update_book_genre"
-              app:errorIconDrawable="@null"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditTextGenre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:cursorVisible="false"
-                android:inputType="textPersonName"
-                android:paddingEnd="58dp"
-                tools:ignore="RtlSymmetry"
-                />
-
-          </com.google.android.material.textfield.TextInputLayout>
-
-          <ImageView
-              android:id="@+id/textInputIconGenre"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="18dp"
-              android:layout_marginEnd="16dp"
-              android:src="@drawable/ic_baseline_navigate_next"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              tools:ignore="ContentDescription"
-              />
-
-          <View
-              android:id="@+id/selectGenre"
-              android:layout_width="0dp"
-              android:layout_height="0dp"
-              android:background="?android:selectableItemBackground"
-              android:clickable="true"
-              android:focusable="true"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding"
+            android:layout_height="match_parent"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
             >
 
-          <com.google.android.material.textfield.TextInputLayout
-              android:id="@+id/textInputLayoutCover"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/update_book_cover"
-              app:errorIconDrawable="@null"
-              app:layout_constraintEnd_toEndOf="parent"
+          <com.makeramen.roundedimageview.RoundedImageView
+              android:id="@+id/imageBook"
+              android:layout_width="90dp"
+              android:layout_height="140dp"
+              android:layout_marginEnd="15dp"
+              android:adjustViewBounds="true"
+              android:background="?attr/colorBackgroundListItem"
+              android:scaleType="fitXY"
+              android:src="@drawable/img_default_book"
+              app:layout_constraintEnd_toStartOf="@+id/constraintLayoutGenre"
               app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:riv_corner_radius="5dp"
+              android:visibility="gone"
+              />
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/constraintLayoutGenre"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toEndOf="@+id/imageBook"
               app:layout_constraintTop_toTopOf="parent"
               >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditTextCover"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutGenre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:cursorVisible="false"
-                android:inputType="textPersonName"
-                android:paddingEnd="58dp"
-                tools:ignore="RtlSymmetry"
+                android:hint="@string/update_book_genre"
+                app:errorIconDrawable="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+              <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/textInputEditTextGenre"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:cursorVisible="false"
+                  android:inputType="textPersonName"
+                  android:paddingEnd="58dp"
+                  tools:ignore="RtlSymmetry"
+                  />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/textInputIconGenre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_baseline_navigate_next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"
                 />
 
-          </com.google.android.material.textfield.TextInputLayout>
+            <View
+                android:id="@+id/selectGenre"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
-          <ImageView
-              android:id="@+id/textInputIconCover"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="18dp"
-              android:layout_marginEnd="16dp"
-              android:src="@drawable/ic_baseline_navigate_next"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              tools:ignore="ContentDescription"
-              />
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
-          <View
-              android:id="@+id/selectCover"
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/constraintLayoutCover"
               android:layout_width="0dp"
-              android:layout_height="0dp"
-              android:background="?android:selectableItemBackground"
-              android:clickable="true"
-              android:focusable="true"
-              app:layout_constraintBottom_toBottomOf="parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/padding"
               app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              />
+              app:layout_constraintStart_toStartOf="@+id/constraintLayoutGenre"
+              app:layout_constraintTop_toBottomOf="@+id/constraintLayoutGenre"
+              >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutCover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/update_book_cover"
+                app:errorIconDrawable="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+              <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/textInputEditTextCover"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:cursorVisible="false"
+                  android:inputType="textPersonName"
+                  android:paddingEnd="58dp"
+                  tools:ignore="RtlSymmetry"
+                  />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/textInputIconCover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_baseline_navigate_next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"
+                />
+
+            <View
+                android:id="@+id/selectCover"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutTitle"

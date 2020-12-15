@@ -63,6 +63,15 @@ android {
     }
 }
 
+dependencies {
+    implementation("gun0912.ted:tedpermission:2.2.3")
+}
+
+dependencies {
+    // @todo deprecated android 11
+    implementation("com.droidninja:filepicker:2.2.5")
+}
+
 // firebase
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:26.1.1"))

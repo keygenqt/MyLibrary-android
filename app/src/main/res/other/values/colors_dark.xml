@@ -1,8 +1,8 @@
 <resources>
 
   <style name="DayNight.AppThemeColors" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-    <item name="gradientStart">#361C88</item>
-    <item name="gradientEnd">#3687DD</item>
+    <item name="gradientStart">#1ca2fb</item>
+    <item name="gradientEnd">#1ad6c3</item>
     <item name="colorText">#FFFFFF</item>
     <item name="colorTextLite">#EDEDED</item>
     <item name="colorTextLink">#0892CA</item>
@@ -18,7 +18,7 @@
     <item name="colorChipEnable">#DCEBF7</item>
     <item name="colorChipDisable">#414F59</item>
     <item name="colorChipText">#222222</item>
-    <item name="colorActionMenu">#A6FFFFFF</item>
+    <item name="colorActionMenu">#A6000000</item>
   </style>
 
 </resources>

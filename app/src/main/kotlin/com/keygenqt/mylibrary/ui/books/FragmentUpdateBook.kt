@@ -16,19 +16,22 @@
 
 package com.keygenqt.mylibrary.ui.books
 
-import android.content.Intent
-import android.net.Uri
+import android.Manifest
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import com.keygenqt.mylibrary.data.models.ModelBook
@@ -40,12 +43,18 @@ import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
-import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
+import droidninja.filepicker.FilePickerBuilder
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
 
+    companion object {
+        const val REQUEST_CODE = 1
+        const val FILE_PICKER_REQUEST_CODE = 2
+    }
+
+    private val preferences: BaseSharedPreferences by inject()
     private val args: FragmentUpdateBookArgs by navArgs()
     private val viewModel: ViewUpdateBook by inject()
 
@@ -63,7 +72,20 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
     override fun onOptionsItemSelected(id: Int) {
         when (id) {
             R.id.action_take_photo -> {
-                Toast.makeText(activity, R.string.page_coming_soon, Toast.LENGTH_SHORT).show()
+                TedPermission.with(context)
+                    .setPermissionListener(object : PermissionListener {
+                        override fun onPermissionGranted() {
+                            FilePickerBuilder.instance
+                                .setActivityTitle("Take photo...")
+                                .setActivityTheme(R.style.LibAppTheme)
+                                .setMaxCount(1)
+                                .pickPhoto(activity!!)
+                        }
+
+                        override fun onPermissionDenied(deniedPermissions: List<String>) {}
+                    })
+                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .check()
             }
         }
     }
@@ -293,6 +315,16 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
                 textInputEditTextGenre.setText(relation.genre?.title)
             }
             relation.model.let { model ->
+
+                if (!model.image.isNullOrEmpty()) {
+                    imageBook.visibility = View.VISIBLE
+                    Glide.with(root)
+                        .load(model.image)
+                        .placeholder(preferences.resDefaultBook)
+                        .error(preferences.resDefaultBook)
+                        .into(imageBook)
+                }
+
                 modelCover?.let {
                     textInputEditTextCover.setText(modelCover)
                 } ?: run {
