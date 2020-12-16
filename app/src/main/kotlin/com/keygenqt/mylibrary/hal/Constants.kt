@@ -17,6 +17,7 @@
 package com.keygenqt.mylibrary.hal
 
 const val API_KEY_MESSAGE_TOKEN = "message-token"
+const val API_KEY_UPLOAD_IMAGE = "upload-image"
 const val API_KEY_LOGIN = "login"
 const val API_KEY_JOIN = "join"
 const val API_KEY_PASSWORD = "password"

@@ -17,6 +17,7 @@
 package com.keygenqt.mylibrary.ui.books
 
 import android.Manifest
+import android.media.ThumbnailUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,16 +44,12 @@ import com.keygenqt.mylibrary.extensions.requestFocusTextInputLayoutError
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectCover
 import com.keygenqt.mylibrary.ui.observes.ObserveSelectGenre
 import com.keygenqt.mylibrary.ui.observes.ObserveUpdateBooks
-import droidninja.filepicker.FilePickerBuilder
+import com.keygenqt.mylibrary.utils.API_IMAGE_BOOK_HEIGHT
+import com.keygenqt.mylibrary.utils.API_IMAGE_BOOK_WIDTH
 import org.koin.android.ext.android.inject
 
 @ActionBarEnable
 class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
-
-    companion object {
-        const val REQUEST_CODE = 1
-        const val FILE_PICKER_REQUEST_CODE = 2
-    }
 
     private val preferences: BaseSharedPreferences by inject()
     private val args: FragmentUpdateBookArgs by navArgs()
@@ -69,25 +66,41 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
         return R.menu.menu_edit_book
     }
 
+    // menu actions
     override fun onOptionsItemSelected(id: Int) {
-        when (id) {
-            R.id.action_take_photo -> {
-                TedPermission.with(context)
-                    .setPermissionListener(object : PermissionListener {
-                        override fun onPermissionGranted() {
-                            FilePickerBuilder.instance
-                                .setActivityTitle("Take photo...")
-                                .setActivityTheme(R.style.LibAppTheme)
-                                .setMaxCount(1)
-                                .pickPhoto(activity!!)
+        TedPermission.with(context)
+            .setPermissionListener(object : PermissionListener {
+                override fun onPermissionGranted() {
+                    when (id) {
+                        R.id.action_take_photo -> {
+                            takePhoto { bitmap ->
+                                bitmap?.let {
+                                    statusProgress(true)
+                                    viewModel.uploadImage(ThumbnailUtils.extractThumbnail(bitmap, API_IMAGE_BOOK_WIDTH, API_IMAGE_BOOK_HEIGHT))
+                                } ?: run {
+                                    Toast.makeText(activity, getString(R.string.failed_try_later), Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
+                        R.id.action_take_image -> {
+                            takeImage { bitmap ->
+                                bitmap?.let {
+                                    statusProgress(true)
+                                    viewModel.uploadImage(ThumbnailUtils.extractThumbnail(bitmap, API_IMAGE_BOOK_WIDTH, API_IMAGE_BOOK_HEIGHT))
+                                } ?: run {
+                                    Toast.makeText(activity, getString(R.string.failed_try_later), Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                }
 
-                        override fun onPermissionDenied(deniedPermissions: List<String>) {}
-                    })
-                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .check()
-            }
-        }
+                override fun onPermissionDenied(deniedPermissions: List<String>) {
+
+                }
+            })
+            .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .check()
     }
 
     override fun onCreateBind(inflater: LayoutInflater, container: ViewGroup?): FragmentUpdateBookBinding {
@@ -111,7 +124,6 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
         bind {
             buttonSubmit.setOnClickListener {
                 statusProgress(true)
-
                 viewModel.params.postValue(viewModel.relation?.model?.apply {
                     genreId = modelGenre?.id ?: 0L
                     coverType = textInputEditTextCover.text.toString()
@@ -126,10 +138,34 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
                 })
             }
             selectGenre.setOnClickListener {
-                root.findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(modelGenre?.id ?: 0))
+                root.findNavController().navigate(
+                    FragmentUpdateBookDirections.actionFragmentEditBookToFragmentGenres(
+                        modelGenre?.id ?: 0
+                    )
+                )
             }
             selectCover.setOnClickListener {
-                root.findNavController().navigate(FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(modelCover))
+                root.findNavController().navigate(
+                    FragmentUpdateBookDirections.actionFragmentEditBookToFragmentCover(
+                        modelCover
+                    )
+                )
+            }
+        }
+    }
+
+    @OnCreateAfter
+    fun observeSelectImage() {
+        bind {
+            viewModel.imageLink.observe(viewLifecycleOwner) { link ->
+                statusProgress(false)
+                viewModel.relation?.model?.image = link
+                imageBook.visibility = View.VISIBLE
+                Glide.with(root)
+                    .load(link)
+                    .placeholder(preferences.resDefaultBook)
+                    .error(preferences.resDefaultBook)
+                    .into(imageBook)
             }
         }
     }
@@ -307,6 +343,7 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
     }
 
     private fun updateView(relation: RelationBook) {
+
         bind {
             modelGenre?.let {
                 textInputEditTextGenre.setText(it.title)

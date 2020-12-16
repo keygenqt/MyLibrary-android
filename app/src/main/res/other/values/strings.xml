@@ -34,6 +34,7 @@
   <string name="page_main_bottom_menu_item_chat">Chat</string>
   <string name="button_submit">Submit</string>
   <string name="profile_updated_successfully">Profile updated successfully</string>
+  <string name="failed_try_later">Failed. Try later</string>
   <string name="language_app_update">App language has been updated</string>
 
   // login

@@ -20,6 +20,9 @@ import com.keygenqt.mylibrary.R
 
 const val API_VERSION = "1.0.0"
 
+const val API_IMAGE_BOOK_WIDTH = 800
+const val API_IMAGE_BOOK_HEIGHT = 1200
+
 val AVATARS = linkedMapOf(
     R.drawable.avatar_0 to R.string.avatar_0,
     R.drawable.avatar_1 to R.string.avatar_1,

@@ -5,4 +5,9 @@
         android:icon="@drawable/ic_baseline_camera_alt"
         android:title="@string/update_book_take_photo"
         app:showAsAction="ifRoom" />
+    <item
+        android:title="@string/update_book_take_photo"
+        android:icon="@drawable/ic_baseline_image"
+        android:id="@+id/action_take_image"
+        app:showAsAction="ifRoom" />
 </menu>

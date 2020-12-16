@@ -52,20 +52,4 @@
     <item name="floatingSearch_menuItemIconColor">?attr/colorTextItem</item>
   </style>
 
-  <!-- Colors FilePickerBuilder start -->
-  <!-- @todo deprecated android 11 -->
-  <style name="LibAppTheme" parent="@style/Light.AppThemeColors">
-    <item name="toolbarStyle">@style/ToolbarTheme</item>
-    <item name="android:textColorSecondary">@color/colorWhite</item>
-    <item name="android:toolbarStyle">@color/colorAccent</item>
-  </style>
-
-  <style name="ToolbarTheme" parent="Widget.MaterialComponents.Toolbar.Primary">
-    <item name="android:background">@drawable/common_background_action_bar</item>
-  </style>
-
-  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    <item name="android:textColorPrimary">@android:color/white</item>
-  </style>
-
 </resources>

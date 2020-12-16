@@ -16,6 +16,7 @@
 
 package com.keygenqt.mylibrary.ui.books
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -27,12 +28,15 @@ import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
 import com.keygenqt.mylibrary.hal.Link
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
 
     var relation: RelationBook? = null
 
+    val imageLink: MutableLiveData<String> = MutableLiveData()
     val selfLink: MutableLiveData<String> = MutableLiveData()
     val loading: MutableLiveData<LiveDataEvent<Boolean>> = MutableLiveData()
     val params: MutableLiveData<ModelBook> = MutableLiveData()
@@ -70,6 +74,14 @@ class ViewUpdateBook(private val service: ServiceBooks) : ViewModel() {
                 service.addBook(book) {
                     emit(LiveDataEvent(true))
                 }
+            }
+        }
+    }
+
+    fun uploadImage(bitmap: Bitmap) {
+        GlobalScope.launch(BaseExceptionHandler.getExceptionHandler()) {
+            service.uploadImage(bitmap) { link ->
+                imageLink.postValue(link)
             }
         }
     }

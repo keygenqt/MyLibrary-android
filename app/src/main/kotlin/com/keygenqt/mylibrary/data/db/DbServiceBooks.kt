@@ -23,6 +23,7 @@ import com.keygenqt.mylibrary.data.hal.ListDataModelBook
 import com.keygenqt.mylibrary.data.hal.ListDataModelBookGenre
 import com.keygenqt.mylibrary.data.models.*
 import com.keygenqt.mylibrary.data.relations.RelationBook
+import com.keygenqt.mylibrary.hal.API_KEY_UPLOAD_IMAGE
 import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.utils.API_VERSION
 
@@ -48,6 +49,10 @@ class DbServiceBooks(
 
     fun getGenresLink(): Link {
         return db.getDao<ModelRootDao>().findModel(API_VERSION).getLink(ModelBookGenre.API_KEY)
+    }
+
+    fun getUploadImageLink(): Link {
+        return db.getDao<ModelRootDao>().findModel(API_VERSION).getLink(API_KEY_UPLOAD_IMAGE)
     }
 
     fun findSearch(): ModelSearch? {

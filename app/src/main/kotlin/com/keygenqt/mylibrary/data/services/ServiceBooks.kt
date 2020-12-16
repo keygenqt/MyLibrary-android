@@ -16,6 +16,9 @@
 
 package com.keygenqt.mylibrary.data.services
 
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat.*
+import android.util.Log
 import com.google.gson.Gson
 import com.keygenqt.mylibrary.base.BaseQuery
 import com.keygenqt.mylibrary.data.db.DbServiceBooks
@@ -31,11 +34,32 @@ import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ResponseSuccessful
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
 
 class ServiceBooks(
     val layer: DbServiceBooks,
     private val query: BaseQuery
 ) {
+
+    suspend fun uploadImage(bitmap: Bitmap, response: suspend (String) -> Unit) {
+        withContext(Dispatchers.IO) {
+
+            // to bite array
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(PNG, 100, stream)
+            val byteArray = stream.toByteArray()
+            val body = byteArray.toRequestBody("image/png".toMediaTypeOrNull(), 0, byteArray.size)
+            bitmap.recycle()
+
+            query.postRequestBody<ResponseSuccessful>(this, layer.getUploadImageLink().value, body).await().let { success ->
+                response.invoke(success.message)
+            }
+        }
+    }
 
     suspend fun getSearch(key: String = ModelBook.API_KEY, response: suspend (ModelSearch) -> Unit) {
         withContext(Dispatchers.IO) {

@@ -48,17 +48,12 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewBook by inject()
 
-    private var menu: Menu? = null
-
     override fun isSpawnAnimation(): Boolean {
         return viewModel.relation == null
     }
 
-    // menu
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        this.menu = menu
-        inflater.inflate(R.menu.menu_book_page, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onCreateOptionsMenu(): Int {
+        return R.menu.menu_book_page
     }
 
     override fun onOptionsItemSelected(id: Int) {

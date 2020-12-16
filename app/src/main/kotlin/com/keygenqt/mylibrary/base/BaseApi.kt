@@ -18,6 +18,7 @@ package com.keygenqt.mylibrary.base
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -27,6 +28,9 @@ interface BaseApi {
 
     @POST
     fun post(@Url link: String, @Body fields: JsonObject): Call<JsonElement>
+
+    @POST
+    fun postRequestBody(@Url link: String, @Body bites: RequestBody): Call<JsonElement>
 
     @PUT
     fun put(@Url link: String, @Body fields: JsonObject): Call<JsonElement>

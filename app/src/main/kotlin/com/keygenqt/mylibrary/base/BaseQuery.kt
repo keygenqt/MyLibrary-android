@@ -24,6 +24,7 @@ import com.keygenqt.mylibrary.base.exceptions.ValidateException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
@@ -47,11 +48,18 @@ class BaseQuery(val api: BaseApi) {
         }
     }
 
+    inline fun <reified T> postRequestBody(coroutineScope: CoroutineScope, link: String, byteArray: RequestBody): Deferred<T> {
+        return coroutineScope.async<T> {
+            val body = api.postRequestBody(link, byteArray).awaitResponse().checkResponse()
+            Gson().fromJson(body, T::class.java)
+        }
+    }
+
     inline fun <reified T> putAsync(coroutineScope: CoroutineScope, link: String, params: JsonObject = JsonObject()): Deferred<T?> {
         return coroutineScope.async<T?> {
             val body = api.put(link, params).awaitResponse().checkResponse()
             if (T::class != Void::class) {
-                Gson().fromJson(body, T::class.java)
+                return@async Gson().fromJson(body, T::class.java)
             }
             null
         }

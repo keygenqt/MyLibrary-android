@@ -16,11 +16,18 @@
 
 package com.keygenqt.mylibrary.base
 
+import android.app.Activity.*
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color.*
+import android.graphics.ImageDecoder
 import android.icu.lang.UCharacter.GraphemeClusterBreak.*
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
@@ -43,8 +50,15 @@ import kotlin.reflect.full.findAnnotation
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
+    companion object {
+        const val REQUEST_IMAGE_CAPTURE = 1
+        const val REQUEST_PICK_IMAGE = 2
+    }
+
     annotation class OnCreateAfter
     annotation class UpStack
+
+    protected var menu: Menu? = null
 
     private val preferences: BaseSharedPreferences by inject()
 
@@ -178,6 +192,7 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     open fun onOptionsItemSelected(id: Int) {}
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        this.menu = menu
         onCreateOptionsMenu()?.let { id ->
             inflater.inflate(id, menu)
             super.onCreateOptionsMenu(menu, inflater)
@@ -187,5 +202,50 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onOptionsItemSelected(item.itemId)
         return true
+    }
+
+    var listenerPhoto: (Bitmap?) -> Unit = {}
+    var listenerImage: (Bitmap?) -> Unit = {}
+
+    fun takePhoto(listener: (Bitmap?) -> Unit) {
+        listenerPhoto = listener
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        } catch (e: ActivityNotFoundException) {
+            listener.invoke(null)
+        }
+    }
+
+    fun takeImage(listener: (Bitmap?) -> Unit) {
+        listenerImage = listener
+        val takePictureIntent = Intent(Intent.ACTION_GET_CONTENT)
+        try {
+            takePictureIntent.type = "image/*"
+            startActivityForResult(Intent.createChooser(takePictureIntent, "Select Image"), REQUEST_PICK_IMAGE)
+        } catch (e: ActivityNotFoundException) {
+            listener.invoke(null)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            listenerPhoto.invoke(data?.extras?.get("data") as Bitmap?)
+        }
+        if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
+            val selectedPhotoUri = data?.data
+            try {
+                selectedPhotoUri?.let {
+                    if (Build.VERSION.SDK_INT < 28) {
+                        listenerImage.invoke(MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedPhotoUri))
+                    } else {
+                        val source = ImageDecoder.createSource(requireActivity().contentResolver, selectedPhotoUri)
+                        listenerImage.invoke(ImageDecoder.decodeBitmap(source))
+                    }
+                }
+            } catch (e: Exception) {
+                listenerImage.invoke(null)
+            }
+        }
     }
 }
