@@ -23,7 +23,6 @@
 
   // common
   <string name="filter_view_example_gizmos">filter_view_example_gizmos</string>
-
   <string name="list_not_found">Ничего не найдено</string>
   <string name="exit_info">Для выхода кликните еще раз</string>
   <string name="page_main_bottom_menu_item_my_library">MyLibrary</string>
@@ -31,6 +30,11 @@
   <string name="button_submit">Отправить</string>
   <string name="profile_updated_successfully">Профайл обновлен успешно</string>
   <string name="language_app_update">Язык приложения был обновлен</string>
+  <string name="common_search">Поиск</string>
+  <string name="common_action_voice">Голос</string>
+  <string name="common_action_menu">Меню</string>
+  <string name="failed_try_later">Не удалось. Попробуй позже.</string>
+  <string name="common_subject">Привет %s!</string>
 
   // login
   <string name="login_email">Мыло</string>
@@ -70,6 +74,24 @@
   <string name="view_book_get_error">Книга не доступна</string>
   <string name="view_book_type_soft">Мягкая</string>
   <string name="view_book_type_solid">Твердая</string>
+
+  // update book
+  <string name="update_book_genre">Жанр</string>
+  <string name="update_book_cover">Обложка</string>
+  <string name="update_book_title">Заглавие</string>
+  <string name="update_book_author">Автор</string>
+  <string name="update_book_description">Описание</string>
+  <string name="update_book_publisher">Издатель</string>
+  <string name="update_book_year">Год</string>
+  <string name="update_book_ISBN">ISBN</string>
+  <string name="update_book_numberOfPages">Количество страниц</string>
+  <string name="update_book_updated_successfully">Книга успешно обновлена</string>
+  <string name="update_book_added_successfully">Книга успешно добавлена</string>
+  <string name="update_book_select_genre_done">Готово</string>
+  <string name="update_book_take_photo">Фото</string>
+  <string name="update_book_take_image">Изображение</string>
+  <string name="update_book_swap">Обмен книг</string>
+  <string name="update_book_swap_desc">Предоставляет возможность показать свое желание обменяться этой книгой с другими участниками</string>
 
   // settings
   <string name="settings_title">Настройки</string>

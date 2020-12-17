@@ -24,18 +24,18 @@
 
   // common
   <string name="filter_view_example_gizmos">filter_view_example_gizmos</string>
-  <string name="common_search">Search</string>
-  <string name="common_action_voice">Voice</string>
-  <string name="common_action_menu">Menu</string>
-
   <string name="list_not_found">Nothing found</string>
   <string name="exit_info">Please click back again to exit</string>
   <string name="page_main_bottom_menu_item_my_library">MyLibrary</string>
   <string name="page_main_bottom_menu_item_chat">Chat</string>
   <string name="button_submit">Submit</string>
   <string name="profile_updated_successfully">Profile updated successfully</string>
-  <string name="failed_try_later">Failed. Try later</string>
   <string name="language_app_update">App language has been updated</string>
+  <string name="common_search">Search</string>
+  <string name="common_action_voice">Voice</string>
+  <string name="common_action_menu">Menu</string>
+  <string name="failed_try_later">Failed. Try later</string>
+  <string name="common_subject">Hello %s!</string>
 
   // login
   <string name="login_email">Email</string>
@@ -89,8 +89,8 @@
   <string name="update_book_updated_successfully">Book updated successfully</string>
   <string name="update_book_added_successfully">Book added successfully</string>
   <string name="update_book_select_genre_done">Done</string>
-  <string name="update_book_take_photo">Take Photo</string>
-  <string name="update_book_take_image">Take Image</string>
+  <string name="update_book_take_photo">Photo</string>
+  <string name="update_book_take_image">Image</string>
   <string name="update_book_swap">Book Swap</string>
   <string name="update_book_swap_desc">Provides an opportunity to show your desire to exchange this book with other members</string>
 

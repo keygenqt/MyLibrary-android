@@ -20,7 +20,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
@@ -47,6 +49,7 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
     private val preferences: BaseSharedPreferences by inject()
     private val args: FragmentBookArgs by navArgs()
     private val viewModel: ViewBook by inject()
+    private var userNickname: String? = null
 
     override fun isSpawnAnimation(): Boolean {
         return viewModel.relation == null
@@ -107,7 +110,8 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
                 viewModel.relation?.let {
                     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                         data = Uri.parse("mailto:${it.user?.email}")
-                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_feedback_subject))
+                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.common_subject, userNickname ?: ""))
+                        putExtra(Intent.EXTRA_TEXT, "\n\n\nMyLibrary\nBook: ${viewModel.selfLink.value}")
                         addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     }
                     startActivity(Intent.createChooser(emailIntent, "Send from MyLibrary"))
@@ -216,13 +220,16 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
                 bookSynopsisBlock.visibility = if (model.description.isNullOrEmpty()) View.GONE else View.VISIBLE
                 bookSynopsis.text = model.description
 
-                buttonMessage.visibility = if (model.sale) View.VISIBLE else View.GONE
+                buttonMessage.visibility = if (model.sale && model.userId != preferences.userId) View.VISIBLE else View.GONE
             }
             relation.genre?.let { genre ->
                 bookGenre.text = getString(R.string.view_book_genre, genre.title)
                 bookGenreDesc.text = genre.description
             }
             relation.user?.let { user ->
+
+                userNickname = user.nickname
+
                 Glide.with(root)
                     .load(if (user.image.isNullOrEmpty()) user.avatarRes else user.image)
                     .placeholder(preferences.resDefaultUser)
