@@ -22,6 +22,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.base.BaseModel
 import com.keygenqt.mylibrary.hal.API_KEY_SELF
@@ -32,9 +33,6 @@ data class ModelBook(
     @PrimaryKey
     @SerializedName("id")
     var id: Long = 0,
-
-    @SerializedName("image")
-    var image: String? = null,
 
     @SerializedName("title")
     var title: String? = null,
@@ -73,6 +71,16 @@ data class ModelBook(
     var userId: Long = 0
 
 ) : BaseModel() {
+
+    @SerializedName("image")
+    var image: String? = null
+    get() {
+        // temporary
+        if (BuildConfig.DEBUG) {
+            return field?.replace("https://mylibraryapp.com/", "http://192.168.1.68:8080/")
+        }
+        return field
+    }
 
     override fun baseId(): Long {
         return id

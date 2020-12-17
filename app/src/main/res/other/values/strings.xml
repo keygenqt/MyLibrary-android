@@ -19,8 +19,8 @@
   <string name="fragment_settings_title">Settings</string>
 
   // test credentials
-  <string name="user_email">user@gmail.com</string>
-  <string name="user_passw">12345</string>
+  <string name="user_email" translatable="false">dev@keygenqt.com</string>
+  <string name="user_passw" translatable="false">12345</string>
 
   // common
   <string name="filter_view_example_gizmos">filter_view_example_gizmos</string>

@@ -23,14 +23,15 @@ import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler.Companion.getExceptionHandler
 import com.keygenqt.mylibrary.base.ListLinks
 import com.keygenqt.mylibrary.base.LiveDataEvent
-import com.keygenqt.mylibrary.data.models.ModelBook
 import com.keygenqt.mylibrary.data.models.ModelListGenre
 import com.keygenqt.mylibrary.data.services.ServiceBooks
 import com.keygenqt.mylibrary.hal.Link
+import java.util.Locale
 
 class ViewGenres(private val service: ServiceBooks) : ViewModel() {
 
-    private val linkList: MutableLiveData<Link> = MutableLiveData(service.layer.getGenresLink())
+    private val linkList: MutableLiveData<Link> =
+        MutableLiveData(service.layer.getGenresLink().linkWithParams(hashMapOf("language" to Locale.getDefault().toLanguageTag())))
 
     val changeLink = linkList.switchMap { link ->
         liveData(getExceptionHandler()) {
