@@ -18,6 +18,8 @@ package com.keygenqt.mylibrary.ui.books
 
 import android.Manifest
 import android.media.ThumbnailUtils
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +63,7 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
 
     private var modelGenre: ModelBookGenre? = null
     private var modelCover: String? = null
+    private var imageLink: String? = null
 
     override fun onCreateOptionsMenu(): Int {
         return R.menu.menu_edit_book
@@ -126,6 +129,7 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
                 statusProgress(true)
                 viewModel.params.postValue(viewModel.relation?.model?.apply {
                     genreId = modelGenre?.id ?: 0L
+                    image = imageLink
                     coverType = textInputEditTextCover.text.toString()
                     title = textInputEditTextTitle.text.toString()
                     author = textInputEditTextAuthor.text.toString()
@@ -158,14 +162,16 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
     fun observeSelectImage() {
         bind {
             viewModel.imageLink.observe(viewLifecycleOwner) { link ->
+                imageLink = link
                 statusProgress(false)
-                viewModel.relation?.model?.image = link
                 imageBook.visibility = View.VISIBLE
+                imageBookError.visibility = View.GONE
                 Glide.with(root)
                     .load(link)
                     .placeholder(preferences.resDefaultBook)
                     .error(preferences.resDefaultBook)
                     .into(imageBook)
+
             }
         }
     }
@@ -262,6 +268,34 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
     }
 
     @OnCreateAfter
+    fun validateImage() {
+        bind {
+            viewModel.error.observe(viewLifecycleOwner, { event ->
+                if (imageLink == null)
+                    event?.peekContent()?.let { throwable ->
+                        when (throwable) {
+                            is ValidateException -> {
+                                throwable.errors.forEach {
+                                    when (it.field) {
+                                        "image" -> {
+                                            if (throwable.errors.size == 1) {
+                                                Handler(Looper.getMainLooper()).postDelayed({
+                                                    scrollView.fullScroll(ScrollView.FOCUS_UP)
+                                                }, 100)
+                                            }
+                                            imageBookErrorText.text = it.defaultMessage
+                                            imageBookError.visibility = View.VISIBLE
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+            })
+        }
+    }
+
+    @OnCreateAfter
     fun validate() {
         bind {
             viewModel.error.observe(viewLifecycleOwner, { event ->
@@ -343,7 +377,6 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
     }
 
     private fun updateView(relation: RelationBook) {
-
         bind {
             modelGenre?.let {
                 textInputEditTextGenre.setText(it.title)
@@ -354,6 +387,7 @@ class FragmentUpdateBook : BaseFragment<FragmentUpdateBookBinding>() {
             relation.model.let { model ->
 
                 if (!model.image.isNullOrEmpty()) {
+                    imageLink = model.image
                     imageBook.visibility = View.VISIBLE
                     Glide.with(root)
                         .load(model.image)

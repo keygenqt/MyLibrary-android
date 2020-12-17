@@ -65,8 +65,42 @@
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"
               app:riv_corner_radius="5dp"
-              android:visibility="gone"
               />
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/imageBookError"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:paddingTop="13dp"
+              app:layout_constraintEnd_toEndOf="@+id/imageBook"
+              app:layout_constraintStart_toStartOf="@+id/imageBook"
+              app:layout_constraintTop_toBottomOf="@+id/imageBook"
+              android:visibility="gone"
+              >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1.2dp"
+                android:background="@color/colorRed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/imageBookErrorText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/colorRed"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Is required"
+                />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
           <androidx.constraintlayout.widget.ConstraintLayout
               android:id="@+id/constraintLayoutGenre"
