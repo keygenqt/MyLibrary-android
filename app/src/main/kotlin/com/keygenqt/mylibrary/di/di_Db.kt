@@ -18,12 +18,6 @@ package com.keygenqt.mylibrary.di
 
 import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.db.DbServiceOther
-import com.keygenqt.mylibrary.ui.books.*
-import com.keygenqt.mylibrary.ui.other.ViewJoin
-import com.keygenqt.mylibrary.ui.other.ViewLogin
-import com.keygenqt.mylibrary.ui.other.ViewSplash
-import com.keygenqt.mylibrary.ui.settings.ViewEditProfile
-import com.keygenqt.mylibrary.ui.settings.ViewPassword
 import org.koin.dsl.module
 
 val moduleDb = module {

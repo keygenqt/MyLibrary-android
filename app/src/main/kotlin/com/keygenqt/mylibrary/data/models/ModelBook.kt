@@ -77,7 +77,7 @@ data class ModelBook(
     get() {
         // temporary
         if (BuildConfig.DEBUG) {
-            return field?.replace("https://mylibraryapp.com/", "http://192.168.1.68:8080/")
+            return field?.replace("https://api.mylibraryapp.com/", "http://192.168.1.68:8080/")
         }
         return field
     }
