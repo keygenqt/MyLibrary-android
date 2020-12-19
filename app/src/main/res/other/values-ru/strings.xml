@@ -31,6 +31,9 @@
   <string name="common_action_menu">Меню</string>
   <string name="failed_try_later">Не удалось. Попробуй позже.</string>
   <string name="common_subject">Привет %s!</string>
+  <string name="dialog_ok">OK</string>
+  <string name="dialog_warning_title">Добро пожаловать в MyLibrary!</string>
+  <string name="dialog_warning_text">Рад приветствовать тебя. Утебя есть возможность делиться своей библиотекой и каталогизировать, но не забудь что \u0022Запрещенный контент\u0022 размещать запрещено. Удачи!</string>
 
   // login
   <string name="login_email">Мыло</string>

@@ -22,6 +22,14 @@ import java.util.UUID
 
 class BaseSharedPreferences(private val preferences: SharedPreferences) {
 
+    var firstOpen: Boolean
+        get() {
+            return preferences.getBoolean("firstOpen", true)
+        }
+        set(value) {
+            preferences.edit().putBoolean("firstOpen", value).apply()
+        }
+
     var locale: String?
         get() {
             return preferences.getString("locale", null)
@@ -93,5 +101,4 @@ class BaseSharedPreferences(private val preferences: SharedPreferences) {
         get() {
             return if (darkTheme || grayTheme) R.drawable.img_default_user_dark else R.drawable.img_default_user
         }
-
 }

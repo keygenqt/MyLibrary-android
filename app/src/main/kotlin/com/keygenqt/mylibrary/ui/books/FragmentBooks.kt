@@ -24,10 +24,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arlib.floatingsearchview.FloatingSearchView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.keygenqt.mylibrary.R
 import com.keygenqt.mylibrary.annotations.ActionBarEnable
 import com.keygenqt.mylibrary.annotations.ActionBarSearchEnable
 import com.keygenqt.mylibrary.base.BaseFragment
+import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.ListSearchAdapter
 import com.keygenqt.mylibrary.databinding.CommonFragmentListBinding
 import com.keygenqt.mylibrary.extensions.showWithPadding
@@ -39,7 +41,7 @@ import org.koin.android.ext.android.inject
 class FragmentBooks : BaseFragment<CommonFragmentListBinding>() {
 
     private val viewModel: ViewBooks by inject()
-
+    private val preferences: BaseSharedPreferences by inject()
     private val observeUpdateBooks: ObserveUpdateBooks by activityViewModels()
 
     private var updateBooks = false
@@ -61,6 +63,17 @@ class FragmentBooks : BaseFragment<CommonFragmentListBinding>() {
     }
 
     override fun onCreateView() {
+        if (preferences.firstOpen) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.dialog_warning_title))
+                .setMessage(resources.getString(R.string.dialog_warning_text))
+                .setNeutralButton(resources.getString(R.string.dialog_ok)) { dialog, _ ->
+                    preferences.firstOpen = false
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
         bind {
             recyclerView.layoutManager = LinearLayoutManager(requireActivity())
             recyclerView.adapter = AdapterBooks(R.layout.item_book_list) { next ->

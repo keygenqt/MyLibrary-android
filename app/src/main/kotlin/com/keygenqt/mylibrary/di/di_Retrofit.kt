@@ -17,6 +17,7 @@
 package com.keygenqt.mylibrary.di
 
 import android.util.Log
+import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.base.BaseApi
 import com.keygenqt.mylibrary.base.BaseQuery
 import com.keygenqt.mylibrary.base.BaseSharedPreferences
@@ -35,7 +36,7 @@ val moduleRetrofit = module {
 
 fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("http://192.168.1.68:8080/")
+        .baseUrl(if (BuildConfig.DEBUG) "http://192.168.1.68:8080/" else "https://api.mylibraryapp.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .client(OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)

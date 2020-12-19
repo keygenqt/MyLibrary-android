@@ -36,6 +36,9 @@
   <string name="common_action_menu">Menu</string>
   <string name="failed_try_later">Failed. Try later</string>
   <string name="common_subject">Hello %s!</string>
+  <string name="dialog_ok">OK</string>
+  <string name="dialog_warning_title">Welcome to the MyLibrary!</string>
+  <string name="dialog_warning_text">I am glad to welcome you. You have the opportunity to share your library and catalog, but do not forget that it is prohibited to post \u0022Prohibited Content\u0022. Good luck!</string>
 
   // login
   <string name="login_email">Email</string>
