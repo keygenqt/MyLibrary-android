@@ -150,6 +150,7 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
         bind {
             viewModel.data.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let { model ->
+                    refresh.isRefreshing = false
                     statusProgressPage(false)
                     updateView(model)
                 }
