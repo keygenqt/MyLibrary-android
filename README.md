@@ -10,4 +10,4 @@ Find a rare book among users MyLibrary.
 
 **[Google Play](https://play.google.com/store/apps/details?id=com.keygenqt.mylibrary)**
 
-![picture](data/google_play/1.png)
+![picture](data/preview.png)
