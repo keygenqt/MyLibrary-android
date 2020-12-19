@@ -111,7 +111,7 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
                     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                         data = Uri.parse("mailto:${it.user?.email}")
                         putExtra(Intent.EXTRA_SUBJECT, getString(R.string.common_subject, userNickname ?: ""))
-                        putExtra(Intent.EXTRA_TEXT, "\n\n\nMyLibrary\nBook: ${viewModel.selfLink.value}")
+                        putExtra(Intent.EXTRA_TEXT, "\n\n\nMyLibrary")
                         addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     }
                     startActivity(Intent.createChooser(emailIntent, "Send from MyLibrary"))
