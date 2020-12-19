@@ -410,6 +410,7 @@
               android:minHeight="0dp"
               android:paddingTop="7dp"
               android:paddingBottom="7dp"
+              android:layout_marginStart="10dp"
               android:text="@string/view_book_btn_connect"
               android:textColor="@color/colorWhite"
               app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
