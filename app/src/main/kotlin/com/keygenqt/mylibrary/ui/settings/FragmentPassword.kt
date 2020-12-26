@@ -56,6 +56,7 @@ class FragmentPassword : BaseFragment<FragmentPasswordBinding>() {
         bind {
             viewModel.password.observe(viewLifecycleOwner) { event ->
                 event?.peekContentHandled()?.let {
+                    statusProgress(false)
                     clearError()
                     root.hideKeyboard()
                     body.requestFocus()
