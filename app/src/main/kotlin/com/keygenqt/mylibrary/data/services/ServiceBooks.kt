@@ -18,8 +18,8 @@ package com.keygenqt.mylibrary.data.services
 
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat.*
-import android.util.Log
 import com.google.gson.Gson
+import com.keygenqt.mylibrary.BuildConfig
 import com.keygenqt.mylibrary.base.BaseQuery
 import com.keygenqt.mylibrary.data.db.DbServiceBooks
 import com.keygenqt.mylibrary.data.hal.ListDataModelBook
@@ -34,15 +34,13 @@ import com.keygenqt.mylibrary.hal.Link
 import com.keygenqt.mylibrary.hal.ResponseSuccessful
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.ByteArrayOutputStream
 
 class ServiceBooks(
     val layer: DbServiceBooks,
-    private val query: BaseQuery
+    private val query: BaseQuery,
 ) {
 
     suspend fun uploadImage(bitmap: Bitmap, response: suspend (String) -> Unit) {
@@ -56,7 +54,11 @@ class ServiceBooks(
             bitmap.recycle()
 
             query.postRequestBody<ResponseSuccessful>(this, layer.getUploadImageLink().value, body).await().let { success ->
-                response.invoke(success.message)
+                if (BuildConfig.DEBUG) {
+                    response.invoke(success.message.replace("https://api.mylibraryapp.com/", "http://192.168.1.68:8080/"))
+                } else {
+                    response.invoke(success.message)
+                }
             }
         }
     }

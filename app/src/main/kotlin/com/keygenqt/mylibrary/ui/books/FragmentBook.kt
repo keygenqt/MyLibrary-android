@@ -20,6 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ import com.keygenqt.mylibrary.base.BaseSharedPreferences
 import com.keygenqt.mylibrary.base.exceptions.HttpException
 import com.keygenqt.mylibrary.data.relations.RelationBook
 import com.keygenqt.mylibrary.databinding.FragmentBookBinding
+import com.keygenqt.mylibrary.extensions.navigateUri
 import com.keygenqt.mylibrary.ui.other.FragmentSplashDirections
 import org.koin.android.ext.android.inject
 
@@ -242,12 +244,14 @@ class FragmentBook : BaseFragment<FragmentBookBinding>() {
                 userName.text = user.nickname
                 userBio.text = user.bio
 
-                menu?.iterator()?.forEach {
-                    when (it.itemId) {
-                        R.id.book_menu_edit -> it.isVisible = preferences.userId == user.id
-                        R.id.book_menu_delete -> it.isVisible = preferences.userId == user.id
+                Handler(Looper.getMainLooper()).postDelayed({
+                    menu?.iterator()?.forEach {
+                        when (it.itemId) {
+                            R.id.book_menu_edit -> it.isVisible = preferences.userId == user.id
+                            R.id.book_menu_delete -> it.isVisible = preferences.userId == user.id
+                        }
                     }
-                }
+                }, 50)
             }
         }
     }
