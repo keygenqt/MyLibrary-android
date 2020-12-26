@@ -27,8 +27,8 @@ android {
         applicationId = "com.keygenqt.mylibrary"
         minSdkVersion(24)
         targetSdkVersion(30)
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
