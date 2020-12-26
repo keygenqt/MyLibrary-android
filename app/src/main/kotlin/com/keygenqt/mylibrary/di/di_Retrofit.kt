@@ -46,6 +46,7 @@ fun provideRetrofit(sharedPreferences: BaseSharedPreferences): Retrofit {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .addInterceptor {
+                Log.d("Authorization", sharedPreferences.token ?: "")
                 val original = it.request()
                 val request = original.newBuilder()
                     .header("Authorization", sharedPreferences.token ?: "")

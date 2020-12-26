@@ -16,11 +16,13 @@
 
 package com.keygenqt.mylibrary.ui.other
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import com.keygenqt.mylibrary.base.BaseExceptionHandler
+import com.keygenqt.mylibrary.base.BaseFirebaseMessaging
 import com.keygenqt.mylibrary.base.LiveDataEvent
 import com.keygenqt.mylibrary.data.models.ModelUser
 import com.keygenqt.mylibrary.data.services.ServiceOther
@@ -39,10 +41,19 @@ class ViewJoin(private val service: ServiceOther) : ViewModel() {
                     service.layer.setBaseUserData(model.id, model.token)
                     service.getRootLinks { links ->
                         service.getUserMe(links.links[ModelUser.API_KEY]?.value!!) {
+                            registerMessage()
                             emit(LiveDataEvent(model))
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun registerMessage() {
+        BaseFirebaseMessaging.getToken { token ->
+            service.registerMessage(token) {
+                Log.d("ViewLogin", "Refreshed token: $token")
             }
         }
     }
