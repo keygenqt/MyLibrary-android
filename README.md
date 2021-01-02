@@ -1,4 +1,4 @@
-My Library
+MyLibrary
 ===================
 
 MyLibrary is an application for cataloging your books library.
