@@ -57,7 +57,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
     }
 
     private fun init(activity: Activity) {
-        error.observe(activity as LifecycleOwner, { event ->
+        error.observe(activity as LifecycleOwner) { event ->
             event?.peekContentHandled()?.let { throwable ->
                 when (throwable) {
                     is HttpException -> {
@@ -89,7 +89,7 @@ class BaseExceptionHandler(private val sharedPreferences: BaseSharedPreferences)
                     }
                 }
             }
-        })
+        }
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
